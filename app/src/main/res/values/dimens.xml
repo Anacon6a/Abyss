@@ -1,0 +1,9 @@
+<resources>
+    <!-- Default screen margins, per the Android Design guidelines. -->
+    <dimen name="fragment_horizontal_margin">16dp</dimen>
+    <dimen name="fragment_vertical_margin">16dp</dimen>
+    <dimen name="input_start_and_end_margin">32dp</dimen>
+    <dimen name="between_input">24dp</dimen>
+    <dimen name="between_switching_button">48dp</dimen>
+    <dimen name="passw_text_error">12dp</dimen>
+</resources>

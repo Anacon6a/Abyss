@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".ui.auth.LoginFragment">
+
+    <data>
+        <variable
+            name="LoginViewModel"
+            type="com.example.abyss.ui.auth.login.LoginViewModel" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:paddingLeft="@dimen/fragment_horizontal_margin"
+        android:paddingTop="@dimen/fragment_vertical_margin"
+        android:paddingRight="@dimen/fragment_horizontal_margin"
+        android:paddingBottom="@dimen/fragment_vertical_margin">
+
+
+        <TextView
+            android:id="@+id/login_textView"
+            style="@style/SwitchingButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/input_start_and_end_margin"
+            android:text="@string/login"
+            android:textColor="@color/teal_700"
+            app:layout_constraintEnd_toStartOf="@+id/registration_textView"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/registration_textView"
+            style="@style/SwitchingButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/input_start_and_end_margin"
+            android:onClick="@{() -> LoginViewModel.onGoToRegistration()}"
+            android:enabled="@{LoginViewModel.viewEnabled}"
+            android:text="@string/registration"
+            android:textColor="@color/grey"
+            app:layout_constraintBottom_toBottomOf="@+id/login_textView"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/login_textView" />
+
+
+        <EditText
+            android:id="@+id/login_edit"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/input_start_and_end_margin"
+            android:layout_marginTop="@dimen/between_input"
+            android:layout_marginEnd="@dimen/input_start_and_end_margin"
+            android:hint="@string/email"
+            android:enabled="@{LoginViewModel.viewEnabled}"
+            android:text="@={LoginViewModel.email}"
+            android:imeOptions="actionNext"
+            android:importantForAutofill="no"
+            android:inputType="textEmailAddress"
+            android:selectAllOnFocus="true"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/login_textView" />
+
+        <EditText
+            android:id="@+id/password_edit"
+            android:enabled="@{LoginViewModel.viewEnabled}"
+            android:text="@={LoginViewModel.password}"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/input_start_and_end_margin"
+            android:layout_marginTop="@dimen/between_input"
+            android:layout_marginEnd="@dimen/input_start_and_end_margin"
+            android:hint="@string/password"
+            android:imeOptions="actionDone"
+            android:importantForAutofill="no"
+            android:inputType="textPassword"
+            android:selectAllOnFocus="true"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/login_edit" />
+
+        <TextView
+            android:id="@+id/login_error"
+            hideIfEmpty="@{LoginViewModel.errorString}"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/passw_text_error"
+            android:maxLines="3"
+            android:textAlignment="viewStart"
+            android:textColor="@android:color/holo_red_dark"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="@+id/password_edit"
+            app:layout_constraintHorizontal_bias="0.498"
+            app:layout_constraintStart_toStartOf="@+id/password_edit"
+            app:layout_constraintTop_toBottomOf="@+id/password_edit" />
+
+        <Button
+            android:id="@+id/login"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="@dimen/passw_text_error"
+            android:background="@drawable/login_btn_bg"
+            android:enabled="@{LoginViewModel.buttonEnabled}"
+            android:onClick="@{() -> LoginViewModel.onLogin()}"
+            android:text="@string/sign_in"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/login_error"
+            app:layout_constraintVertical_bias="0"/>
+
+        <ProgressBar
+            android:id="@+id/progressBar"
+            hideIfFalse="@{LoginViewModel.loading}"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

@@ -10,7 +10,6 @@ import android.view.ViewGroup
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import com.example.abyss.databinding.FragmentLoginBinding
-import com.example.abyss.ui.auth.AuthFragmentDirections
 import org.kodein.di.android.x.kodein
 import org.kodein.di.KodeinAware
 import org.kodein.di.generic.instance
@@ -54,6 +53,7 @@ class LoginFragment : Fragment(), KodeinAware {
     }
 
     private fun onRegistdration() {
+        parentFragment
         findNavController().navigate(LoginFragmentDirections.actionLoginFragmentToRegistrationFragment())
     }
 

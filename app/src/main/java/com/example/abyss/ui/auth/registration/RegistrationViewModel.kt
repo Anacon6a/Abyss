@@ -3,30 +3,31 @@ package com.example.abyss.ui.auth.registration
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.example.abyss.data.repositories.AuthRepository
 import com.example.abyss.data.repositories.UserRepository
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.disposables.CompositeDisposable
 import io.reactivex.rxjava3.schedulers.Schedulers
 
 class RegistrationViewModel(
-    private val repository: UserRepository
+    private val repository: AuthRepository
 ) : ViewModel() {
 
     var username: String? = null
         set(value) {
-            field = value
+            field = value?.trim()
             validateInput()
         }
 
     var email: String? = null
         set(value) {
-            field = value
+            field = value?.trim()
             validateInput()
         }
 
     var password: String? = null
         set(value) {
-            field = value
+            field = value?.trim()
             validateInput()
         }
 
@@ -59,10 +60,6 @@ class RegistrationViewModel(
     }
 
     private val disposables = CompositeDisposable()
-
-//    val user by lazy {
-//        repository.currentUser()
-//    }
 
     init {
         _eventRegistrationCompleted.value = false

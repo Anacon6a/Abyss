@@ -50,7 +50,7 @@ class RegistrationFragment : Fragment(), KodeinAware {
     }
 
     private fun onRegistdration() {
-
+        findNavController().navigate(RegistrationFragmentDirections.actionRegistrationFragmentToHomeFragment())
     }
 
 }

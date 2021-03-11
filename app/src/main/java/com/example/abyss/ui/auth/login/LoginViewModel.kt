@@ -3,24 +3,25 @@ package com.example.abyss.ui.auth.login
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.example.abyss.data.repositories.AuthRepository
 import com.example.abyss.data.repositories.UserRepository
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.disposables.CompositeDisposable
 import io.reactivex.rxjava3.schedulers.Schedulers
 
 class LoginViewModel(
-    private val repository: UserRepository
+    private val repository: AuthRepository
 ) : ViewModel() {
 
     var email: String? = null
         set(value) {
-            field = value
+            field = value?.trim()
             validateInput()
         }
 
     var password: String? = null
         set(value) {
-            field = value
+            field = value?.trim()
             validateInput()
         }
 

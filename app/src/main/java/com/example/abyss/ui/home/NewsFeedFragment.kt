@@ -44,7 +44,6 @@ var rep: UserRepository = UserRepository(f)
     private fun fff() {
         rep.logout()
 
-//        findNavController().navigate(NewsFeedFragmentDirections.actionNewsFeedFragmentToAuthFragment2())
     }
 
 }

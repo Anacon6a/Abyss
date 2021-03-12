@@ -8,29 +8,23 @@
         android:layout_height="match_parent"
         tools:context=".ui.home.HomeFragment">
 
-        <fragment
-            android:id="@+id/fragments_home"
-            android:name="androidx.navigation.fragment.NavHostFragment"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            app:defaultNavHost="true"
-            app:navGraph="@navigation/home_navigation" />
 
 
-        <com.google.android.material.bottomnavigation.BottomNavigationView
-            android:id="@+id/bottomBar"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="bottom"
-            android:layout_margin="30dp"
-            android:background="@drawable/bottom_nav_bg"
-            app:elevation="2dp"
-            app:itemIconSize="30dp"
-            app:menu="@menu/menu_items"
-            app:labelVisibilityMode="unlabeled"
-            app:itemRippleColor="@android:color/transparent"
-            app:itemIconTint="@drawable/item_selector"
-            tools:ignore="MissingConstraints" />
+
+<!--        <com.google.android.material.bottomnavigation.BottomNavigationView-->
+<!--            android:id="@+id/bottomBar"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_gravity="bottom"-->
+<!--            android:layout_margin="30dp"-->
+<!--            android:background="@drawable/bottom_nav_bg"-->
+<!--            app:elevation="2dp"-->
+<!--            app:itemIconSize="30dp"-->
+<!--            app:menu="@menu/bottom_nav_menu"-->
+<!--            app:labelVisibilityMode="unlabeled"-->
+<!--            app:itemRippleColor="@android:color/transparent"-->
+<!--            app:itemIconTint="@drawable/item_selector"-->
+<!--            tools:ignore="MissingConstraints" />-->
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 </layout>

@@ -58,7 +58,7 @@ class LoginFragment : Fragment(), KodeinAware {
     }
 
     private fun loginCompleted() {
-        findNavController().navigate(LoginFragmentDirections.actionLoginFragmentToHomeFragment())
+        findNavController().navigate(LoginFragmentDirections.actionLoginFragmentToNewsFeedFragment())
             //parentFragment?.findNavController()?.navigate(AuthFragmentDirections.actionAuthFragmentToHomeFragment())
     }
 

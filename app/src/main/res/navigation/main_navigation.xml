@@ -10,20 +10,48 @@
         android:label="fragment_first"
         tools:layout="@layout/fragment_first" >
         <action
-            android:id="@+id/action_firstFragment_to_authFragment"
-            app:destination="@id/authFragment" />
+            android:id="@+id/action_firstFragment_to_newsFeedFragment"
+            app:destination="@id/newsFeedFragment" />
         <action
-            android:id="@+id/action_firstFragment_to_homeFragment"
-            app:destination="@id/homeFragment" />
+            android:id="@+id/action_firstFragment_to_loginFragment"
+            app:destination="@id/loginFragment" />
     </fragment>
     <fragment
-        android:id="@+id/authFragment"
-        android:name="com.example.abyss.ui.auth.AuthFragment"
-        android:label="fragment_auth"
-        tools:layout="@layout/fragment_auth" />
+        android:id="@+id/loginFragment"
+        android:name="com.example.abyss.ui.auth.login.LoginFragment"
+        android:label="LoginFragment"
+        tools:layout="@layout/fragment_login" >
+        <action
+            android:id="@+id/action_loginFragment_to_registrationFragment"
+            app:destination="@id/registrationFragment"
+            app:enterAnim="@anim/move_from_the_right"
+            app:exitAnim="@anim/move_to_the_left" />
+        <action
+            android:id="@+id/action_loginFragment_to_newsFeedFragment"
+            app:destination="@id/newsFeedFragment" />
+    </fragment>
     <fragment
-        android:id="@+id/homeFragment"
-        android:name="com.example.abyss.ui.home.HomeFragment"
-        android:label="fragment_home"
-        tools:layout="@layout/fragment_home" />
+        android:id="@+id/registrationFragment"
+        android:name="com.example.abyss.ui.auth.registration.RegistrationFragment"
+        android:label="RegistrationFragment"
+        tools:layout="@layout/fragment_registration" >
+        <action
+            android:id="@+id/action_registrationFragment_to_loginFragment"
+            app:destination="@id/loginFragment"
+            app:enterAnim="@anim/move_from_the_left"
+            app:exitAnim="@anim/move_to_the_right" />
+        <action
+            android:id="@+id/action_registrationFragment_to_newsFeedFragment"
+            app:destination="@id/newsFeedFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/newsFeedFragment"
+        android:name="com.example.abyss.ui.home.NewsFeedFragment"
+        android:label="fragment_news_feed"
+        tools:layout="@layout/fragment_news_feed" />
+    <fragment
+        android:id="@+id/profileFragment"
+        android:name="com.example.abyss.ui.home.profile.ProfileFragment"
+        android:label="fragment_profile"
+        tools:layout="@layout/fragment_profile" />
 </navigation>

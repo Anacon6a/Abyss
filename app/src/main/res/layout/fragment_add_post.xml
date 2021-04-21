@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".ui.posts.AddPostFragment">
+
+    <data>
+<!--        <variable-->
+<!--            name="AddPostViewModel"-->
+<!--            type="com.example.abyss.ui.posts.AddPostViewModel" />-->
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ImageView
+            android:id="@+id/image_view_new_post"
+            android:layout_width="234dp"
+            android:layout_height="229dp"
+            android:layout_marginTop="84dp"
+            android:layout_marginBottom="28dp"
+            app:layout_constraintBottom_toTopOf="@+id/button_select_img"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/ic_launcher_background" />
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/text_input_edit_text"
+            android:layout_width="279dp"
+            android:layout_height="59dp"
+            android:layout_marginStart="67dp"
+            android:layout_marginEnd="67dp"
+            android:layout_marginBottom="47dp"
+            android:hint="Добавьте подпись"
+            app:layout_constraintBottom_toTopOf="@+id/button_cansel"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/button_select_img" />
+
+        <Button
+            android:id="@+id/button_select_img"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="5dp"
+            android:layout_marginBottom="35dp"
+            android:text="Выбрать изображение"
+            app:layout_constraintBottom_toTopOf="@+id/text_input_edit_text"
+            app:layout_constraintStart_toStartOf="@+id/image_view_new_post"
+            app:layout_constraintTop_toBottomOf="@+id/image_view_new_post" />
+
+        <Button
+            android:id="@+id/button_download"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="7dp"
+            android:text="Загрузить"
+            app:layout_constraintBaseline_toBaselineOf="@+id/button_cansel"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/button_cansel" />
+
+        <Button
+            android:id="@+id/button_cansel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="7dp"
+            android:layout_marginBottom="153dp"
+            android:text="Отмена"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/button_download"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/text_input_edit_text" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

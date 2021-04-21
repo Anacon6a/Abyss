@@ -3,14 +3,17 @@ package com.example.abyss.ui.auth.registration
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.example.abyss.data.repositories.AuthRepository
-import com.example.abyss.data.repositories.UserRepository
-import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
+import androidx.lifecycle.viewModelScope
+import com.example.abyss.model.repository.UserRepository
+import com.example.abyss.model.repository.auth.AuthRepository
 import io.reactivex.rxjava3.disposables.CompositeDisposable
-import io.reactivex.rxjava3.schedulers.Schedulers
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.launch
 
 class RegistrationViewModel(
-    private val repository: AuthRepository
+    private val authRepository: AuthRepository,
+    private val userRepository: UserRepository,
+    private val ioDispatcher: CoroutineDispatcher
 ) : ViewModel() {
 
     var username: String? = null
@@ -43,8 +46,8 @@ class RegistrationViewModel(
     val buttonEnabled: LiveData<Boolean>
         get() = _buttonEnabled
 
-    private val  _viewEnabled = MutableLiveData<Boolean>()
-    val  viewEnabled: LiveData<Boolean>
+    private val _viewEnabled = MutableLiveData<Boolean>()
+    val viewEnabled: LiveData<Boolean>
         get() = _viewEnabled
 
     private val _eventRegistrationCompleted = MutableLiveData<Boolean>()
@@ -56,7 +59,8 @@ class RegistrationViewModel(
         get() = _eventGoToLogin
 
     private fun validateInput() {
-        _buttonEnabled.value = !(username.isNullOrEmpty() || email.isNullOrEmpty() || password.isNullOrEmpty())
+        _buttonEnabled.value =
+            !(username.isNullOrEmpty() || email.isNullOrEmpty() || password.isNullOrEmpty())
     }
 
     private val disposables = CompositeDisposable()
@@ -71,35 +75,39 @@ class RegistrationViewModel(
         _eventGoToLogin.value = true
     }
 
-     fun onRegistration() {
+    fun onRegistration() {
 
-         onStartLoading()
+       loading(true)
 
-         val disposable = repository.register(email!!, password!!)
-             .subscribeOn(Schedulers.io())
-             .observeOn( AndroidSchedulers.mainThread())
-             .subscribe({
+        viewModelScope.launch(ioDispatcher) {
+            var request = authRepository.register(email!!, password!!)
 
-                 onSuccessLoading()
-             }, {
+            if (request != "") {
 
-                 onFailureLoading(it.message!!)
-             })
-         disposables.add(disposable)
-    }
+                onFailureRegistration(request)
+            } else {
+                createUser()
+                onSuccessRegistration()
+            }
+        }
 
-    private fun onStartLoading() {
-        loading(true)
-    }
-
-    private fun onSuccessLoading() {
         loading(false)
-        _eventRegistrationCompleted.value = true
     }
 
-    private fun onFailureLoading(message: String) {
-        loading(false)
-        _errorString.value = message
+    //сохранение пользователя в базу, добавить потом корутины
+    private fun createUser() {
+
+            userRepository.saveUserToFirebaseDatabase(username!!, email!!, password!!, "")
+    }
+
+    private fun onSuccessRegistration() {
+
+        _eventRegistrationCompleted.postValue(true)
+    }
+
+    private fun onFailureRegistration(message: String) {
+
+        _errorString.postValue(message)
     }
 
     private fun loading(boolean: Boolean) {
@@ -107,11 +115,5 @@ class RegistrationViewModel(
         _buttonEnabled.value = !boolean
         _viewEnabled.value = !boolean
     }
-
-    override fun onCleared() {
-        super.onCleared()
-        disposables.dispose()
-    }
-
 
 }

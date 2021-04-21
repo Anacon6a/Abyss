@@ -3,7 +3,7 @@ package com.example.abyss.ui.first
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.example.abyss.data.repositories.UserRepository
+import com.example.abyss.model.repository.UserRepository
 
 class FirstViewModel(
     private var repository: UserRepository

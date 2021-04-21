@@ -20,101 +20,98 @@
         android:paddingBottom="@dimen/fragment_vertical_margin">
 
 
-        <TextView
-            android:id="@+id/login_textView"
-            style="@style/SwitchingButton"
-            android:layout_width="wrap_content"
+        <EditText
+            android:id="@+id/login_edit"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/input_start_and_end_margin"
-            android:text="@string/login"
-            android:textColor="@color/teal_700"
-            app:layout_constraintEnd_toStartOf="@+id/registration_textView"
-            app:layout_constraintHorizontal_bias="0.5"
+            android:layout_marginTop="38dp"
+            android:layout_marginBottom="27dp"
+            android:enabled="@{LoginViewModel.viewEnabled}"
+            android:hint="@string/email"
+            android:imeOptions="actionNext"
+            android:importantForAutofill="no"
+            android:inputType="textEmailAddress"
+            android:selectAllOnFocus="true"
+            android:text="@={LoginViewModel.email}"
+            app:layout_constraintBottom_toTopOf="@+id/password_edit"
+            app:layout_constraintEnd_toEndOf="@+id/password_edit"
+            app:layout_constraintStart_toStartOf="@+id/password_edit"
+            app:layout_constraintTop_toBottomOf="@+id/login_textView" />
+
+        <EditText
+            android:id="@+id/password_edit"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="22dp"
+            android:layout_marginTop="27dp"
+            android:layout_marginEnd="22dp"
+            android:enabled="@{LoginViewModel.viewEnabled}"
+            android:hint="@string/password"
+            android:imeOptions="actionDone"
+            android:importantForAutofill="no"
+            android:inputType="textPassword"
+            android:selectAllOnFocus="true"
+            android:text="@={LoginViewModel.password}"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toBottomOf="@+id/login_edit" />
 
         <TextView
             android:id="@+id/go_to_registration"
             style="@style/SwitchingButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="@dimen/input_start_and_end_margin"
-            android:onClick="@{() -> LoginViewModel.onGoToRegistration()}"
+            android:layout_marginTop="50dp"
+            android:layout_marginEnd="37dp"
             android:enabled="@{LoginViewModel.viewEnabled}"
+            android:onClick="@{() -> LoginViewModel.onGoToRegistration()}"
             android:text="@string/registration"
             android:textColor="@color/grey"
-            app:layout_constraintBottom_toBottomOf="@+id/login_textView"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toEndOf="@+id/login_textView" />
-
-
-        <EditText
-            android:id="@+id/login_edit"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/input_start_and_end_margin"
-            android:layout_marginTop="@dimen/between_input"
-            android:layout_marginEnd="@dimen/input_start_and_end_margin"
-            android:hint="@string/email"
-            android:enabled="@{LoginViewModel.viewEnabled}"
-            android:text="@={LoginViewModel.email}"
-            android:imeOptions="actionNext"
-            android:importantForAutofill="no"
-            android:inputType="textEmailAddress"
-            android:selectAllOnFocus="true"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/login_textView" />
-
-        <EditText
-            android:id="@+id/password_edit"
-            android:enabled="@{LoginViewModel.viewEnabled}"
-            android:text="@={LoginViewModel.password}"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/input_start_and_end_margin"
-            android:layout_marginTop="@dimen/between_input"
-            android:layout_marginEnd="@dimen/input_start_and_end_margin"
-            android:hint="@string/password"
-            android:imeOptions="actionDone"
-            android:importantForAutofill="no"
-            android:inputType="textPassword"
-            android:selectAllOnFocus="true"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/login_edit" />
+            app:layout_constraintTop_toBottomOf="@+id/login" />
 
         <TextView
-            android:id="@+id/login_error"
-            hideIfEmpty="@{LoginViewModel.errorString}"
-            android:layout_width="wrap_content"
+            android:id="@+id/login_textView"
+            style="@style/SwitchingButton"
+            android:layout_width="77dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/passw_text_error"
-            android:maxLines="3"
-            android:textAlignment="viewStart"
-            android:textColor="@android:color/holo_red_dark"
-            android:textStyle="bold"
-            app:layout_constraintEnd_toEndOf="@+id/password_edit"
-            app:layout_constraintHorizontal_bias="0.498"
-            app:layout_constraintStart_toStartOf="@+id/password_edit"
-            app:layout_constraintTop_toBottomOf="@+id/password_edit" />
+            android:layout_marginTop="100dp"
+            android:text="@string/login"
+            android:textColor="@color/teal_700"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <Button
             android:id="@+id/login"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:layout_marginTop="@dimen/passw_text_error"
+            android:layout_marginTop="16dp"
             android:background="@drawable/login_btn_bg"
             android:enabled="@{LoginViewModel.buttonEnabled}"
             android:onClick="@{() -> LoginViewModel.onLogin()}"
             android:text="@string/sign_in"
-            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/login_error"
-            app:layout_constraintVertical_bias="0"/>
+            app:layout_constraintTop_toBottomOf="@+id/login_error" />
+
+        <TextView
+            android:id="@+id/login_error"
+            hideIfEmpty="@{LoginViewModel.errorString}"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="22dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="22dp"
+            android:maxLines="3"
+            android:textAlignment="viewStart"
+            android:textColor="@android:color/holo_red_dark"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toTopOf="@+id/login"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/password_edit" />
 
         <ProgressBar
             android:id="@+id/progressBar"

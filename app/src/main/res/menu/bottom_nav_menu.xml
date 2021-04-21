@@ -8,9 +8,9 @@
         android:icon="@drawable/ic_baseline_bookmark_24"
         android:title="Favorites"/>
 
-    <item android:id="@+id/projects"
+    <item android:id="@+id/addPostFragment"
         android:icon="@drawable/ic_baseline_image_24"
-        android:title="Projects"/>
+        android:title="AddPost"/>
 
     <item android:id="@+id/notifications"
         android:icon="@drawable/ic_baseline_favorite_24"

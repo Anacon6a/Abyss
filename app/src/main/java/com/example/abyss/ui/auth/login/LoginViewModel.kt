@@ -3,15 +3,18 @@ package com.example.abyss.ui.auth.login
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.example.abyss.data.repositories.AuthRepository
-import com.example.abyss.data.repositories.UserRepository
-import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
+import androidx.lifecycle.viewModelScope
+import com.example.abyss.model.repository.auth.AuthRepository
 import io.reactivex.rxjava3.disposables.CompositeDisposable
-import io.reactivex.rxjava3.schedulers.Schedulers
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.launch
+import timber.log.Timber
 
 class LoginViewModel(
-    private val repository: AuthRepository
-) : ViewModel() {
+    private val authRepository: AuthRepository,
+    private val ioDispatcher: CoroutineDispatcher,
+
+    ) : ViewModel() {
 
     var email: String? = null
         set(value) {
@@ -37,13 +40,13 @@ class LoginViewModel(
     val buttonEnabled: LiveData<Boolean>
         get() = _buttonEnabled
 
-    private val  _viewEnabled = MutableLiveData<Boolean>()
-    val  viewEnabled: LiveData<Boolean>
-    get() = _viewEnabled
+    private val _viewEnabled = MutableLiveData<Boolean>()
+    val viewEnabled: LiveData<Boolean>
+        get() = _viewEnabled
 
     private val _eventLoginCompleted = MutableLiveData<Boolean>()
     val eventLoginCompleted: LiveData<Boolean>
-    get() = _eventLoginCompleted
+        get() = _eventLoginCompleted
 
     private val _eventGoToRegistration = MutableLiveData<Boolean>()
     val eventGoToRegistration: LiveData<Boolean>
@@ -55,50 +58,40 @@ class LoginViewModel(
 
     private val disposables = CompositeDisposable()
 
-//    val user by lazy {
-//        repository.currentUser()
-//    }
 
     init {
+        Timber.i("init")
         _eventLoginCompleted.value = false
         _eventGoToRegistration.value = false
         _viewEnabled.value = true
 
     }
 
-     fun onGoToRegistration() {
+    fun onGoToRegistration() {
         _eventGoToRegistration.value = true
     }
 
-     fun onLogin() {
+    fun onLogin() {
 
-         onStartLoading()
-
-          val disposable = repository.login(email!!, password!!)
-             .subscribeOn(Schedulers.io())
-             .observeOn( AndroidSchedulers.mainThread())
-             .subscribe({
-
-                 onSuccessLoading()
-             }, {
-
-                 onFailureLoading(it.message!!)
-             })
-         disposables.add(disposable)
-    }
-
-    private fun onStartLoading() {
         loading(true)
+
+        viewModelScope.launch(ioDispatcher) {
+            var request = authRepository.login(email!!, password!!)
+            if (request != "") {
+                onFailureLogin(request)
+            } else {
+                onSuccessLogin()
+            }
+        }
+        loading(false)
     }
 
-    private fun onSuccessLoading() {
-        loading(false)
-        _eventLoginCompleted.value = true
+    private fun onSuccessLogin() {
+        _eventLoginCompleted.postValue(true)
     }
 
-    private fun onFailureLoading(message: String) {
-        loading(false)
-        _errorString.value = message
+    private fun onFailureLogin(message: String) {
+        _errorString.postValue(message)
     }
 
     private fun loading(boolean: Boolean) {
@@ -107,10 +100,6 @@ class LoginViewModel(
         _viewEnabled.value = !boolean
     }
 
-    override fun onCleared() {
-        super.onCleared()
-        disposables.dispose()
-    }
 
 }
 

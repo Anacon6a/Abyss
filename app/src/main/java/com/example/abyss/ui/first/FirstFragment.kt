@@ -49,11 +49,11 @@ class FirstFragment : Fragment(), KodeinAware {
     }
 
     private fun GoToHome() {
-        findNavController().navigate(FirstFragmentDirections.actionFirstFragmentToLoginFragment())
+        findNavController().navigate(FirstFragmentDirections.actionFirstFragmentToNewsFeedFragment())
     }
 
     private fun GoToAuth() {
-        findNavController().navigate(FirstFragmentDirections.actionFirstFragmentToNewsFeedFragment())
+        findNavController().navigate(FirstFragmentDirections.actionFirstFragmentToLoginFragment())
     }
 
 

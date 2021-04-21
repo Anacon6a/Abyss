@@ -2,10 +2,10 @@
 buildscript {
 
     ext {
-        kotlin_version = "1.4.30"
+        kotlin_version = "1.4.31"
         plugin_version = "4.1.2"
-        nav_version = "2.3.3"
-        lifecycle_version = "2.3.0"
+        nav_version = "2.3.5"
+        lifecycle_version = "2.3.1"
         kodein_version = "6.2.1"
     }
     repositories {

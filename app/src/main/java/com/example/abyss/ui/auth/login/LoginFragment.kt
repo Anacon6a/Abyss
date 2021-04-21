@@ -1,5 +1,6 @@
 package com.example.abyss.ui.auth.login
 
+import android.content.Context
 import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
 import android.util.Log
@@ -53,7 +54,6 @@ class LoginFragment : Fragment(), KodeinAware {
     }
 
     private fun onRegistdration() {
-        parentFragment
         findNavController().navigate(LoginFragmentDirections.actionLoginFragmentToRegistrationFragment())
     }
 
@@ -62,4 +62,44 @@ class LoginFragment : Fragment(), KodeinAware {
             //parentFragment?.findNavController()?.navigate(AuthFragmentDirections.actionAuthFragmentToHomeFragment())
     }
 
+
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        Timber.i("фрагмент связан с активити")
+    }
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        Timber.i("создание начального фрагмента")
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        Timber.i(" сразу после onCreateView()возврата, но до восстановления любого сохраненного состояния в представлении" )
+    }
+
+    override fun onStart() {
+        super.onStart()
+        Timber.i(" фрагмент становится видимым")
+    }
+    override fun onResume() {
+        super.onResume()
+        Timber.i("  фрагмент получает фокус пользователя")
+    }
+    override fun onPause() {
+        super.onPause()
+        Timber.i("теряет фокус пользователя")
+    }
+    override fun onStop() {
+        super.onStop()
+        Timber.i("фрагмент больше не отображается на экране")
+    }
+    override fun onDestroyView() {
+        super.onDestroyView()
+        Timber.i("представление фрагмента больше не требуется, для очистки ресурсов, связанных с этим представлением")
+    }
+    override fun onDetach() {
+        super.onDetach()
+        Timber.i("onAttach called")
+    }
 }

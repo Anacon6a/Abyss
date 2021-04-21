@@ -6,22 +6,24 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.ViewModelProvider
-import com.example.abyss.model.firebase.FirebaseSource
-import com.example.abyss.model.repository.UserRepository
 import com.example.abyss.databinding.FragmentNewsFeedBinding
+import com.example.abyss.model.repository.auth.AuthRepository
+import com.example.abyss.model.repository.auth.AuthRepositoryFirebase
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.FirebaseDatabase
 
 
 class NewsFeedFragment : Fragment() {
 
-    var f: FirebaseSource = FirebaseSource()
-var rep: UserRepository = UserRepository(f)
+
+    var f: FirebaseAuth = FirebaseAuth.getInstance()
 
     private lateinit var viewModel: NewsFeedViewModel
 
     private lateinit var binding: FragmentNewsFeedBinding
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
+        savedInstanceState: Bundle?,
     ): View? {
 
         viewModel = ViewModelProvider(this).get(NewsFeedViewModel::class.java)
@@ -37,8 +39,7 @@ var rep: UserRepository = UserRepository(f)
     }
 
     private fun fff() {
-        rep.logout()
-
+        f.signOut()
     }
 
 }

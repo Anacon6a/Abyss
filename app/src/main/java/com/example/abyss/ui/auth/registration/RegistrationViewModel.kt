@@ -4,8 +4,9 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.abyss.model.repository.UserRepository
+import com.example.abyss.model.data.entity.UserData
 import com.example.abyss.model.repository.auth.AuthRepository
+import com.example.abyss.model.repository.user.UserRepository
 import io.reactivex.rxjava3.disposables.CompositeDisposable
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.launch
@@ -80,24 +81,21 @@ class RegistrationViewModel(
        loading(true)
 
         viewModelScope.launch(ioDispatcher) {
+
             var request = authRepository.register(email!!, password!!)
 
             if (request != "") {
 
                 onFailureRegistration(request)
             } else {
-                createUser()
+
+                val user = UserData(username!!, email!!, "")
+               userRepository.CreateUser(user)
                 onSuccessRegistration()
             }
         }
 
         loading(false)
-    }
-
-    //сохранение пользователя в базу, добавить потом корутины
-    private fun createUser() {
-
-            userRepository.saveUserToFirebaseDatabase(username!!, email!!, password!!, "")
     }
 
     private fun onSuccessRegistration() {

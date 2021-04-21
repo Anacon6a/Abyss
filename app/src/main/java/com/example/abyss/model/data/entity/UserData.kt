@@ -1,7 +1,6 @@
-package com.example.abyss.model.data.internal
+package com.example.abyss.model.data.entity
 
  data class UserData(
-    var userID: String,
     var userName: String,
     var email: String,
     var profileImageUrl:String

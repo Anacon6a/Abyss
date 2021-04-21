@@ -1,4 +1,4 @@
-package com.example.abyss.model.data.internal
+package com.example.abyss.model.data.entity
 
 data class PostData(
     var ImageUrl: String = "",

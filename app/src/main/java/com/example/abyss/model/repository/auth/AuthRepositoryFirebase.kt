@@ -10,7 +10,7 @@ import timber.log.Timber
 class AuthRepositoryFirebase(
     private val firebaseAuth: FirebaseAuth,
     private val ioDispatcher: CoroutineDispatcher,
-    private val externalScope: CoroutineScope,
+    private val externalScope: CoroutineScope
 
     ) : AuthRepository {
 
@@ -32,8 +32,7 @@ class AuthRepositoryFirebase(
                     "The password is invalid or the user does not have a password." -> "Неверно введен пароль."
                     else -> "Ошибка авторизации."
                 }
-              Timber.i(e.hashCode().toString())
-                Timber.i(e.message.toString())
+                Timber.i("Ошибка авторизации" + e.message.toString())
             }
         }
             .join()
@@ -49,7 +48,7 @@ class AuthRepositoryFirebase(
                 firebaseAuth
                     .createUserWithEmailAndPassword(email, password)
                     .await()
-
+                 Timber.i("Регистрация выполнена")
             } catch (e: Exception) {
 
              request = when (e.message.toString()) {
@@ -58,7 +57,7 @@ class AuthRepositoryFirebase(
                     "The email address is already in use by another account." -> "Адрес электронной почты уже используется другим пользователем."
                     else -> "Ошибка регистрации"
                 }
-                 Timber.i(e.message.toString())
+                 Timber.i("Ошибка геристрации"+e.message.toString())
             }
         }
             .join()

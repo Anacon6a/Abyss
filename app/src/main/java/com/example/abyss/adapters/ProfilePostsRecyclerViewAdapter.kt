@@ -8,9 +8,9 @@ import android.widget.ImageView
 import androidx.core.net.toUri
 import androidx.recyclerview.widget.RecyclerView
 import com.example.abyss.R
-import com.example.abyss.model.data.dto.PostDTO
+import com.example.abyss.model.data.entity.PostData
 
-class ProfilePostsRecyclerViewAdapter(var context: Context, var arrayList: ArrayList<PostDTO>) :
+class ProfilePostsRecyclerViewAdapter(var context: Context, var arrayList: ArrayList<PostData>) :
     RecyclerView.Adapter<ProfilePostsRecyclerViewAdapter.ItemHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ItemHolder {
@@ -20,8 +20,8 @@ class ProfilePostsRecyclerViewAdapter(var context: Context, var arrayList: Array
     }
 
     override fun onBindViewHolder(holder: ItemHolder, position: Int) {
-        var post: PostDTO = arrayList.get(position)
-        holder.icons.setImageURI((post.imageUrl).toUri())
+        var post: PostData = arrayList.get(position)
+        holder.icons.setImageURI((post.ImageUrl).toUri())
 
     }
 

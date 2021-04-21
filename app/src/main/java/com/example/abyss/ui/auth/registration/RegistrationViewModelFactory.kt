@@ -2,8 +2,8 @@ package com.example.abyss.ui.auth.registration
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.example.abyss.model.repository.UserRepository
 import com.example.abyss.model.repository.auth.AuthRepository
+import com.example.abyss.model.repository.user.UserRepository
 import kotlinx.coroutines.CoroutineDispatcher
 
 @Suppress("UNCHECKED_CAST")

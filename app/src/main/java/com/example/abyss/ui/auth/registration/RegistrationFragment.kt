@@ -16,6 +16,7 @@ import org.kodein.di.generic.instance
 class RegistrationFragment : Fragment(), KodeinAware {
 
     override val kodein by kodein()
+
     private val factory : RegistrationViewModelFactory by instance()
 
     private lateinit var viewModel: RegistrationViewModel

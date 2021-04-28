@@ -6,7 +6,9 @@
     tools:context=".ui.profile.ProfileFragment">
 
     <data>
-
+        <variable
+            name="ProfileViewModel"
+            type="com.example.abyss.ui.profile.ProfileViewModel" />
     </data>
 <androidx.coordinatorlayout.widget.CoordinatorLayout
     android:layout_width="match_parent"
@@ -37,8 +39,9 @@
                 android:id="@+id/shapeable_image_view"
                 android:layout_width="100dp"
                 android:layout_height="100dp"
-                android:layout_marginStart="30dp"
+                android:layout_marginStart="21dp"
                 android:layout_marginTop="30dp"
+                android:layout_marginEnd="30dp"
                 app:layout_constraintEnd_toStartOf="@+id/user_name_text_view"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
@@ -47,14 +50,15 @@
 
             <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/user_name_text_view"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="15dp"
-                android:layout_marginEnd="54dp"
+                android:layout_marginTop="45dp"
+                android:layout_marginEnd="20dp"
+                android:text="@{ProfileViewModel.userName}"
                 android:textSize="24sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/shapeable_image_view"
-                app:layout_constraintTop_toTopOf="@+id/shapeable_image_view" />
+                app:layout_constraintTop_toTopOf="parent" />
         </androidx.constraintlayout.widget.ConstraintLayout>
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/toolbar"
@@ -77,23 +81,25 @@
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/profile_posts_recycler_view"
-                android:layout_width="0dp"
-                android:layout_height="0dp"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
                 android:padding="12dp"
+                tools:listitem="@layout/post_for_profile_item"
+                android:layout_marginTop="5dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
-            <ImageView
-                android:id="@+id/image_view_post"
-                android:layout_width="134dp"
-                android:layout_height="143dp"
-                android:layout_marginStart="44dp"
-                android:layout_marginTop="44dp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+<!--            <ImageView-->
+<!--                android:id="@+id/image_view_post"-->
+<!--                android:layout_width="134dp"-->
+<!--                android:layout_height="143dp"-->
+<!--                android:layout_marginStart="44dp"-->
+<!--                android:layout_marginTop="44dp"-->
+<!--                app:layout_constraintBottom_toBottomOf="parent"-->
+<!--                app:layout_constraintStart_toStartOf="parent"-->
+<!--                app:layout_constraintTop_toTopOf="parent" />-->
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

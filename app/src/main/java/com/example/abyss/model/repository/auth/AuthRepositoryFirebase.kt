@@ -32,7 +32,7 @@ class AuthRepositoryFirebase(
                     "The password is invalid or the user does not have a password." -> "Неверно введен пароль."
                     else -> "Ошибка авторизации."
                 }
-                Timber.i("Ошибка авторизации" + e.message.toString())
+                Timber.i("Ошибка авторизации: $e")
             }
         }
             .join()
@@ -57,14 +57,14 @@ class AuthRepositoryFirebase(
                     "The email address is already in use by another account." -> "Адрес электронной почты уже используется другим пользователем."
                     else -> "Ошибка регистрации"
                 }
-                 Timber.i("Ошибка геристрации"+e.message.toString())
+                 Timber.i("Ошибка геристрации: $e")
             }
         }
             .join()
         return request
     }
 
-    override suspend fun currentUser(): FirebaseUser = firebaseAuth.currentUser
+    override suspend fun currentUser(): FirebaseUser? = firebaseAuth.currentUser
 
     override suspend fun logout() = firebaseAuth.signOut()
 

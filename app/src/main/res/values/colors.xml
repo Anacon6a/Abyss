@@ -10,4 +10,8 @@
     <color name="white">#FFFFFFFF</color>
     <color name="transparent">#00FFFFFF</color>
     <color name="lightGrey">#d2d2d2</color>
+    <!-- ImagePicker  -->
+    <color name="ucrop_color_toolbar">@color/purple_500</color>
+    <color name="ucrop_color_statusbar">@color/white</color>
+    <color name="ucrop_color_widget_active">@color/white</color>
 </resources>

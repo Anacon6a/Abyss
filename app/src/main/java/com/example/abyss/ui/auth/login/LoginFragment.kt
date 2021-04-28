@@ -45,10 +45,10 @@ class LoginFragment : Fragment(), KodeinAware {
 
 
     private fun Subscription() {
-        viewModel.eventGoToRegistration.observe(viewLifecycleOwner, Observer<Boolean> { event ->
+        viewModel.eventGoToRegistration.observe(viewLifecycleOwner, { event ->
             if (event) onRegistdration()
         })
-        viewModel.eventLoginCompleted.observe(viewLifecycleOwner, Observer<Boolean> { event ->
+        viewModel.eventLoginCompleted.observe(viewLifecycleOwner, { event ->
             if (event) loginCompleted()
         })
     }

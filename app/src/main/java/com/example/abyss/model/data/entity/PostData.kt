@@ -1,7 +1,9 @@
 package com.example.abyss.model.data.entity
 
+import java.sql.Timestamp
+
 data class PostData(
-    var ImageUrl: String = "",
-    var text: String = "",
-    var userId: String = ""
+    val imageUrl: String? = null,
+    val text: String? = null,
+    val date: Timestamp? = null,
 )

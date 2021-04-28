@@ -15,13 +15,13 @@ class ProfilePostsRecyclerViewAdapter(var context: Context, var arrayList: Array
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ItemHolder {
         val itemHolder = LayoutInflater.from(parent.context)
-            .inflate(R.layout.grid_layout_list_item, parent, false)
+            .inflate(R.layout.post_for_profile_item, parent, false)
         return ItemHolder(itemHolder)
     }
 
     override fun onBindViewHolder(holder: ItemHolder, position: Int) {
         var post: PostData = arrayList.get(position)
-        holder.icons.setImageURI((post.ImageUrl).toUri())
+//        holder.icons.setImageURI((post.imageUrl).toUri())
 
     }
 

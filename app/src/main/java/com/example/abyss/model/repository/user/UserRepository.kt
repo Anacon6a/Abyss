@@ -1,8 +1,7 @@
 package com.example.abyss.model.repository.user
 
 import com.example.abyss.model.State
-import com.example.abyss.model.data.entity.UserData
-import com.google.firebase.firestore.DocumentReference
+import com.example.abyss.model.data.UserData
 import kotlinx.coroutines.flow.Flow
 
 interface UserRepository {

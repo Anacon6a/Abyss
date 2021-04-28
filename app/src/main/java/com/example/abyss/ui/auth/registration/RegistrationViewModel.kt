@@ -4,7 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.abyss.model.data.entity.UserData
+import com.example.abyss.model.data.UserData
 import com.example.abyss.model.repository.auth.AuthRepository
 import com.example.abyss.model.repository.user.UserRepository
 import io.reactivex.rxjava3.disposables.CompositeDisposable

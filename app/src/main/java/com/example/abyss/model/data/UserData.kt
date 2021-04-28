@@ -1,4 +1,4 @@
-package com.example.abyss.model.data.entity
+package com.example.abyss.model.data
 
 data class UserData(
     val userName: String? = null,

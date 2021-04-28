@@ -1,6 +1,5 @@
 package com.example.abyss.model.repository
 
-import com.example.abyss.model.data.entity.PostData
 import com.google.firebase.FirebaseException
 import com.google.firebase.database.*
 import kotlinx.coroutines.ExperimentalCoroutinesApi

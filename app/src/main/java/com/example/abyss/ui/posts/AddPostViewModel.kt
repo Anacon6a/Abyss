@@ -5,7 +5,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.abyss.model.data.entity.PostData
+import com.example.abyss.model.data.PostData
 import com.example.abyss.model.repository.post.PostRepository
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
@@ -28,7 +28,7 @@ class AddPostViewModel(
     private val postImageUrlInStorage = MutableLiveData<Uri>()
 
     val signature = MutableLiveData<String>()
-    
+
     private val _buttonEnabled = MutableLiveData<Boolean>()
     val buttonEnabled: LiveData<Boolean>
         get() = _buttonEnabled
@@ -69,24 +69,25 @@ class AddPostViewModel(
     }
 
     fun addPost() {
-      val ap = externalScope.launch(ioDispatcher) {
+        externalScope.launch(ioDispatcher) {
             postImageUrl.value?.let {
+                var i = 0
 
-                val url = postRepository.AddPostImageInStorage(it).collect { url ->
+                    val url = postRepository.AddPostImageInStorage(it).collect { url ->
 
-                    val date = Timestamp(System.currentTimeMillis())
-                    val post = PostData(url, signature.value, date)
-                    postRepository.CreatePost(post)
-                }
-        //            val sdf = SimpleDateFormat("dd/M/yyyy hh:mm:ss")
-        //            val currentDate = sdf.format(Date())
-//                val post = PostData(url, signature.value, date)
-                cancel()
+                        val date = Timestamp(System.currentTimeMillis())
+                        val post = PostData(url, signature.value, date)
+                        postRepository.CreatePost(post)
+
+                        i++
+
+                    }
             }
+            cancel()
         }
         _eventPhotoAdded.value = true
-
     }
 
-
 }
+
+

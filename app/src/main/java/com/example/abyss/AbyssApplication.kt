@@ -3,6 +3,8 @@ package com.example.abyss
 import android.app.Application
 import androidx.lifecycle.ViewModelProvider
 import bindViewModel
+import com.example.abyss.adapters.PostPagingAdapter
+import com.example.abyss.model.pagingsource.PostForProfileFirestorePagingSource
 import com.example.abyss.model.repository.auth.AuthRepositoryFirebase
 import com.example.abyss.model.repository.auth.AuthRepository
 import com.example.abyss.model.repository.post.PostRepository
@@ -67,13 +69,15 @@ class AbyssApplication : Application(), KodeinAware {
 
 // ViewModel
         bindViewModel<ProfileViewModel>() with singleton {
-            ProfileViewModel(instance(), instance(), instance(), instance())
+            ProfileViewModel(instance(), instance(), instance(), instance(), instance(), instance())
         }
         bindViewModel<AddPostViewModel>() with provider {
             AddPostViewModel(instance(), instance(), instance())
         }
-
-
+// Adapter
+        bind<PostPagingAdapter>() with provider { PostPagingAdapter() }
+// PagingSource
+       bind() from provider { PostForProfileFirestorePagingSource(instance(), instance()) }
 
     }
 

@@ -85,21 +85,12 @@
                 android:layout_height="match_parent"
                 android:padding="12dp"
                 tools:listitem="@layout/post_for_profile_item"
-                android:layout_marginTop="5dp"
+                android:layout_marginTop="4dp"
+
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
-
-<!--            <ImageView-->
-<!--                android:id="@+id/image_view_post"-->
-<!--                android:layout_width="134dp"-->
-<!--                android:layout_height="143dp"-->
-<!--                android:layout_marginStart="44dp"-->
-<!--                android:layout_marginTop="44dp"-->
-<!--                app:layout_constraintBottom_toBottomOf="parent"-->
-<!--                app:layout_constraintStart_toStartOf="parent"-->
-<!--                app:layout_constraintTop_toTopOf="parent" />-->
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

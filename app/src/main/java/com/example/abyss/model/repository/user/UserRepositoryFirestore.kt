@@ -1,11 +1,8 @@
 package com.example.abyss.model.repository.user
 
-import com.bumptech.glide.load.engine.Resource
 import com.example.abyss.model.State
-import com.example.abyss.model.data.entity.PostData
-import com.example.abyss.model.data.entity.UserData
+import com.example.abyss.model.data.UserData
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.storage.FirebaseStorage
@@ -14,8 +11,6 @@ import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.tasks.await
 import timber.log.Timber
-import kotlin.Int.Companion.MAX_VALUE
-import kotlin.math.max
 
 class UserRepositoryFirestore(
     private val firebaseAuth: FirebaseAuth,

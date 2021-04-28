@@ -1,20 +1,14 @@
 package com.example.abyss.model.repository.post
 
 import android.net.Uri
-import com.example.abyss.model.data.entity.PostData
-import com.example.abyss.model.repository.awaitsSingle
+import androidx.paging.RemoteMediator
+import com.example.abyss.model.data.PostData
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.database.FirebaseDatabase
-import com.google.firebase.database.GenericTypeIndicator
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.async
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.SharingStarted
-import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.flow.shareIn
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 import timber.log.Timber
@@ -31,16 +25,22 @@ class PostRepositoryFirestore(
     override suspend fun CreatePost(post: PostData) {
         externalScope.launch(ioDispatcher) {
             val uid = firebaseAuth.uid!!
-            firestore.collection("posts")
+
+            val doc = firestore.collection("posts")
                 .document("uid")
                 .collection(uid)
-                .add(post)
-                .await()
+                .document()
+
+            post.id = doc.id
+
+            doc.set(post).addOnCompleteListener{
+                Timber.i("ППост добавлен: ${post.id}")
+            }.addOnFailureListener{
+                Timber.i("Ошибка: ${it.message.toString()}")
+            }
+
         }
             .join()
-//        al postRef = db
-//                .collection("posts? content???").document("uid")
-//            .collection("").document("message1") можно сюда добавить подписки?
     }
 
     override suspend fun AddPostImageInStorage(imageUri: Uri): Flow<String> = flow {
@@ -49,11 +49,10 @@ class PostRepositoryFirestore(
 
         val fileName = UUID.randomUUID().toString()
 
-        val imageRef = firebaseStorage.getReference(uid).child("postImages").child(fileName)
+        val imageRef = firebaseStorage.getReference("postImages").child(uid).child(fileName)
         imageRef.putFile(imageUri).await()
-        val url = imageRef.downloadUrl.await()
-
-        emit(url.path.toString())
+        val url = imageRef.path
+        emit(url.toString())
     }.shareIn(
         externalScope,
         SharingStarted.WhileSubscribed(),

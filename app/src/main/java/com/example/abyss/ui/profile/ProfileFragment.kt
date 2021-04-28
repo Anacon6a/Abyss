@@ -4,22 +4,16 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
 import androidx.fragment.app.Fragment
-import androidx.paging.PagedList
-import androidx.recyclerview.widget.RecyclerView
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-import com.bumptech.glide.Glide
+import androidx.lifecycle.lifecycleScope
+import com.example.abyss.adapters.PostPagingAdapter
 import com.example.abyss.databinding.FragmentProfileBinding
-import com.example.abyss.model.data.entity.PostData
-import com.example.abyss.model.repository.post.PostRepository
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.database.*
 import kodeinViewModel
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 import org.kodein.di.KodeinAware
 import org.kodein.di.android.x.kodein
 import org.kodein.di.generic.instance
-import timber.log.Timber
 
 
 class ProfileFragment : Fragment(), KodeinAware {
@@ -29,6 +23,8 @@ class ProfileFragment : Fragment(), KodeinAware {
     override val kodein by kodein()
 
     private val viewModel: ProfileViewModel by kodeinViewModel()
+
+    private val postAdapter: PostPagingAdapter by instance()
 
     var userId: String? = null
 
@@ -41,9 +37,30 @@ class ProfileFragment : Fragment(), KodeinAware {
         binding.profileViewModel = viewModel
         binding.lifecycleOwner = viewLifecycleOwner
 
+        setAdapters()
+        getProducts()
         return binding.root
     }
 
+    private fun setAdapters() {
+        binding.profilePostsRecyclerView.adapter = postAdapter
+    }
+
+    private fun getProducts() {
+        lifecycleScope.launch {
+            viewModel.flow.collectLatest {
+                postAdapter.submitData(it)
+            }
+        }
+    }
+
+    private fun setProgressBarAccordingToLoadState() {
+//        lifecycleScope.launch {
+//            postAdapter.loadStateFlow.collectLatest {
+//                binding.progressBar.isVisible = it.append is Loading
+//            }
+//        }
+    }
 }
 
 

@@ -2,7 +2,13 @@ package com.example.abyss.ui.profile
 
 import android.net.sip.SipSession
 import androidx.lifecycle.*
+import androidx.paging.Pager
+import androidx.paging.PagingConfig
+import androidx.paging.cachedIn
+import com.example.abyss.adapters.PostPagingAdapter
 import com.example.abyss.model.State
+import com.example.abyss.model.pagingsource.PostForProfileFirestorePagingSource
+import com.example.abyss.model.repository.auth.AuthRepository
 import com.example.abyss.model.repository.post.PostRepository
 import com.example.abyss.model.repository.user.UserRepository
 import kotlinx.coroutines.*
@@ -14,7 +20,9 @@ class ProfileViewModel(
     private val ioDispatcher: CoroutineDispatcher,
     private val postRepository: PostRepository,
     private val userRepository: UserRepository,
+    private val authRepository: AuthRepository,
     private val externalScope: CoroutineScope,
+    private val postForProfileFirestorePagingSource: PostForProfileFirestorePagingSource
 ) : ViewModel() {
 
     private val _userName = MutableLiveData<String>()
@@ -29,18 +37,29 @@ class ProfileViewModel(
     val avatarImageUrl: LiveData<String>
         get() = _avatarImageUrl
 
+
+    val flow = Pager(
+        PagingConfig(
+            initialLoadSize = 80,
+            pageSize = 60,
+            prefetchDistance = 30
+        )
+    ) {
+        postForProfileFirestorePagingSource
+    }.flow.cachedIn(viewModelScope)
+
     init {
         GetUser()
-        GetPost()
+//        GetPost()
     }
 
-    private fun GetPost() {
-        viewModelScope.launch(ioDispatcher) {
-            var p = postRepository.GetPostForProfile()
-        }
-    }
+//    private fun GetPost() {
+//        viewModelScope.launch(ioDispatcher) {
+//            var p = postRepository.GetPostForProfile()
+//        }
+//    }
 
-     fun GetUser() {
+    fun GetUser() {
 
         externalScope.launch(ioDispatcher) {
 

@@ -11,6 +11,7 @@ import com.example.abyss.model.pagingsource.PostForProfileFirestorePagingSource
 import com.example.abyss.model.repository.auth.AuthRepository
 import com.example.abyss.model.repository.post.PostRepository
 import com.example.abyss.model.repository.user.UserRepository
+import com.google.firebase.firestore.Query
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
 import timber.log.Timber
@@ -22,7 +23,6 @@ class ProfileViewModel(
     private val userRepository: UserRepository,
     private val authRepository: AuthRepository,
     private val externalScope: CoroutineScope,
-    private val postForProfileFirestorePagingSource: PostForProfileFirestorePagingSource
 ) : ViewModel() {
 
     private val _userName = MutableLiveData<String>()
@@ -45,15 +45,15 @@ class ProfileViewModel(
     val loadingAllPosts: LiveData<Boolean>
         get() = _loadingAllPosts
 
-    val flow = Pager(
-        PagingConfig(
-            initialLoadSize = 40,
-            pageSize = 40,
-            prefetchDistance = 40
-        )
-    ) {
-        postForProfileFirestorePagingSource
-    }.flow.cachedIn(externalScope)
+//    val flow = Pager(
+//        PagingConfig(
+//            initialLoadSize = 40,
+//            pageSize = 40,
+//            prefetchDistance = 40
+//        )
+//    ) {
+//        postForProfileFirestorePagingSource
+//    }.flow.cachedIn(externalScope)
 
     init {
         GetUser()
@@ -67,11 +67,8 @@ class ProfileViewModel(
 
     }
 
-//    private fun GetPost() {
-//        viewModelScope.launch(ioDispatcher) {
-//            var p = postRepository.GetPostForProfile()
-//        }
-//    }
+    val getPosts = postRepository.GetPostForProfile()?.cachedIn(viewModelScope)?.asLiveData()
+
 
     fun GetUser() {
 
@@ -94,7 +91,6 @@ class ProfileViewModel(
         }
 
     }
-
 
 }
 

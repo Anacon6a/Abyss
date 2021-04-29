@@ -16,6 +16,7 @@ import com.example.abyss.ui.first.FirstViewModelFactory
 import com.example.abyss.ui.auth.login.LoginViewModelFactory
 import com.example.abyss.ui.auth.registration.RegistrationViewModelFactory
 import com.example.abyss.ui.posts.addpost.AddPostViewModel
+import com.example.abyss.ui.posts.post.PostViewModel
 import com.example.abyss.ui.profile.ProfileViewModel
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.FirebaseDatabase
@@ -67,15 +68,18 @@ class AbyssApplication : Application(), KodeinAware {
 
 // ViewModel
         bindViewModel<ProfileViewModel>() with singleton {
-            ProfileViewModel(instance(), instance(), instance(), instance(), instance(), instance())
+            ProfileViewModel(instance(), instance(), instance(), instance(), instance())
         }
         bindViewModel<AddPostViewModel>() with provider {
             AddPostViewModel(instance(), instance(), instance())
         }
+        bindViewModel<PostViewModel>() with provider {
+            PostViewModel(instance())
+        }
 // Adapter
         bind<PostPagingAdapter>() with provider { PostPagingAdapter() }
 // PagingSource
-       bind() from provider { PostForProfileFirestorePagingSource(instance(), instance()) }
+//       bind() from provider { PostForProfileFirestorePagingSource(instance(), instance()) }
 
     }
 

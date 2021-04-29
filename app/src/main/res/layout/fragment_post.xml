@@ -1,14 +1,149 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
     tools:context=".ui.posts.post.PostFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
 
-</FrameLayout>
+    <data>
+
+        <variable
+            name="PostViewModel"
+            type="com.example.abyss.ui.posts.post.PostViewModel" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <!--    <androidx.constraintlayout.widget.ConstraintLayout-->
+        <!--        android:layout_width="match_parent"-->
+        <!--        android:layout_height="match_parent"-->
+        <!--        android:background="@color/black">-->
+
+
+        <!--        <android.support.design.widget.AppBarLayout-->
+        <!--            android:id="@+id/post_app_bar_layout"-->
+        <!--            android:layout_width="match_parent"-->
+        <!--            android:layout_height="wrap_content"-->
+        <!--            app:expanded="true"-->
+        <!--            app:layout_behavior="com.company.app.custom.CustomRecyclerScrollBehavior">-->
+
+        <!--        <android.support.design.widget.CollapsingToolbarLayout-->
+        <!--            android:id="@+id/post_container"-->
+        <!--            android:layout_width="match_parent"-->
+        <!--            android:layout_height="wrap_content"-->
+        <!--            android:background="@drawable/post_content_bg"-->
+        <!--            app:contentScrim="?attr/colorPrimary"-->
+        <!--            app:expandedTitleMarginEnd="64dp"-->
+        <!--            app:expandedTitleMarginStart="48dp"-->
+        <!--            app:layout_scrollFlags="scroll|exitUntilCollapsed">-->
+
+        <!--            <FrameLayout-->
+        <!--                android:id="@+id/header_frame"-->
+        <!--                android:layout_width="match_parent"-->
+        <!--                android:layout_height="wrap_content"-->
+        <!--                app:layout_collapseMode="parallax"-->
+        <!--                app:layout_collapseParallaxMultiplier="0.8">-->
+
+        <!--                <ScrollView-->
+        <!--                    android:layout_width="match_parent"-->
+        <!--                    android:layout_height="wrap_content"-->
+        <!--                    app:layout_constraintEnd_toEndOf="parent"-->
+        <!--                    app:layout_constraintStart_toStartOf="parent"-->
+        <!--                    app:layout_constraintTop_toTopOf="parent">-->
+
+
+        <!--                        <ImageView-->
+        <!--                            android:id="@+id/post_image"-->
+        <!--                            android:layout_width="0dp"-->
+        <!--                            android:layout_height="wrap_content"-->
+        <!--                            android:adjustViewBounds="true"-->
+        <!--                            android:src="@drawable/synth" />-->
+
+        <!--&lt;!&ndash;                        <androidx.constraintlayout.widget.ConstraintLayout&ndash;&gt;-->
+        <!--&lt;!&ndash;                            android:layout_width="match_parent"&ndash;&gt;-->
+        <!--&lt;!&ndash;                            android:layout_height="wrap_content"&ndash;&gt;-->
+        <!--&lt;!&ndash;                            android:layout_margin="20dp"&ndash;&gt;-->
+        <!--&lt;!&ndash;                            app:layout_constraintBottom_toBottomOf="parent"&ndash;&gt;-->
+        <!--&lt;!&ndash;                            app:layout_constraintTop_toBottomOf="@+id/post_image"&ndash;&gt;-->
+        <!--&lt;!&ndash;                            tools:layout_editor_absoluteX="20dp">&ndash;&gt;-->
+
+        <!--                            <com.google.android.material.imageview.ShapeableImageView-->
+        <!--                                android:id="@+id/profile_image"-->
+        <!--                                android:layout_width="0dp"-->
+        <!--                                android:layout_height="0dp"-->
+        <!--                                android:layout_marginEnd="185dp"-->
+        <!--                                android:src="@color/white"-->
+        <!--                                app:layout_constraintBottom_toBottomOf="parent"-->
+        <!--                                app:layout_constraintEnd_toStartOf="@+id/subscribe_btn"-->
+        <!--                                app:layout_constraintStart_toStartOf="parent"-->
+        <!--                                app:layout_constraintTop_toTopOf="parent"-->
+        <!--                                app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.App.CornerSize50Percent" />-->
+
+        <!--                            <LinearLayout-->
+        <!--                                android:id="@+id/user_profile_linear_layout"-->
+        <!--                                android:layout_width="0dp"-->
+        <!--                                android:layout_height="0dp"-->
+        <!--                                android:layout_marginStart="10dp"-->
+        <!--                                android:layout_marginEnd="10dp"-->
+        <!--                                android:onClick="@{() -> PostViewModel.goToUserProfile()}"-->
+        <!--                                android:orientation="vertical"-->
+        <!--                                app:layout_constraintBottom_toBottomOf="parent"-->
+        <!--                                app:layout_constraintEnd_toStartOf="@+id/subscribe_btn"-->
+        <!--                                app:layout_constraintStart_toEndOf="@id/profile_image"-->
+        <!--                                app:layout_constraintTop_toTopOf="parent">-->
+
+        <!--                                <TextView-->
+        <!--                                    android:id="@+id/user_name"-->
+        <!--                                    android:layout_width="wrap_content"-->
+        <!--                                    android:layout_height="wrap_content"-->
+        <!--                                    android:text="@{PostViewModel.userName}"-->
+        <!--                                    tools:text="" />-->
+
+        <!--                                <TextView-->
+        <!--                                    android:id="@+id/textView"-->
+        <!--                                    android:layout_width="wrap_content"-->
+        <!--                                    android:layout_height="wrap_content"-->
+        <!--                                    android:text="Ограничить символы " />-->
+        <!--                            </LinearLayout>-->
+
+        <!--                            <Button-->
+        <!--                                android:id="@+id/subscribe_btn"-->
+        <!--                                android:layout_width="wrap_content"-->
+        <!--                                android:layout_height="wrap_content"-->
+        <!--                                android:layout_marginEnd="5dp"-->
+        <!--                                android:background="@drawable/login_btn_bg"-->
+        <!--                                android:onClick="@{() -> PostViewModel.subscribeToAccount()}"-->
+        <!--                                android:text="Подписаться"-->
+        <!--                                android:textAllCaps="false"-->
+        <!--                                app:layout_constraintBottom_toBottomOf="@+id/user_profile_linear_layout"-->
+        <!--                                app:layout_constraintEnd_toEndOf="parent"-->
+        <!--                                app:layout_constraintStart_toEndOf="@+id/user_profile_linear_layout"-->
+        <!--                                app:layout_constraintTop_toTopOf="parent" />-->
+
+        <!--                </ScrollView>-->
+        <!--            </FrameLayout>-->
+        <!--            -->
+
+        <!--        </android.support.design.widget.CollapsingToolbarLayout>-->
+
+        <!--        <androidx.constraintlayout.widget.ConstraintLayout-->
+        <!--            android:layout_width="match_parent"-->
+        <!--            android:layout_height="200dp"-->
+        <!--            app:layout_constraintBottom_toTopOf="@id/comments_recycler_view"-->
+        <!--            app:layout_constraintTop_toBottomOf="@id/nestedScrollView">-->
+
+
+        <!--        </androidx.constraintlayout.widget.ConstraintLayout>-->
+
+        <!--        <androidx.recyclerview.widget.RecyclerView-->
+        <!--            android:id="@+id/comments_recycler_view"-->
+        <!--            android:layout_width="match_parent"-->
+        <!--            android:layout_height="wrap_content"-->
+        <!--            app:layout_constraintTop_toBottomOf="@+id/nestedScrollView" />-->
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+</layout>

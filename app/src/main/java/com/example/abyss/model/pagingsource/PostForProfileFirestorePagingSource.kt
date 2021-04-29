@@ -17,16 +17,11 @@ import timber.log.Timber
 
 
 class PostForProfileFirestorePagingSource(
-    private val firebaseAuth: FirebaseAuth,
-    private val firestore: FirebaseFirestore,
+    private val query: Query,
 ) : PagingSource<QuerySnapshot, PostData>() {
 
     override suspend fun load(params: LoadParams<QuerySnapshot>): LoadResult<QuerySnapshot, PostData> {
         return try {
-
-            val uid = firebaseAuth.uid.toString()
-            val query = firestore.collection("posts").document("uid").collection(uid)
-                .orderBy("date", Query.Direction.DESCENDING)
 
             //ссылка на первые 10 элементов
             val currentPage = params.key ?: query.limit(40).get().await()
@@ -49,19 +44,4 @@ class PostForProfileFirestorePagingSource(
     override fun getRefreshKey(state: PagingState<QuerySnapshot, PostData>): QuerySnapshot? {
         return null
     }
-
-//    override fun getRefreshKey(state: PagingState<Int, User>): Int? {
-//        // Try to find the page key of the closest page to anchorPosition, from
-//        // either the prevKey or the nextKey, but you need to handle nullability
-//        // here:
-//        //  * prevKey == null -> anchorPage is the first page.
-//        //  * nextKey == null -> anchorPage is the last page.
-//        //  * both prevKey and nextKey null -> anchorPage is the initial page, so
-//        //    just return null.
-//        return state.anchorPosition?.let { anchorPosition ->
-//            val anchorPage = state.closestPageToPosition(anchorPosition)
-//            anchorPage?.prevKey?.plus(1) ?: anchorPage?.nextKey?.minus(1)
-//        }
-//    }
-//}
 }

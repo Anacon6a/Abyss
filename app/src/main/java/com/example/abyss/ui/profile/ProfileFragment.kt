@@ -42,7 +42,7 @@ class ProfileFragment : Fragment(), KodeinAware {
         binding = FragmentProfileBinding.inflate(inflater, container, false)
         binding.profileViewModel = viewModel
         binding.lifecycleOwner = viewLifecycleOwner
-        binding.progressBarLoadingAllPosts.visibility = View.GONE
+
         setAdapters()
         getPosts()
         return binding.root
@@ -69,22 +69,23 @@ class ProfileFragment : Fragment(), KodeinAware {
                 }
             }
         }
-//        postAdapter.setOnItemClickListener {
+        postAdapter.setOnItemClickListener {
 //            val action = HomeFragmentDirections.actionHomeFragmentToDetailsFragment(it)
 //            findNavController().navigate(action)
-//        }
-    }
-
-    // получение данных из viewmodel и передача адаптеру
-    private fun getPosts() {
-        lifecycleScope.launch {
-            viewModel.flow.collectLatest {
-                postAdapter.submitData(it)
-            }
         }
     }
 
+    // получение данных из viewmodel и передача адаптеру
+    private fun getPosts()  {
+
+        viewModel.getPosts?.observe(viewLifecycleOwner, {
+            lifecycleScope.launch {
+                postAdapter.submitData(it)
+            }
+        })
+    }
 }
+
 
 
 

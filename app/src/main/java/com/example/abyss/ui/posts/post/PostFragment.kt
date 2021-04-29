@@ -16,7 +16,7 @@ class PostFragment : Fragment() {
         savedInstanceState: Bundle?,
     ): View? {
 
-        
+
 
         return inflater.inflate(R.layout.fragment_post, container, false)
     }

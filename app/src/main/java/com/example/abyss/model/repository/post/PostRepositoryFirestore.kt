@@ -1,10 +1,15 @@
 package com.example.abyss.model.repository.post
 
 import android.net.Uri
+import androidx.paging.Pager
+import androidx.paging.PagingConfig
 import androidx.paging.RemoteMediator
+import androidx.paging.cachedIn
 import com.example.abyss.model.data.PostData
+import com.example.abyss.model.pagingsource.PostForProfileFirestorePagingSource
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.Query
 import com.google.firebase.storage.FirebaseStorage
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
@@ -20,6 +25,7 @@ class PostRepositoryFirestore(
     private val firebaseStorage: FirebaseStorage,
     private val ioDispatcher: CoroutineDispatcher,
     private val externalScope: CoroutineScope,
+
 ) : PostRepository {
 
     override suspend fun CreatePost(post: PostData) {
@@ -60,34 +66,18 @@ class PostRepositoryFirestore(
     )
 
 
-    override suspend fun GetPostForProfile(): List<PostData>? {
-        return null
-//        val uid = firebaseAuth.uid!!
-//
-//        val posts = firestore.collection("posts")
+    override fun GetPostForProfile() =
+        Pager(
+            PagingConfig(
+                initialLoadSize = 40,
+                pageSize = 40,
+                prefetchDistance = 40
+            )
+        ) {
+            val uid = firebaseAuth.uid.toString()
+            val query = firestore.collection("posts").document("uid").collection(uid).orderBy("date", Query.Direction.DESCENDING)
+            PostForProfileFirestorePagingSource(query)
+        }.flow.cachedIn(externalScope)
 
-//        val postsList: List<PostData>?
-//        val postsTypeIndicator = object : GenericTypeIndicator<List<PostData>>() {}
-//        val uid = firebaseAuth.uid!!
-//
-//        return try {
-//
-//            val postsSnapshot = firebaseDatabase
-//                .getReference("posts")
-//                .orderByChild("userId")
-//                .equalTo(uid)
-//                .awaitsSingle()
-//
-//            postsList = postsSnapshot.getValue(postsTypeIndicator)
-//
-//            postsList
-//
-//        } catch (e: Exception) {
-//
-//            Timber.w(e, "Не удается получить посты из базы данных")
-//            null
-//        }
-//    }
-    }
 
 }

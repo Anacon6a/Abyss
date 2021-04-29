@@ -53,7 +53,11 @@
         android:id="@+id/profileFragment"
         android:name="com.example.abyss.ui.profile.ProfileFragment"
         android:label="fragment_profile"
-        tools:layout="@layout/fragment_profile" />
+        tools:layout="@layout/fragment_profile" >
+        <action
+            android:id="@+id/action_profileFragment_to_postFragment"
+            app:destination="@id/postFragment" />
+    </fragment>
     <fragment
         android:id="@+id/addPostFragment"
         android:name="com.example.abyss.ui.posts.addpost.AddPostFragment"
@@ -63,4 +67,9 @@
             android:id="@+id/action_addPostFragment_to_profileFragment"
             app:destination="@id/profileFragment" />
     </fragment>
+    <fragment
+        android:id="@+id/postFragment"
+        android:name="com.example.abyss.ui.posts.post.PostFragment"
+        android:label="fragment_post"
+        tools:layout="@layout/fragment_post" />
 </navigation>

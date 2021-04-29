@@ -2,13 +2,13 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context=".ui.posts.AddPostFragment">
+    tools:context=".ui.posts.addpost.AddPostFragment">
 
     <data>
 
         <variable
             name="AddPostViewModel"
-            type="com.example.abyss.ui.posts.AddPostViewModel" />
+            type="com.example.abyss.ui.posts.addpost.AddPostViewModel" />
     </data>
 
     <androidx.core.widget.NestedScrollView
@@ -22,19 +22,13 @@
 
             <ImageView
                 android:id="@+id/image_view_new_post"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="12dp"
                 android:layout_marginTop="50dp"
+                android:layout_marginEnd="12dp"
                 android:layout_marginBottom="28dp"
-                android:maxWidth="340dp"
-                android:maxHeight="400dp"
-                app:layout_constraintHeight_max="400dp"
-                app:layout_constraintWidth_max="340dp"
-                app:layout_constraintHeight_min="300dp"
-                app:layout_constraintWidth_min="300dp"
-                android:minWidth="300dp"
-                android:minHeight="300dp"
-                android:scaleType="fitCenter"
+                android:adjustViewBounds="true"
                 android:src="@{AddPostViewModel.postImageUrl}"
                 app:layout_constraintBottom_toTopOf="@+id/button_select_img"
                 app:layout_constraintEnd_toEndOf="parent"

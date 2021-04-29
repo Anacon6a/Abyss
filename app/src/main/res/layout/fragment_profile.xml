@@ -69,15 +69,29 @@
     </com.google.android.material.appbar.CollapsingToolbarLayout>
     </com.google.android.material.appbar.AppBarLayout>
 
-    <androidx.core.widget.NestedScrollView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior"
-        android:background="@drawable/profile_content_bg">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior"
+            android:background="@drawable/profile_content_bg">
+
+            <com.google.android.material.progressindicator.LinearProgressIndicator
+                android:id="@+id/progress_bar_add_posts"
+                style="@style/SpinKitView.MultiplePulse"
+                android:indeterminate="true"
+                hideIfFalse="@{ProfileViewModel.loadingAddPost}"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginStart="32dp"
+                android:layout_marginTop="12dp"
+                android:layout_marginEnd="32dp"
+                app:indicatorColor="@color/purple_700"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/profile_posts_recycler_view"
@@ -85,36 +99,29 @@
                 android:layout_height="match_parent"
                 android:padding="12dp"
                 tools:listitem="@layout/post_for_profile_item"
-                android:layout_marginTop="4dp"
-
+                android:layout_marginTop="12dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
+            <com.github.ybq.android.spinkit.SpinKitView
+                android:id="@+id/progress_bar_loading_all_posts"
+                style="@style/SpinKitView.MultiplePulse"
+                hideIfFalse="@{ProfileViewModel.loadingAllPosts}"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                app:SpinKit_Color="@color/purple_700"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.498"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.269" />
+
         </androidx.constraintlayout.widget.ConstraintLayout>
 
-
-<!--        <HorizontalScrollView-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="wrap_content">-->
-
-<!--            <LinearLayout-->
-<!--                android:layout_width="wrap_content"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                android:orientation="horizontal"/>-->
-<!--        </HorizontalScrollView>-->
-
-<!--        <ScrollView-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="wrap_content">-->
-<!--            <LinearLayout-->
-<!--                android:layout_width="wrap_content"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                android:orientation="vertical"/>-->
-<!--        </ScrollView>-->
-
-    </androidx.core.widget.NestedScrollView>
 
 <!--    <com.google.android.material.floatingactionbutton.FloatingActionButton-->
 <!--        android:layout_width="wrap_content"-->
@@ -128,6 +135,7 @@
 <!--        android:layout_marginStart="30dp"-->
 <!--        android:backgroundTint="?attr/colorAccent"-->
 <!--        android:focusable="true" />-->
+
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
 </layout>

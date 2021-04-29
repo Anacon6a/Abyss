@@ -11,12 +11,10 @@
         tools:layout="@layout/fragment_first" >
         <action
             android:id="@+id/action_firstFragment_to_newsFeedFragment"
-            app:destination="@id/newsFeedFragment"
-            app:popUpToInclusive="true" />
+            app:destination="@id/newsFeedFragment" />
         <action
             android:id="@+id/action_firstFragment_to_loginFragment"
-            app:destination="@id/loginFragment"
-            app:popUpToInclusive="true" />
+            app:destination="@id/loginFragment" />
     </fragment>
     <fragment
         android:id="@+id/loginFragment"
@@ -30,8 +28,7 @@
             app:exitAnim="@anim/move_to_the_left" />
         <action
             android:id="@+id/action_loginFragment_to_newsFeedFragment"
-            app:destination="@id/newsFeedFragment"
-            app:popUpToInclusive="true" />
+            app:destination="@id/newsFeedFragment" />
     </fragment>
     <fragment
         android:id="@+id/registrationFragment"
@@ -45,8 +42,7 @@
             app:exitAnim="@anim/move_to_the_right" />
         <action
             android:id="@+id/action_registrationFragment_to_newsFeedFragment"
-            app:destination="@id/newsFeedFragment"
-            app:popUpToInclusive="true" />
+            app:destination="@id/newsFeedFragment" />
     </fragment>
     <fragment
         android:id="@+id/newsFeedFragment"
@@ -60,12 +56,11 @@
         tools:layout="@layout/fragment_profile" />
     <fragment
         android:id="@+id/addPostFragment"
-        android:name="com.example.abyss.ui.posts.AddPostFragment"
+        android:name="com.example.abyss.ui.posts.addpost.AddPostFragment"
         android:label="fragment_add_post"
         tools:layout="@layout/fragment_add_post" >
         <action
             android:id="@+id/action_addPostFragment_to_profileFragment"
-            app:destination="@id/profileFragment"
-            app:popUpToInclusive="true" />
+            app:destination="@id/profileFragment" />
     </fragment>
 </navigation>

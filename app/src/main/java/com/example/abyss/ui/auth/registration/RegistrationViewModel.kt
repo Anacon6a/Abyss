@@ -67,8 +67,6 @@ class RegistrationViewModel(
     private val disposables = CompositeDisposable()
 
     init {
-        _eventRegistrationCompleted.value = false
-        _eventGoToLogin.value = false
         _viewEnabled.value = true
     }
 
@@ -78,11 +76,11 @@ class RegistrationViewModel(
 
     fun onRegistration() {
 
-       loading(true)
-
         viewModelScope.launch(ioDispatcher) {
 
-            var request = authRepository.register(email!!, password!!)
+            loading(true)
+
+            val request = authRepository.register(email!!, password!!)
 
             if (request != "") {
 
@@ -93,9 +91,10 @@ class RegistrationViewModel(
                userRepository.CreateUser(user)
                 onSuccessRegistration()
             }
+            loading(false)
         }
 
-        loading(false)
+
     }
 
     private fun onSuccessRegistration() {
@@ -109,9 +108,9 @@ class RegistrationViewModel(
     }
 
     private fun loading(boolean: Boolean) {
-        _progressBar.value = boolean
-        _buttonEnabled.value = !boolean
-        _viewEnabled.value = !boolean
+        _progressBar.postValue(boolean)
+        _buttonEnabled.postValue(!boolean)
+        _viewEnabled.postValue(!boolean)
     }
 
 }

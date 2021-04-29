@@ -14,7 +14,7 @@
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     app:cardCornerRadius="20dp"
-    app:cardElevation="4dp"
+    app:cardElevation="2dp"
     app:cardPreventCornerOverlap="true"
     app:cardUseCompatPadding="true"
     android:layout_margin="0dp">
@@ -22,18 +22,18 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/product_container">
+        android:id="@+id/post_container">
 
         <com.google.android.material.imageview.ShapeableImageView
             android:id="@+id/icons_image"
-            android:layout_width="100dp"
-            android:layout_height="100dp"
+            android:layout_width="120dp"
+            android:layout_height="120dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.DifferentCornerSize."
-            app:srcCompat="@drawable/ic_launcher_background" />
+            app:srcCompat="@drawable/post_bg" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

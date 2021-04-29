@@ -1,19 +1,14 @@
-package com.example.abyss.ui.posts
+package com.example.abyss.ui.posts.addpost
 
 import android.net.Uri
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.abyss.model.data.PostData
 import com.example.abyss.model.repository.post.PostRepository
-import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.cancel
+import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.launch
-import timber.log.Timber
-import java.sql.Timestamp
+import java.util.*
 
 class AddPostViewModel(
     private val ioDispatcher: CoroutineDispatcher,
@@ -40,14 +35,14 @@ class AddPostViewModel(
     private val _eventImageSelection = MutableLiveData<Boolean>()
     val eventImageSelection: LiveData<Boolean>
         get() = _eventImageSelection
-//
+
+
 //    private val _eventCansel = MutableLiveData<Boolean>()
 //    val eventCansel: LiveData<Boolean>
 //        get() = _eventCansel
 
 
     init {
-
         _buttonEnabled.value = false
     }
 
@@ -71,15 +66,13 @@ class AddPostViewModel(
     fun addPost() {
         externalScope.launch(ioDispatcher) {
             postImageUrl.value?.let {
-                var i = 0
 
                     val url = postRepository.AddPostImageInStorage(it).collect { url ->
 
-                        val date = Timestamp(System.currentTimeMillis())
-                        val post = PostData(url, signature.value, date)
-                        postRepository.CreatePost(post)
+                        val date = Date(System.currentTimeMillis())
+//                        val post = PostData(url, signature.value, date)
 
-                        i++
+//                        postRepository.CreatePost(post)
 
                     }
             }

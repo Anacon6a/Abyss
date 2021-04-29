@@ -37,20 +37,34 @@ class ProfileViewModel(
     val avatarImageUrl: LiveData<String>
         get() = _avatarImageUrl
 
+    private val _loadingAddPost = MutableLiveData<Boolean>()
+    val loadingAddPost: LiveData<Boolean>
+        get() = _loadingAddPost
+
+    private val _loadingAllPosts = MutableLiveData<Boolean>()
+    val loadingAllPosts: LiveData<Boolean>
+        get() = _loadingAllPosts
 
     val flow = Pager(
         PagingConfig(
-            initialLoadSize = 80,
-            pageSize = 60,
-            prefetchDistance = 30
+            initialLoadSize = 40,
+            pageSize = 40,
+            prefetchDistance = 40
         )
     ) {
         postForProfileFirestorePagingSource
-    }.flow.cachedIn(viewModelScope)
+    }.flow.cachedIn(externalScope)
 
     init {
         GetUser()
-//        GetPost()
+    }
+
+    fun LoadingPosts(boolean: Boolean) {
+        _loadingAllPosts.postValue(boolean)
+    }
+
+    fun LoadingPost() {
+
     }
 
 //    private fun GetPost() {

@@ -56,15 +56,9 @@ class LoginViewModel(
         _buttonEnabled.value = !(email.isNullOrEmpty() || password.isNullOrEmpty())
     }
 
-    private val disposables = CompositeDisposable()
-
 
     init {
-        Timber.i("init")
-        _eventLoginCompleted.value = false
-        _eventGoToRegistration.value = false
         _viewEnabled.value = true
-
     }
 
     fun onGoToRegistration() {
@@ -73,17 +67,18 @@ class LoginViewModel(
 
     fun onLogin() {
 
-        loading(true)
-
         viewModelScope.launch(ioDispatcher) {
+            loading(true)
+
             var request = authRepository.login(email!!, password!!)
             if (request != "") {
                 onFailureLogin(request)
             } else {
                 onSuccessLogin()
             }
+            loading(false)
         }
-        loading(false)
+
     }
 
     private fun onSuccessLogin() {
@@ -95,9 +90,9 @@ class LoginViewModel(
     }
 
     private fun loading(boolean: Boolean) {
-        _progressBar.value = boolean
-        _buttonEnabled.value = !boolean
-        _viewEnabled.value = !boolean
+        _progressBar.postValue(boolean)
+        _buttonEnabled.postValue(!boolean)
+        _viewEnabled.postValue(!boolean)
     }
 
 

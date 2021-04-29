@@ -24,6 +24,7 @@ class PostRepositoryFirestore(
 
     override suspend fun CreatePost(post: PostData) {
         externalScope.launch(ioDispatcher) {
+
             val uid = firebaseAuth.uid!!
 
             val doc = firestore.collection("posts")
@@ -33,9 +34,9 @@ class PostRepositoryFirestore(
 
             post.id = doc.id
 
-            doc.set(post).addOnCompleteListener{
-                Timber.i("ППост добавлен: ${post.id}")
-            }.addOnFailureListener{
+            doc.set(post).addOnCompleteListener {
+                Timber.i("Пост добавлен: ${post.id}")
+            }.addOnFailureListener {
                 Timber.i("Ошибка: ${it.message.toString()}")
             }
 
@@ -51,7 +52,7 @@ class PostRepositoryFirestore(
 
         val imageRef = firebaseStorage.getReference("postImages").child(uid).child(fileName)
         imageRef.putFile(imageUri).await()
-        val url = imageRef.path
+        val url = imageRef.downloadUrl.await()
         emit(url.toString())
     }.shareIn(
         externalScope,

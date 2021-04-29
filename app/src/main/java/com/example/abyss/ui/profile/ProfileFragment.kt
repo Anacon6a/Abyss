@@ -4,8 +4,14 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
+import androidx.paging.LoadState
+import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.abyss.adapters.PostLoadStateAdapter
 import com.example.abyss.adapters.PostPagingAdapter
 import com.example.abyss.databinding.FragmentProfileBinding
 import kodeinViewModel
@@ -36,17 +42,41 @@ class ProfileFragment : Fragment(), KodeinAware {
         binding = FragmentProfileBinding.inflate(inflater, container, false)
         binding.profileViewModel = viewModel
         binding.lifecycleOwner = viewLifecycleOwner
-
+        binding.progressBarLoadingAllPosts.visibility = View.GONE
         setAdapters()
-        getProducts()
+        getPosts()
         return binding.root
     }
 
+    // настройка RecyclerView и подключение к адаптерам
     private fun setAdapters() {
-        binding.profilePostsRecyclerView.adapter = postAdapter
+        lifecycleScope.launch {
+            binding.profilePostsRecyclerView.apply {
+                layoutManager = GridLayoutManager(context, 3)
+                setHasFixedSize(false)
+                itemAnimator = null
+                adapter = postAdapter
+//                    .withLoadStateFooter(
+//                    footer = PostLoadStateAdapter { postAdapter.retry()}
+//                )
+                lifecycleScope.launch {
+                    postAdapter.loadStateFlow.collectLatest { loadState ->
+
+                        viewModel.LoadingPosts(loadState.source.refresh is LoadState.Loading)
+                        // ничего не найдено - is LoadState.NotLoading
+                        //    is LoadState.Error
+                    }
+                }
+            }
+        }
+//        postAdapter.setOnItemClickListener {
+//            val action = HomeFragmentDirections.actionHomeFragmentToDetailsFragment(it)
+//            findNavController().navigate(action)
+//        }
     }
 
-    private fun getProducts() {
+    // получение данных из viewmodel и передача адаптеру
+    private fun getPosts() {
         lifecycleScope.launch {
             viewModel.flow.collectLatest {
                 postAdapter.submitData(it)
@@ -54,13 +84,6 @@ class ProfileFragment : Fragment(), KodeinAware {
         }
     }
 
-    private fun setProgressBarAccordingToLoadState() {
-//        lifecycleScope.launch {
-//            postAdapter.loadStateFlow.collectLatest {
-//                binding.progressBar.isVisible = it.append is Loading
-//            }
-//        }
-    }
 }
 
 

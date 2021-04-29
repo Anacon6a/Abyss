@@ -1,4 +1,4 @@
-package com.example.abyss.ui.posts
+package com.example.abyss.ui.posts.addpost
 
 import android.app.Activity
 import android.content.Intent
@@ -10,6 +10,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.example.abyss.databinding.FragmentAddPostBinding
+import com.example.abyss.ui.posts.AddPostFragmentDirections
 import com.github.dhaval2404.imagepicker.ImagePicker
 import kodeinViewModel
 import org.kodein.di.KodeinAware

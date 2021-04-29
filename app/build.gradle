@@ -96,5 +96,7 @@ dependencies {
     implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.4.3'
     // ImagePicker
     implementation 'com.github.dhaval2404:imagepicker:1.8'
+    // Android-SpinKit - анимация загрузки
+    implementation 'com.github.ybq:Android-SpinKit:1.4.0'
 
 }

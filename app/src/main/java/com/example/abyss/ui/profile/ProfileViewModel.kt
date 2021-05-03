@@ -1,27 +1,18 @@
 package com.example.abyss.ui.profile
 
-import android.net.sip.SipSession
 import androidx.lifecycle.*
-import androidx.paging.Pager
-import androidx.paging.PagingConfig
 import androidx.paging.cachedIn
-import com.example.abyss.adapters.PostPagingAdapter
 import com.example.abyss.model.State
-import com.example.abyss.model.pagingsource.PostForProfileFirestorePagingSource
-import com.example.abyss.model.repository.auth.AuthRepository
 import com.example.abyss.model.repository.post.PostRepository
 import com.example.abyss.model.repository.user.UserRepository
-import com.google.firebase.firestore.Query
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
 import timber.log.Timber
-import java.lang.Exception
 
 class ProfileViewModel(
     private val ioDispatcher: CoroutineDispatcher,
     private val postRepository: PostRepository,
     private val userRepository: UserRepository,
-    private val authRepository: AuthRepository,
     private val externalScope: CoroutineScope,
 ) : ViewModel() {
 
@@ -29,21 +20,17 @@ class ProfileViewModel(
     val userName: LiveData<String>
         get() = _userName
 
-    private val _postImageUrl = MutableLiveData<String>()
-    val postImageUrl: LiveData<String>
-        get() = _postImageUrl
-
-    private val _avatarImageUrl = MutableLiveData<String>()
-    val avatarImageUrl: LiveData<String>
-        get() = _avatarImageUrl
+    private val _profileImageUrl = MutableLiveData<String>()
+    val profileImageUrl: LiveData<String>
+        get() = _profileImageUrl
 
     private val _loadingAddPost = MutableLiveData<Boolean>()
     val loadingAddPost: LiveData<Boolean>
         get() = _loadingAddPost
 
-    private val _loadingAllPosts = MutableLiveData<Boolean>()
-    val loadingAllPosts: LiveData<Boolean>
-        get() = _loadingAllPosts
+    private val _progressBarloadingAllPosts = MutableLiveData<Boolean>()
+    val progressBarloadingAllPosts: LiveData<Boolean>
+        get() = _progressBarloadingAllPosts
 
 //    val flow = Pager(
 //        PagingConfig(
@@ -60,7 +47,7 @@ class ProfileViewModel(
     }
 
     fun LoadingPosts(boolean: Boolean) {
-        _loadingAllPosts.postValue(boolean)
+        _progressBarloadingAllPosts.postValue(boolean)
     }
 
     fun LoadingPost() {
@@ -82,6 +69,7 @@ class ProfileViewModel(
                     }
                     is State.Success -> {
                         _userName.postValue(state.data?.userName!!)
+                        _profileImageUrl.postValue(state.data?.profileImageUrl!!)
                     }
                     is State.Failed -> {
                         Timber.e("Ошибка получения пользователя: ${state.message}")

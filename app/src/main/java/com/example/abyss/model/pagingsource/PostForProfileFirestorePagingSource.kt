@@ -3,17 +3,9 @@ package com.example.abyss.model.pagingsource
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
 import com.example.abyss.model.data.PostData
-import com.example.abyss.model.repository.auth.AuthRepository
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.database.GenericTypeIndicator
-import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.QuerySnapshot
-import com.google.firebase.firestore.ktx.toObjects
-import kotlinx.coroutines.flow.asFlow
-import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.tasks.await
-import timber.log.Timber
 
 
 class PostForProfileFirestorePagingSource(

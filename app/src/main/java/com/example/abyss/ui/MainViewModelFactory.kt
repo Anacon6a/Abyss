@@ -5,7 +5,7 @@ import androidx.lifecycle.ViewModelProvider
 import org.kodein.di.DKodein
 import org.kodein.di.generic.instanceOrNull
 
-class GeneralViewModelFactory(
+class MainViewModelFactory(
     private val kodein: DKodein,
 ) : ViewModelProvider.NewInstanceFactory() {
 

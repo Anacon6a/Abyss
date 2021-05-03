@@ -13,7 +13,7 @@
         android:title="AddPost"/>
 
     <item android:id="@+id/notifications"
-        android:icon="@drawable/ic_baseline_favorite_24"
+        android:icon="@drawable/ic_like_false"
         android:title="Notifications"/>
 
     <item android:id="@+id/profileFragment"

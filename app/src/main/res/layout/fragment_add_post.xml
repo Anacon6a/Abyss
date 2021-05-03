@@ -32,7 +32,6 @@
                 android:src="@{AddPostViewModel.postImageUrl}"
                 app:layout_constraintBottom_toTopOf="@+id/button_select_img"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.491"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:srcCompat="@drawable/ic_add_image_for_post" />

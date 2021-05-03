@@ -37,6 +37,8 @@
 
             <com.google.android.material.imageview.ShapeableImageView
                 android:id="@+id/shapeable_image_view"
+                loadImage="@{ProfileViewModel.profileImageUrl}"
+                android:scaleType="centerCrop"
                 android:layout_width="100dp"
                 android:layout_height="100dp"
                 android:layout_marginStart="21dp"
@@ -108,17 +110,16 @@
             <com.github.ybq.android.spinkit.SpinKitView
                 android:id="@+id/progress_bar_loading_all_posts"
                 style="@style/SpinKitView.MultiplePulse"
-                hideIfFalse="@{ProfileViewModel.loadingAllPosts}"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                hideIfFalse="@{ProfileViewModel.progressBarloadingAllPosts}"
+                android:layout_width="31dp"
+                android:layout_height="32dp"
                 android:layout_gravity="center"
                 app:SpinKit_Color="@color/purple_700"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.498"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.269" />
+                app:layout_constraintVertical_bias="0.2" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

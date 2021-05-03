@@ -36,11 +36,27 @@
             android:layout_width="100dp"
             android:layout_height="100dp"
             android:layout_marginTop="38dp"
+            android:scaleType="centerCrop"
+            android:enabled="@{RegistrationViewModel.viewEnabled}"
+            android:src="@{RegistrationViewModel.userImageUrl}"
+            android:onClick="@{() -> RegistrationViewModel.imageSelection()}"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/registration_textView"
             app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.App.CornerSize50Percent"
             app:srcCompat="@drawable/ic_launcher_background" />
+
+        <com.google.android.material.imageview.ShapeableImageView
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_marginStart="85dp"
+            android:background="@drawable/add_image_btn_bg"
+            android:enabled="@{RegistrationViewModel.viewEnabled}"
+            android:onClick="@{() -> RegistrationViewModel.imageSelection()}"
+            android:src="@drawable/ic_add_post"
+            app:layout_constraintBottom_toBottomOf="@+id/shapeable_image_view"
+            app:layout_constraintStart_toStartOf="@+id/shapeable_image_view"
+            app:layout_constraintTop_toTopOf="@+id/shapeable_image_view" />
 
         <EditText
             android:id="@+id/username"

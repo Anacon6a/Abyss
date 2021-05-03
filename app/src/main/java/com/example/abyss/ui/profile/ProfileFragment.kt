@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.FragmentNavigator
 import androidx.navigation.fragment.findNavController
 import androidx.paging.LoadState
 import androidx.recyclerview.widget.GridLayoutManager
@@ -59,6 +60,13 @@ class ProfileFragment : Fragment(), KodeinAware {
 //                    .withLoadStateFooter(
 //                    footer = PostLoadStateAdapter { postAdapter.retry()}
 //                )
+
+                viewTreeObserver
+                    .addOnPreDrawListener {
+                        startPostponedEnterTransition()
+                        true
+                    }
+
                 lifecycleScope.launch {
                     postAdapter.loadStateFlow.collectLatest { loadState ->
 
@@ -69,15 +77,26 @@ class ProfileFragment : Fragment(), KodeinAware {
                 }
             }
         }
-        postAdapter.setOnItemClickListener {
-//            val action = HomeFragmentDirections.actionHomeFragmentToDetailsFragment(it)
-//            findNavController().navigate(action)
+        postAdapter.setOnItemClickListener {postImage, imageView, postContainer ->
+
+            val action = ProfileFragmentDirections.actionProfileFragmentToPostFragment(postImage)
+
+            findNavController()
+                .navigate(action,
+                    FragmentNavigator.Extras.Builder()
+                        .addSharedElements(
+                            mapOf(
+//                                imageView to imageView.transitionName,
+                                postContainer to postContainer.transitionName
+                            )
+                        ).build()
+                )
+
         }
     }
 
     // получение данных из viewmodel и передача адаптеру
     private fun getPosts()  {
-
         viewModel.getPosts?.observe(viewLifecycleOwner, {
             lifecycleScope.launch {
                 postAdapter.submitData(it)

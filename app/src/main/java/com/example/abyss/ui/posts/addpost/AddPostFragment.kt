@@ -46,9 +46,6 @@ class AddPostFragment : Fragment(), KodeinAware {
                 goToProfile()
             }
         })
-//        viewModel.eventCansel.observe(viewLifecycleOwner, { event ->
-//
-//        })
         viewModel.eventImageSelection.observe(viewLifecycleOwner, {event ->
             if (event) {
                 photoSelection()

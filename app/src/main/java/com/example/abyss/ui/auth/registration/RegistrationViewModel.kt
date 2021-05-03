@@ -1,15 +1,17 @@
 package com.example.abyss.ui.auth.registration
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
+import android.net.Uri
+import androidx.lifecycle.*
 import com.example.abyss.model.data.UserData
 import com.example.abyss.model.repository.auth.AuthRepository
 import com.example.abyss.model.repository.user.UserRepository
 import io.reactivex.rxjava3.disposables.CompositeDisposable
 import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.launch
+import timber.log.Timber
+import java.util.*
 
 class RegistrationViewModel(
     private val authRepository: AuthRepository,
@@ -59,15 +61,30 @@ class RegistrationViewModel(
     val eventGoToLogin: LiveData<Boolean>
         get() = _eventGoToLogin
 
+    private val _userImageUrl = MutableLiveData<Uri>()
+    val userImageUrl: LiveData<Uri>
+        get() = _userImageUrl
+
+    private val _eventImageSelection = MutableLiveData<Boolean>()
+    val eventImageSelection: LiveData<Boolean>
+        get() = _eventImageSelection
+
+
     private fun validateInput() {
         _buttonEnabled.value =
             !(username.isNullOrEmpty() || email.isNullOrEmpty() || password.isNullOrEmpty())
     }
 
-    private val disposables = CompositeDisposable()
-
     init {
         _viewEnabled.value = true
+    }
+
+    fun imageSelection() {
+        _eventImageSelection.value = true
+    }
+
+    fun endEventImageSelection() {
+        _eventImageSelection.value = false
     }
 
     fun onGoToLogin() {
@@ -83,28 +100,38 @@ class RegistrationViewModel(
             val request = authRepository.register(email!!, password!!)
 
             if (request != "") {
-
                 onFailureRegistration(request)
             } else {
 
-                val user = UserData(username!!, email!!, "")
-               userRepository.CreateUser(user)
-                onSuccessRegistration()
+                if (userImageUrl.value != null) {
+                   userRepository.AddProfileImageInStorage(userImageUrl.value!!).collect {
+                      AddUser(it)
+                  }
+                } else {
+                    AddUser("")
+                }
+                Timber.i("Сюда не придем")
             }
+        }
+    }
+
+    private fun AddUser(url: String){
+        viewModelScope.launch(ioDispatcher) {
+            val date = Date(System.currentTimeMillis())
+            val user = UserData(username!!, email!!, url, date)
+            userRepository.CreateUser(user)
+            onSuccessRegistration()
             loading(false)
         }
-
-
     }
 
     private fun onSuccessRegistration() {
-
         _eventRegistrationCompleted.postValue(true)
     }
 
     private fun onFailureRegistration(message: String) {
-
         _errorString.postValue(message)
+        loading(false)
     }
 
     private fun loading(boolean: Boolean) {
@@ -113,4 +140,11 @@ class RegistrationViewModel(
         _viewEnabled.postValue(!boolean)
     }
 
+    fun onActivityResult(requestCode: Int, uri: Uri?) {
+        if (uri != null) {
+            viewModelScope.launch {
+                _userImageUrl.postValue(uri!!)
+            }
+        }
+    }
 }

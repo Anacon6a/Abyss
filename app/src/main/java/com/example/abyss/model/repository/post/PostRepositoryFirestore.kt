@@ -3,7 +3,6 @@ package com.example.abyss.model.repository.post
 import android.net.Uri
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
-import androidx.paging.RemoteMediator
 import androidx.paging.cachedIn
 import com.example.abyss.model.data.PostData
 import com.example.abyss.model.pagingsource.PostForProfileFirestorePagingSource
@@ -26,7 +25,7 @@ class PostRepositoryFirestore(
     private val ioDispatcher: CoroutineDispatcher,
     private val externalScope: CoroutineScope,
 
-) : PostRepository {
+    ) : PostRepository {
 
     override suspend fun CreatePost(post: PostData) {
         externalScope.launch(ioDispatcher) {
@@ -75,9 +74,8 @@ class PostRepositoryFirestore(
             )
         ) {
             val uid = firebaseAuth.uid.toString()
-            val query = firestore.collection("posts").document("uid").collection(uid).orderBy("date", Query.Direction.DESCENDING)
+            val query = firestore.collection("posts").document("uid").collection(uid)
+                .orderBy("date", Query.Direction.DESCENDING)
             PostForProfileFirestorePagingSource(query)
         }.flow.cachedIn(externalScope)
-
-
 }

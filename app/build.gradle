@@ -2,10 +2,10 @@ plugins {
     id 'com.android.application'
     id 'kotlin-android'
     id 'com.google.gms.google-services'
+    id "kotlin-kapt"
     // Добавление apply plugin для safeargs
     id 'androidx.navigation.safeargs'
-
-    id "kotlin-kapt"
+    id 'kotlin-parcelize'
 }
 
 android {
@@ -98,5 +98,11 @@ dependencies {
     implementation 'com.github.dhaval2404:imagepicker:1.8'
     // Android-SpinKit - анимация загрузки
     implementation 'com.github.ybq:Android-SpinKit:1.4.0'
+    //ExpandableTextView
+    implementation 'com.github.josinSbazin:android_ExpandableLayout:0.8'
 
+//    implementation 'com.github.gifffert:ExpandableTextView:0.1.6'
+
+    implementation 'com.squareup.picasso:picasso:2.71828'
 }
+

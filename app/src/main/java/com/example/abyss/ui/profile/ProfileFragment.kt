@@ -71,8 +71,7 @@ class ProfileFragment : Fragment(), KodeinAware {
                     postAdapter.loadStateFlow.collectLatest { loadState ->
 
                         viewModel.LoadingPosts(loadState.source.refresh is LoadState.Loading)
-                        // ничего не найдено - is LoadState.NotLoading
-                        //    is LoadState.Error
+
                     }
                 }
             }

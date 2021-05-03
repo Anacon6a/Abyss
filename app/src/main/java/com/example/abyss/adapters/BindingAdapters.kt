@@ -16,6 +16,7 @@ import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.RequestOptions
 import com.bumptech.glide.request.target.Target
 import com.example.abyss.R
+import kotlinx.coroutines.coroutineScope
 import ru.rhanza.constraintexpandablelayout.ExpandableLayout
 import java.sql.Date
 import java.sql.Timestamp
@@ -45,8 +46,10 @@ fun hideIfFalse(view: View, boolean: Boolean) {
 fun SubIfTrue(button: Button, boolean: Boolean) {
     if (boolean) {
         button.background = ContextCompat.getDrawable(button.context, R.drawable.bg_unsubscribe_bg)
+        button.text = "Отписаться"
     } else {
         button.background = ContextCompat.getDrawable(button.context, R.drawable.bg_com_btn)
+        button.text = "Подписаться"
     }
 }
 
@@ -115,8 +118,7 @@ fun LikeIfTrue(imageView: ImageView, boolean: Boolean) {
 
 @BindingAdapter("loadImage")
 fun loadImage(imageView: ImageView, url: String?) {
-
-    Glide.with(imageView).load(url).dontTransform().into(imageView)
+    Glide.with(imageView).load(url).into(imageView)
 }
 
 
@@ -161,7 +163,7 @@ fun DateConverter(textView: TextView, date: java.util.Date? ){
         val datePost = format.format(date)
 
         if (today == datePost){
-        format = SimpleDateFormat("hh:mm:ss")
+        format = SimpleDateFormat("HH:mm:ss")
         textView.text = format.format(date)
         }
         else {

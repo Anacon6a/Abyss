@@ -66,6 +66,8 @@ class AuthRepositoryFirebase(
 
     override suspend fun currentUser(): FirebaseUser? = firebaseAuth.currentUser
 
+    override suspend fun GetUid(): String? = firebaseAuth.uid!!
+
     override suspend fun logout() = firebaseAuth.signOut()
 
 }

@@ -6,5 +6,7 @@ data class UserData(
     val userName: String? = null,
     val email: String? = null,
     val profileImageUrl: String? = null,
-    val registrationDate: Date? = null
+    val registrationDate: Date? = null,
+    val numberOfSubscribers: Int? = null,
+    val numberOfSubscriptions: Int? = null
 )

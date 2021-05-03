@@ -12,6 +12,8 @@ data class PostData(
     val text: String? = null,
     val date: Date? = null,
     var id: String? = null,
-//    val uid: String? = null,
-): Parcelable
+    var uid: String? = null,
+    val numberOfLikes: Int? = null,
+    val numberOfVies: Int? = null
+) : Parcelable
 

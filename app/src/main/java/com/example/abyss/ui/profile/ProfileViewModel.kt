@@ -61,7 +61,7 @@ class ProfileViewModel(
 
         externalScope.launch(ioDispatcher) {
 
-            userRepository.GetUserById().collect { state ->
+            userRepository.GetUserByUid().collect { state ->
 
                 when (state) {
                     is State.Loading -> {

@@ -38,6 +38,7 @@ class PostRepositoryFirestore(
                 .document()
 
             post.id = doc.id
+            post.uid = uid
 
             doc.set(post).addOnCompleteListener {
                 Timber.i("Пост добавлен: ${post.id}")

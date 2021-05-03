@@ -73,8 +73,9 @@
                         android:id="@+id/profile_image"
                         android:layout_width="50dp"
                         android:layout_height="50dp"
+                        android:scaleType="centerCrop"
                         android:onClick="@{() -> PostViewModel.goToUserProfile()}"
-                        android:src="@drawable/post_bg"
+                        loadImage="@{PostViewModel.userData.profileImageUrl}"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent"
@@ -100,7 +101,7 @@
                             android:layout_height="wrap_content"
                             android:ellipsize="end"
                             android:maxLines="1"
-                            android:text="@{PostViewModel.userName}"
+                            android:text="@{PostViewModel.userData.userName}"
                             android:textColor="@color/black"
                             android:textSize="18sp"
                             android:typeface="monospace"
@@ -123,7 +124,6 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:onClick="@{() -> PostViewModel.subscribeToAccount()}"
-                        android:text="@{PostViewModel.textSubscribe}"
                         android:textAllCaps="false"
                         app:layout_constraintBottom_toBottomOf="@+id/user_profile_linear_layout"
                         app:layout_constraintEnd_toEndOf="parent"
@@ -161,7 +161,7 @@
                             android:layout_width="48dp"
                             android:layout_height="48dp"
                             android:background="@drawable/post_content_bg"
-                            android:onClick="@{() -> PostViewModel.subscribeToAccount()}"
+                            android:onClick="@{() -> PostViewModel.ClickLike()}"
                             tools:src="@drawable/ic_like_false" />
 
                         <TextView
@@ -214,10 +214,10 @@
                     tools:text="10.11.2021" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
-
+<!--            hideIfFalse="@{PostViewModel.visibilityTextPost}"-->
             <ru.rhanza.constraintexpandablelayout.ExpandableLayout
                 android:id="@+id/text_posts"
-                hideIfFalse="@{PostViewModel.visibilityTextPost}"
+
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="1dp"

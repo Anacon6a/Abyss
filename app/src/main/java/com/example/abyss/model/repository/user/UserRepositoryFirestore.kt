@@ -53,7 +53,7 @@ class UserRepositoryFirestore(
 
     //в режиме реального времени
     @ExperimentalCoroutinesApi
-    override suspend fun GetUserById(): Flow<State<UserData?>> = callbackFlow {
+    override suspend fun GetUserByUid(): Flow<State<UserData?>> = callbackFlow {
 
         val uid = firebaseAuth.uid!!
 
@@ -77,6 +77,18 @@ class UserRepositoryFirestore(
         }
     }.catch {
         Timber.e("Ошибка: $it")
+    }.shareIn(
+        externalScope,
+        SharingStarted.WhileSubscribed(),
+    )
+
+    @ExperimentalCoroutinesApi
+    override suspend fun GetUserContentProviderByUid(uid: String): Flow<UserData?> = flow{
+
+        val userRef = firestore.collection("users").document(uid).get().await()
+        val user = userRef.toObject<UserData>()
+        emit(user)
+
     }.shareIn(
         externalScope,
         SharingStarted.WhileSubscribed(),

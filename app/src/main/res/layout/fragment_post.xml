@@ -148,7 +148,7 @@
 
 
                     <LinearLayout
-                        android:layout_width="178dp"
+                        android:layout_width="140dp"
                         android:layout_height="wrap_content"
                         android:layout_margin="2dp"
                         android:background="@drawable/post_content_bg"
@@ -171,8 +171,8 @@
                             android:layout_marginStart="4dp"
                             android:ellipsize="end"
                             android:maxLines="1"
-                            android:text="@{PostViewModel.numberOfLikes}"
-                            tools:text="800 Млн. лайков" />
+                            textForNumberLikes="@{PostViewModel.numberOfLikes}"
+                            tools:text="800 Млн." />
 
                     </LinearLayout>
 
@@ -180,10 +180,11 @@
                         android:id="@+id/number_of_views"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_margin="10dp"
+                        android:layout_marginStart="10dp"
+                        android:layout_marginTop="2dp"
                         android:ellipsize="end"
                         android:maxLines="1"
-                        android:text="@{PostViewModel.numberOfViews}"
+                        textForNumberViews="@{PostViewModel.numberOfViews}"
                         app:drawableLeftCompat="@drawable/ic_views"
                         tools:text=" 1000 Млн. просмотров" />
 
@@ -214,10 +215,10 @@
                     tools:text="10.11.2021" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
-<!--            hideIfFalse="@{PostViewModel.visibilityTextPost}"-->
+
             <ru.rhanza.constraintexpandablelayout.ExpandableLayout
                 android:id="@+id/text_posts"
-
+                hideIfFalse="@{PostViewModel.visibilityTextPost}"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="1dp"

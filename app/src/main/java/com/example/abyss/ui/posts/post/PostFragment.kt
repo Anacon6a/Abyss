@@ -6,10 +6,8 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.transition.doOnEnd
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.navArgs
-import com.bumptech.glide.Glide
 import com.example.abyss.adapters.loadImageStatusTracking
 import com.example.abyss.databinding.FragmentPostBinding
 import kodeinViewModel
@@ -51,7 +49,7 @@ class PostFragment : Fragment(), KodeinAware {
         binding.executePendingBindings()
 
         viewModel.postData.set(args.post)
-        viewModel.InsertPost()
+        viewModel.Insert()
 //        InsertPost()
 
         return binding.root

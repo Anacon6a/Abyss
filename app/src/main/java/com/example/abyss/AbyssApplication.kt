@@ -12,6 +12,8 @@ import com.example.abyss.model.repository.post.PostRepository
 import com.example.abyss.model.repository.post.PostRepositoryFirestore
 import com.example.abyss.model.repository.user.UserRepository
 import com.example.abyss.model.repository.user.UserRepositoryFirestore
+import com.example.abyss.model.repository.views.ViewsRepository
+import com.example.abyss.model.repository.views.ViewsRepositoryFirestore
 import com.example.abyss.ui.MainViewModelFactory
 import com.example.abyss.ui.first.FirstViewModelFactory
 import com.example.abyss.ui.auth.login.LoginViewModelFactory
@@ -57,6 +59,9 @@ class AbyssApplication : Application(), KodeinAware {
         bind<LikeRepository>() with provider {
             LikeRepositoryFirestore(instance(), instance(), instance(), instance())
         }
+        bind<ViewsRepository>() with provider {
+            ViewsRepositoryFirestore(instance(), instance(), instance(), instance())
+        }
 // ViewModelFactory
         bind() from provider { FirstViewModelFactory(instance(), instance()) }
         bind() from provider { LoginViewModelFactory(instance(), instance()) }
@@ -77,7 +82,7 @@ class AbyssApplication : Application(), KodeinAware {
             AddPostViewModel(instance(), instance(), instance())
         }
         bindViewModel<PostViewModel>() with provider {
-            PostViewModel(instance(), instance(), instance(), instance(), instance(), instance())
+            PostViewModel(instance(), instance(), instance(), instance(), instance(), instance(), instance())
         }
 // Adapter
         bind<PostPagingAdapter>() with provider { PostPagingAdapter() }

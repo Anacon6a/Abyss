@@ -5,7 +5,7 @@ import kotlinx.parcelize.Parcelize
 import java.util.*
 
 @Parcelize
-data class ViewsData(
+data class ViewData(
     val uidRated: String? = null,
     val date: Date? = null
 ) : Parcelable

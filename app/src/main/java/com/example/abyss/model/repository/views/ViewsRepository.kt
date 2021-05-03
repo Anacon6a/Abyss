@@ -1,4 +1,7 @@
 package com.example.abyss.model.repository.views
 
-class ViewsRepository {
+import kotlinx.coroutines.flow.Flow
+
+interface ViewsRepository {
+    suspend fun AddViewsAndGetNumberOfViews(postId: String, uidProvider: String): Int?
 }

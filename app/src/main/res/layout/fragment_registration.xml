@@ -136,7 +136,7 @@
             android:layout_gravity="center"
             android:layout_marginTop="16dp"
             android:layout_marginEnd="16dp"
-            android:background="@drawable/login_btn_bg"
+            android:background="@drawable/bg_login_btn"
             android:enabled="@{RegistrationViewModel.buttonEnabled}"
             android:onClick="@{() -> RegistrationViewModel.onRegistration()}"
             android:text="@string/sign_up"

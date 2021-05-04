@@ -29,7 +29,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="bottom"
             android:layout_margin="15dp"
-            android:background="@drawable/bottom_nav_bg"
+            android:background="@drawable/bg_bottom_nav"
             app:elevation="2dp"
             app:itemIconSize="30dp"
             app:menu="@menu/bottom_nav_menu"

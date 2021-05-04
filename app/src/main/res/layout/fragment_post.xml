@@ -28,7 +28,7 @@
                 android:id="@+id/post_constraint_layout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@drawable/post_content_bg"
+                android:background="@drawable/bg_post_content"
                 android:transitionName="@{@string/postContainer(String.valueOf(PostViewModel.postData.id))}"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -151,7 +151,7 @@
                         android:layout_width="140dp"
                         android:layout_height="wrap_content"
                         android:layout_margin="2dp"
-                        android:background="@drawable/post_content_bg"
+                        android:background="@drawable/bg_post_content"
                         android:gravity="center_vertical"
                         android:orientation="horizontal">
 
@@ -160,7 +160,6 @@
                             LikeIfTrue="@{PostViewModel.stateLike}"
                             android:layout_width="48dp"
                             android:layout_height="48dp"
-                            android:background="@drawable/post_content_bg"
                             android:onClick="@{() -> PostViewModel.ClickLike()}"
                             tools:src="@drawable/ic_like_false" />
 
@@ -222,7 +221,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="1dp"
-                android:background="@drawable/post_content_bg"
+                android:background="@drawable/bg_post_content"
                 android:padding="20dp"
                 app:el_animationDuration="80"
                 app:el_collapsedHeight="100dp"
@@ -251,7 +250,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="1dp"
-                android:background="@drawable/post_content_bg"
+                android:background="@drawable/bg_post_content"
                 android:padding="20dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"

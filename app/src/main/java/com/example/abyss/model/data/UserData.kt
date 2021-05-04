@@ -8,5 +8,5 @@ data class UserData(
     val profileImageUrl: String? = null,
     val registrationDate: Date? = null,
     val numberOfSubscribers: Int? = null,
-    val numberOfSubscriptions: Int? = null
+    val numberOfSubscriptions: Int? = null,
 )

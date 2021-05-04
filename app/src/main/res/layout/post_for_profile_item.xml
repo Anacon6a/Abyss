@@ -23,7 +23,7 @@
             android:id="@+id/post_container"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@drawable/post_content_bg"
+            android:background="@drawable/bg_post_content"
             android:transitionName="@{@string/postContainer(String.valueOf(post.id))}">
 
             <ImageView
@@ -37,7 +37,6 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 loadImage="@{post.imageUrl}"
-                app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.DifferentCornerSize."
                 />
 <!--            app:srcCompat="@drawable/post_bg"-->
 

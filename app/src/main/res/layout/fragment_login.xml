@@ -88,7 +88,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_marginTop="16dp"
-            android:background="@drawable/login_btn_bg"
+            android:background="@drawable/bg_login_btn"
             android:enabled="@{LoginViewModel.buttonEnabled}"
             android:onClick="@{() -> LoginViewModel.onLogin()}"
             android:text="@string/sign_in"

@@ -42,6 +42,8 @@ class ProfileViewModel(
 //        postForProfileFirestorePagingSource
 //    }.flow.cachedIn(externalScope)
 
+    val getPosts = postRepository.GetPostForProfile()?.cachedIn(viewModelScope)?.asLiveData()
+
     init {
         GetUser()
     }
@@ -53,8 +55,6 @@ class ProfileViewModel(
     fun LoadingPost() {
 
     }
-
-    val getPosts = postRepository.GetPostForProfile()?.cachedIn(viewModelScope)?.asLiveData()
 
 
     fun GetUser() {

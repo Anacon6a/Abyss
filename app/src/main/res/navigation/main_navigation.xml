@@ -48,7 +48,11 @@
         android:id="@+id/newsFeedFragment"
         android:name="com.example.abyss.ui.home.NewsFeedFragment"
         android:label="fragment_news_feed"
-        tools:layout="@layout/fragment_news_feed" />
+        tools:layout="@layout/fragment_news_feed" >
+        <action
+            android:id="@+id/action_newsFeedFragment_to_postFragment"
+            app:destination="@id/postFragment" />
+    </fragment>
     <fragment
         android:id="@+id/profileFragment"
         android:name="com.example.abyss.ui.profile.ProfileFragment"

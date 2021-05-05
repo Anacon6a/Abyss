@@ -4,16 +4,13 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.FragmentNavigator
 import androidx.navigation.fragment.findNavController
 import androidx.paging.LoadState
 import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.abyss.adapters.PostLoadStateAdapter
-import com.example.abyss.adapters.PostPagingAdapter
+import com.example.abyss.adapters.PostProfilePagingAdapter
 import com.example.abyss.databinding.FragmentProfileBinding
 import kodeinViewModel
 import kotlinx.coroutines.flow.collectLatest
@@ -31,7 +28,7 @@ class ProfileFragment : Fragment(), KodeinAware {
 
     private val viewModel: ProfileViewModel by kodeinViewModel()
 
-    private val postAdapter: PostPagingAdapter by instance()
+    private val postProfileAdapter: PostProfilePagingAdapter by instance()
 
     var userId: String? = null
 
@@ -56,19 +53,19 @@ class ProfileFragment : Fragment(), KodeinAware {
                 layoutManager = GridLayoutManager(context, 3)
                 setHasFixedSize(false)
                 itemAnimator = null
-                adapter = postAdapter
+                adapter = postProfileAdapter
 //                    .withLoadStateFooter(
 //                    footer = PostLoadStateAdapter { postAdapter.retry()}
 //                )
 
-                viewTreeObserver
-                    .addOnPreDrawListener {
-                        startPostponedEnterTransition()
-                        true
-                    }
+//                viewTreeObserver
+//                    .addOnPreDrawListener {
+//                        startPostponedEnterTransition()
+//                        true
+//                    }
 
                 lifecycleScope.launch {
-                    postAdapter.loadStateFlow.collectLatest { loadState ->
+                    postProfileAdapter.loadStateFlow.collectLatest { loadState ->
 
                         viewModel.LoadingPosts(loadState.source.refresh is LoadState.Loading)
 
@@ -76,29 +73,26 @@ class ProfileFragment : Fragment(), KodeinAware {
                 }
             }
         }
-        postAdapter.setOnItemClickListener {postImage, imageView, postContainer ->
+        postProfileAdapter.setOnItemClickListener { postImage, imageView, postContainer ->
 
             val action = ProfileFragmentDirections.actionProfileFragmentToPostFragment(postImage)
 
-            findNavController()
-                .navigate(action,
-                    FragmentNavigator.Extras.Builder()
-                        .addSharedElements(
-                            mapOf(
+            findNavController().navigate(
+                action, FragmentNavigator.Extras.Builder().addSharedElements(
+                    mapOf(
 //                                imageView to imageView.transitionName,
-                                postContainer to postContainer.transitionName
-                            )
-                        ).build()
-                )
-
+                        postContainer to postContainer.transitionName
+                    )
+                ).build()
+            )
         }
     }
 
     // получение данных из viewmodel и передача адаптеру
-    private fun getPosts()  {
+    private fun getPosts() {
         viewModel.getPosts?.observe(viewLifecycleOwner, {
             lifecycleScope.launch {
-                postAdapter.submitData(it)
+                postProfileAdapter.submitData(it)
             }
         })
     }

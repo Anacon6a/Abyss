@@ -6,7 +6,6 @@ import androidx.annotation.NonNull
 import androidx.paging.LoadState
 import androidx.paging.LoadStateAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.example.abyss.databinding.PostDataBinding
 
 class PostLoadStateAdapter(
 //    private val retry: () -> Unit,

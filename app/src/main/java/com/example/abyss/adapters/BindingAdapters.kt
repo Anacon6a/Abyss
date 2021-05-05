@@ -140,7 +140,7 @@ fun ImageView.loadImageStatusTracking(url: String?, onLoadingFinished: () -> Uni
     Glide.with(this)
         .load(url)
         .onlyRetrieveFromCache(true)
-        .dontTransform()
+//        .dontTransform()
         .listener(listener)
         .into(this)
 }

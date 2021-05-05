@@ -3,7 +3,9 @@ package com.example.abyss
 import android.app.Application
 import androidx.lifecycle.ViewModelProvider
 import bindViewModel
-import com.example.abyss.adapters.PostPagingAdapter
+import com.example.abyss.adapters.PostNewsFeedPagingAdapter
+import com.example.abyss.adapters.PostNewsFeedViewPagerAdapter
+import com.example.abyss.adapters.PostProfilePagingAdapter
 import com.example.abyss.model.repository.auth.AuthRepositoryFirebase
 import com.example.abyss.model.repository.auth.AuthRepository
 import com.example.abyss.model.repository.like.LikeRepository
@@ -18,6 +20,7 @@ import com.example.abyss.ui.MainViewModelFactory
 import com.example.abyss.ui.first.FirstViewModelFactory
 import com.example.abyss.ui.auth.login.LoginViewModelFactory
 import com.example.abyss.ui.auth.registration.RegistrationViewModelFactory
+import com.example.abyss.ui.home.NewsFeedViewModel
 import com.example.abyss.ui.posts.addpost.AddPostViewModel
 import com.example.abyss.ui.posts.post.PostViewModel
 import com.example.abyss.ui.profile.ProfileViewModel
@@ -25,10 +28,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
-import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.MainScope
+import kotlinx.coroutines.*
 import org.kodein.di.Kodein
 import org.kodein.di.KodeinAware
 import org.kodein.di.android.x.androidXModule
@@ -70,7 +70,7 @@ class AbyssApplication : Application(), KodeinAware {
         bind<ViewModelProvider.Factory>() with singleton { MainViewModelFactory(kodein.direct) }
 
 // Корутины
-        bind<CoroutineScope>() with singleton { MainScope() }
+        bind<CoroutineScope>() with singleton { CoroutineScope(SupervisorJob()) }// не отменит ни себя, ни остальных своих child при исключениях
         bind<CoroutineDispatcher>() with singleton { Dispatchers.IO }
         bind<CoroutineDispatcher>(tag = "default") with singleton { Dispatchers.Default }
 
@@ -82,11 +82,17 @@ class AbyssApplication : Application(), KodeinAware {
             AddPostViewModel(instance(), instance(), instance())
         }
         bindViewModel<PostViewModel>() with provider {
-            PostViewModel(instance(), instance(), instance(), instance(), instance(), instance(), instance())
+            PostViewModel(
+                instance(), instance(), instance(), instance(), instance(), instance(), instance()
+            )
+        }
+        bindViewModel<NewsFeedViewModel>() with singleton {
+            NewsFeedViewModel(instance())
         }
 // Adapter
-        bind<PostPagingAdapter>() with provider { PostPagingAdapter() }
-
+        bind<PostProfilePagingAdapter>() with provider { PostProfilePagingAdapter() }
+        bind() from provider { PostNewsFeedViewPagerAdapter() }
+        bind() from provider { PostNewsFeedPagingAdapter() }
     }
 
     override fun onCreate() {

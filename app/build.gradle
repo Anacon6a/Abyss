@@ -100,9 +100,12 @@ dependencies {
     implementation 'com.github.ybq:Android-SpinKit:1.4.0'
     //ExpandableTextView
     implementation 'com.github.josinSbazin:android_ExpandableLayout:0.8'
+    // ViewPager2
+    implementation "androidx.viewpager2:viewpager2:1.0.0"
 
 //    implementation 'com.github.gifffert:ExpandableTextView:0.1.6'
 
     implementation 'com.squareup.picasso:picasso:2.71828'
+
 }
 

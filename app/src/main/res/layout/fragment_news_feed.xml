@@ -9,18 +9,76 @@ tools:context=".ui.home.NewsFeedFragment">
         name="NewsFeedViewModel"
         type="com.example.abyss.ui.home.NewsFeedViewModel" />
 </data>
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:background="@color/black">
 
+        <!--        <androidx.coordinatorlayout.widget.CoordinatorLayout>-->
+
+        <!--            <com.google.android.material.appbar.AppBarLayout-->
+        <!--                android:id="@+id/appBarLayout">-->
+
+        <!--                <androidx.appcompat.widget.Toolbar-->
+        <!--                    android:id="@+id/toolbar">-->
+
+        <!--                    <com.google.android.material.tabs.TabLayout-->
+        <!--                        android:id="@+id/chipsLayout" />-->
+
+        <!--                </androidx.appcompat.widget.Toolbar>-->
+
+        <!--            </com.google.android.material.appbar.AppBarLayout>-->
         <Button
             android:id="@+id/button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="37dp"
             android:text="Выйти"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.023" />
+
+        <LinearLayout
+            android:id="@+id/linearLayout"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:background="@drawable/bg_profile_content"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toBottomOf="@+id/news_feed_tab_layout">
+
+            <com.example.abyss.NestedScrollableHost
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="40dp"
+                android:background="@color/transparent"
+                app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+                <androidx.viewpager2.widget.ViewPager2
+                    android:id="@+id/view_pager_posts"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal" />
+
+            </com.example.abyss.NestedScrollableHost>
+        </LinearLayout>
+
+        <com.google.android.material.tabs.TabLayout
+            android:id="@+id/news_feed_tab_layout"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="7dp"
+            app:layout_constraintBottom_toTopOf="@+id/linearLayout"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/button"
+            app:tabMode="scrollable"
+            android:background="@color/black"/>
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

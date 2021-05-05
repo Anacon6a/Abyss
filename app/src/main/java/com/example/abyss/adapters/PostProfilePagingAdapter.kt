@@ -7,15 +7,14 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
-import com.example.abyss.databinding.PostDataBinding
+import com.example.abyss.databinding.PostProfileDataBinding
 import com.example.abyss.model.data.PostData
 
-class PostPagingAdapter : PagingDataAdapter<PostData, PostPagingAdapter.PostViewHolder>(Companion) {
+class PostProfilePagingAdapter : PagingDataAdapter<PostData, PostProfilePagingAdapter.PostViewHolder>(Companion) {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PostViewHolder {
         val layoutInflater = LayoutInflater.from(parent.context)
 
-        val binding = PostDataBinding.inflate(
+        val binding = PostProfileDataBinding.inflate(
             layoutInflater,
             parent,
             false
@@ -26,7 +25,6 @@ class PostPagingAdapter : PagingDataAdapter<PostData, PostPagingAdapter.PostView
     override fun onBindViewHolder(holder: PostViewHolder, position: Int) {
         val post = getItem(position) ?: return
         holder.bindPost(post)
-
     }
 
     companion object : DiffUtil.ItemCallback<PostData>() {
@@ -41,7 +39,7 @@ class PostPagingAdapter : PagingDataAdapter<PostData, PostPagingAdapter.PostView
 
 
     inner class PostViewHolder(
-        private val binding: PostDataBinding,
+        private val binding: PostProfileDataBinding,
     ) : RecyclerView.ViewHolder(binding.root) {
 
         fun bindPost(post: PostData) {

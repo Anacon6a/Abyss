@@ -2,6 +2,7 @@ package com.example.abyss.ui.posts.addpost
 
 import android.app.Activity
 import android.content.Intent
+import android.graphics.drawable.BitmapDrawable
 import android.os.Bundle
 import android.os.Environment
 import android.view.LayoutInflater
@@ -14,6 +15,7 @@ import com.github.dhaval2404.imagepicker.ImagePicker
 import kodeinViewModel
 import org.kodein.di.KodeinAware
 import org.kodein.di.android.x.kodein
+import timber.log.Timber
 import java.io.File
 
 
@@ -40,13 +42,20 @@ class AddPostFragment : Fragment(), KodeinAware {
     }
 
     private fun Subscription() {
-
-        viewModel.eventPhotoAdded.observe(viewLifecycleOwner, { event ->
+        viewModel.eventOnAddPost.observe(viewLifecycleOwner, { event ->
+            if (event) {
+                viewModel.widthImage.set(binding.imageViewNewPost.width)
+                viewModel.heightImage.set(binding.imageViewNewPost.height)
+                Timber.i("размеры добавлены")
+                viewModel.addPost()
+            }
+        })
+        viewModel.eventPostAdded.observe(viewLifecycleOwner, { event ->
             if (event) {
                 goToProfile()
             }
         })
-        viewModel.eventImageSelection.observe(viewLifecycleOwner, {event ->
+        viewModel.eventImageSelection.observe(viewLifecycleOwner, { event ->
             if (event) {
                 photoSelection()
                 viewModel.endEventImageSelection()
@@ -56,8 +65,8 @@ class AddPostFragment : Fragment(), KodeinAware {
 
     private fun photoSelection() {
         ImagePicker.with(this)
-            .crop()
-            .saveDir ( File ( Environment .getExternalStorageDirectory (), "Abyss" ))
+            .crop().compress(1024)
+            .saveDir(File(Environment.getExternalStorageDirectory(), "Abyss"))
             .start()
     }
 

@@ -87,12 +87,12 @@ class AbyssApplication : Application(), KodeinAware {
             )
         }
         bindViewModel<NewsFeedViewModel>() with singleton {
-            NewsFeedViewModel(instance())
+            NewsFeedViewModel(instance(), instance(), instance(), instance())
         }
 // Adapter
         bind<PostProfilePagingAdapter>() with provider { PostProfilePagingAdapter() }
         bind() from provider { PostNewsFeedViewPagerAdapter() }
-        bind() from provider { PostNewsFeedPagingAdapter() }
+        bind() from provider { PostNewsFeedPagingAdapter(instance(), instance()) }
     }
 
     override fun onCreate() {

@@ -10,6 +10,8 @@ import androidx.navigation.fragment.FragmentNavigator
 import androidx.navigation.fragment.findNavController
 import androidx.paging.LoadState
 import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import androidx.viewpager2.widget.ViewPager2
 import com.example.abyss.adapters.PostNewsFeedPagingAdapter
 import com.example.abyss.adapters.PostNewsFeedViewPagerAdapter
@@ -71,7 +73,6 @@ class NewsFeedFragment() : Fragment(), KodeinAware {
                 ).build()
             )
         }
-
         postNewsFeedViewPagerAdapter.setOnCreatePostViewHolder {
             bindingRecycler = it
             setAdaptersForRecycler()
@@ -89,7 +90,7 @@ class NewsFeedFragment() : Fragment(), KodeinAware {
     private fun setAdaptersForRecycler() {
         lifecycleScope.launch {
             bindingRecycler.postRecyclerView.apply {
-                layoutManager = GridLayoutManager(context, 1)
+                layoutManager = StaggeredGridLayoutManager(2, RecyclerView.VERTICAL)
                 setHasFixedSize(false)
                 itemAnimator = null
                 adapter = postNewsFeedPagingAdapter

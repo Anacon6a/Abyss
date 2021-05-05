@@ -42,7 +42,7 @@ tools:context=".ui.home.NewsFeedFragment">
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.023" />
 
-        <LinearLayout
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/linearLayout"
             android:layout_width="match_parent"
             android:layout_height="0dp"
@@ -56,6 +56,8 @@ tools:context=".ui.home.NewsFeedFragment">
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_marginTop="40dp"
+                android:layout_marginStart="4dp"
+                android:layout_marginEnd="4dp"
                 android:background="@color/transparent"
                 app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
@@ -66,7 +68,20 @@ tools:context=".ui.home.NewsFeedFragment">
                     android:orientation="horizontal" />
 
             </com.example.abyss.NestedScrollableHost>
-        </LinearLayout>
+
+            <com.github.ybq.android.spinkit.SpinKitView
+                android:id="@+id/progress_bar_loading_all_posts"
+                style="@style/SpinKitView.MultiplePulse"
+                hideIfFalse="@{NewsFeedViewModel.progressBarloadingAllPosts}"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                app:SpinKit_Color="@color/purple_700"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.4" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
         <com.google.android.material.tabs.TabLayout
             android:id="@+id/news_feed_tab_layout"

@@ -48,7 +48,7 @@ class PostNewsFeedViewPagerAdapter : RecyclerView.Adapter<PostNewsFeedViewPagerA
 
     @SuppressLint("SetTextI18n")
     override fun onBindViewHolder(holder: PostViewHolder, position: Int) {
-        holder.bindRecycker()
+        holder.bindRecycer()
     }
 
 
@@ -57,7 +57,7 @@ class PostNewsFeedViewPagerAdapter : RecyclerView.Adapter<PostNewsFeedViewPagerA
     ) : RecyclerView.ViewHolder(binding.root) {
 
         @SuppressLint("SetTextI18n")
-        fun bindRecycker() {
+        fun bindRecycer() {
 
             onCreatePostViewHolder?.let {
                 it(binding)

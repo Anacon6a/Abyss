@@ -1,14 +1,13 @@
 package com.example.abyss.ui.posts.addpost
 
 import android.net.Uri
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
+import androidx.databinding.ObservableField
+import androidx.lifecycle.*
 import com.example.abyss.model.data.PostData
 import com.example.abyss.model.repository.post.PostRepository
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.collect
+import timber.log.Timber
 import java.util.*
 
 class AddPostViewModel(
@@ -27,9 +26,13 @@ class AddPostViewModel(
     val buttonEnabled: LiveData<Boolean>
         get() = _buttonEnabled
 
-    private val _eventPhotoAdded = MutableLiveData<Boolean>()
-    val eventPhotoAdded: LiveData<Boolean>
-        get() = _eventPhotoAdded
+    private val _eventOnAddPost = MutableLiveData<Boolean>()
+    val eventOnAddPost: LiveData<Boolean>
+        get() = _eventOnAddPost
+
+    private val _eventPostAdded = MutableLiveData<Boolean>()
+    val eventPostAdded: LiveData<Boolean>
+        get() = _eventPostAdded
 
     private val _eventImageSelection = MutableLiveData<Boolean>()
     val eventImageSelection: LiveData<Boolean>
@@ -56,21 +59,30 @@ class AddPostViewModel(
         }
     }
 
+    val widthImage = ObservableField<Int>()
+    val heightImage = ObservableField<Int>()
+
+    fun onAddPost() {
+        _eventOnAddPost.value = true
+    }
+
     fun addPost() {
         externalScope.launch(ioDispatcher) {
+
+
             postImageUrl.value?.let {
 
                 val url = postRepository.AddPostImageInStorage(it).collect { url ->
 
                     val date = Date(System.currentTimeMillis())
-                    val post = PostData(url, signature.value, date)
-
+                    val post =
+                        PostData(url, signature.value, date, widthImage.get(), heightImage.get())
                     postRepository.CreatePost(post)
-
+                    Timber.i("пост создан")
                 }
             }
         }
-        _eventPhotoAdded.value = true
+        _eventPostAdded.value = true
     }
 
 }

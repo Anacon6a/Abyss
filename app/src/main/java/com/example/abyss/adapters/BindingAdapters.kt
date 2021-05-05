@@ -62,50 +62,6 @@ fun LikeIfTrue(imageView: ImageView, boolean: Boolean) {
         )
     }
 }
-//
-//@BindingAdapter("loadImage")
-//fun loadImage(imageView: ImageView, url: String?) {
-//    Picasso.get().load(url).into(imageView)
-//}
-//
-//
-//fun ImageView.loadImageStatusTracking(url: String?, onLoadingFinished: () -> Unit = {}) {
-//
-//    val listener = object : RequestListener<Drawable> {
-//        override fun onLoadFailed(
-//            e: Picasso?,
-//            model: Any?,
-//            target: Target<Drawable>?,
-//            isFirstResource: Boolean
-//        ): Boolean {
-//            return false
-//        }
-//
-//        override fun onResourceReady(
-//            resource: Drawable?,
-//            model: Any?,
-//            target: Target<Drawable>?,
-//            dataSource: DataSource?,
-//            isFirstResource: Boolean
-//        ): Boolean {
-//            onLoadingFinished()
-//            return false
-//        }
-//    }
-//
-//    Picasso.get().load(url).noFade().into(this)
-//        .into(imageView, new Callback() {
-//            @Override
-//            public void onSuccess() {
-//                supportStartPostponedEnterTransition();
-//            }
-//
-//            @Override
-//            public void onError() {
-//                supportStartPostponedEnterTransition();
-//            }
-//        });
-//}
 
 @BindingAdapter("loadImage")
 fun loadImage(imageView: ImageView, url: String?) {
@@ -143,6 +99,10 @@ fun ImageView.loadImageStatusTracking(url: String?, onLoadingFinished: () -> Uni
 //        .dontTransform()
         .listener(listener)
         .into(this)
+}
+
+fun ImageView.loadImage2(url: String?) {
+    Glide.with(this).load(url).into(this)
 }
 
 @SuppressLint("SimpleDateFormat")

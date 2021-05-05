@@ -69,9 +69,9 @@ class PostRepositoryFirestore(
     override fun GetPostForProfile() =
         Pager(
             PagingConfig(
-                initialLoadSize = 40,
-                pageSize = 40,
-                prefetchDistance = 40
+                initialLoadSize = 1,
+                pageSize = 1,
+                prefetchDistance = 1
             )
         ) {
             val uid = firebaseAuth.uid.toString()

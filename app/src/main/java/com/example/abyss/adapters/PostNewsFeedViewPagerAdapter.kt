@@ -19,7 +19,6 @@ import androidx.paging.LoadState
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.abyss.R
-import com.example.abyss.databinding.PostNewsFeedDataBinding
 import com.example.abyss.databinding.PostNewsFeedRecyclerDataBinding
 import com.example.abyss.databinding.PostProfileDataBinding
 import com.example.abyss.model.data.PostData
@@ -45,14 +44,10 @@ class PostNewsFeedViewPagerAdapter : RecyclerView.Adapter<PostNewsFeedViewPagerA
             false
         )
         return PostViewHolder(binding)
-//            return PostViewHolder(postNewsFeedRecyclerDataBinding.get()!!)
     }
 
     @SuppressLint("SetTextI18n")
     override fun onBindViewHolder(holder: PostViewHolder, position: Int) {
-//        with(holder) {
-//           title.text = "Элемент$layoutPosition"
-//        }
         holder.bindRecycker()
     }
 
@@ -63,13 +58,10 @@ class PostNewsFeedViewPagerAdapter : RecyclerView.Adapter<PostNewsFeedViewPagerA
 
         @SuppressLint("SetTextI18n")
         fun bindRecycker() {
-//            val title: TextView = binding.texttttt
-            binding.texttttt.text = "Элемент$layoutPosition"
 
             onCreatePostViewHolder?.let {
                 it(binding)
             }
-//            val recycler: RecyclerView = binding.postRecyclerView
         }
     }
     private var onCreatePostViewHolder: ((PostNewsFeedRecyclerDataBinding) -> Unit)? = null

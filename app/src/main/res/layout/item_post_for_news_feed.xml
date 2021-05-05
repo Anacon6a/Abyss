@@ -32,8 +32,7 @@
                 tools:src="@drawable/synth"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:scaleType="centerCrop"
-                android:src="@color/purple_500"/>
+                android:scaleType="centerCrop" />
 
 <!--            <LinearLayout-->
 <!--                android:orientation="horizontal"-->

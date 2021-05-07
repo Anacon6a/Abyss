@@ -19,6 +19,7 @@ import com.example.abyss.adapters.PostProfilePagingAdapter
 import com.example.abyss.databinding.FragmentNewsFeedBinding
 import com.example.abyss.databinding.PostNewsFeedRecyclerDataBinding
 import com.example.abyss.ui.profile.ProfileFragmentDirections
+import com.google.android.material.tabs.TabLayoutMediator
 import com.google.firebase.auth.FirebaseAuth
 import kodeinViewModel
 import kotlinx.coroutines.flow.collectLatest
@@ -34,9 +35,9 @@ class NewsFeedFragment() : Fragment(), KodeinAware {
     private val viewModel: NewsFeedViewModel by kodeinViewModel()
     private lateinit var binding: FragmentNewsFeedBinding
     private lateinit var bindingRecycler: PostNewsFeedRecyclerDataBinding
-    private val postNewsFeedPagingAdapter: PostNewsFeedPagingAdapter by instance()
-    private val postNewsFeedViewPagerAdapter: PostNewsFeedViewPagerAdapter by instance()
 
+    //    private val postNewsFeedPagingAdapter: PostNewsFeedPagingAdapter by instance()
+    private val postNewsFeedViewPagerAdapter: PostNewsFeedViewPagerAdapter by instance()
 
 
     override fun onCreateView(
@@ -48,21 +49,17 @@ class NewsFeedFragment() : Fragment(), KodeinAware {
         binding.newsFeedViewModel = viewModel
         binding.lifecycleOwner = viewLifecycleOwner
 
-//выход временно
-        binding.button.setOnClickListener {
-            FirebaseAuth.getInstance().signOut()
-        }
-
 
         Subscription()
-        GetPostsForRecyclerview()
+//        GetPostsForRecyclerview()
         setAdaptersForViewPager()
+        setTabLayout()
 
         return binding.root
     }
 
     private fun Subscription() {
-        postNewsFeedPagingAdapter.setOnItemClickListener { post, imageView, postContainer ->
+        viewModel.postNewsFeedPagingAdapter.setOnItemClickListener { post, imageView, postContainer ->
             val action = NewsFeedFragmentDirections.actionNewsFeedFragmentToPostFragment(post)
             findNavController().navigate(
                 action, FragmentNavigator.Extras.Builder().addSharedElements(
@@ -77,6 +74,13 @@ class NewsFeedFragment() : Fragment(), KodeinAware {
             bindingRecycler = it
             setAdaptersForRecycler()
         }
+        binding.viewPagerPosts.registerOnPageChangeCallback(object :
+            ViewPager2.OnPageChangeCallback() {
+            override fun onPageSelected(position: Int) {
+                super.onPageSelected(position)
+                viewModel.SetPosition(position)
+            }
+        })
     }
 
     private fun setAdaptersForViewPager() {
@@ -93,7 +97,7 @@ class NewsFeedFragment() : Fragment(), KodeinAware {
                 layoutManager = StaggeredGridLayoutManager(2, RecyclerView.VERTICAL)
                 setHasFixedSize(false)
                 itemAnimator = null
-                adapter = postNewsFeedPagingAdapter
+                adapter = viewModel.postNewsFeedPagingAdapter
 //                    .withLoadStateFooter(
 //                    footer = PostLoadStateAdapter { postAdapter.retry()}
 //                )
@@ -105,23 +109,30 @@ class NewsFeedFragment() : Fragment(), KodeinAware {
 //                    }
             }
         }
-        lifecycleScope.launch {
-            postNewsFeedPagingAdapter.loadStateFlow.collectLatest { loadState ->
-                viewModel.LoadingPosts(loadState.source.refresh is LoadState.Loading)
-            }
-        }
-    }
-
-    private fun GetPostsForRecyclerview() {
-        viewModel.getPosts?.observe(viewLifecycleOwner, {
-            lifecycleScope.launch {
-                postNewsFeedPagingAdapter.submitData(it)
-            }
-        })
+//        lifecycleScope.launch {
+//            postNewsFeedPagingAdapter.loadStateFlow.collectLatest { loadState ->
+//                viewModel.LoadingPosts(loadState.source.refresh is LoadState.Loading)
+//            }
+//        }
     }
 
 
+    private fun setTabLayout() {
+        TabLayoutMediator(binding.newsFeedTabLayout, binding.viewPagerPosts) { tablayout, position ->
+            tablayout.text = when(position) {
+                0 -> "Подписки"
+                else -> "Тренды"
+            }
+        }.attach()
+    }
 
+//    private fun GetPostsForRecyclerview() {
+//        viewModel.getPosts?.observe(viewLifecycleOwner, {
+//            lifecycleScope.launch {
+//                postNewsFeedPagingAdapter.submitData(it)
+//            }
+//        })
+//    }
 
 
 }

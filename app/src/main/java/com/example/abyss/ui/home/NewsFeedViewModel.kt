@@ -9,6 +9,7 @@ import com.example.abyss.model.data.PostData
 import com.example.abyss.model.repository.post.PostRepository
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
@@ -21,20 +22,71 @@ class NewsFeedViewModel(
 
     init {
 
+        LoadingStatus()
+        GetPostsSubscriptions()
     }
 
     private val _progressBarloadingAllPosts = MutableLiveData<Boolean>()
     val progressBarloadingAllPosts: LiveData<Boolean>
         get() = _progressBarloadingAllPosts
 
-    private val _posts = MutableLiveData<PagingData<PostData>>()
+    private val _postsSubscriptions = MutableLiveData<PagingData<PostData>>()
+    val postsSubscriptions: LiveData<PagingData<PostData>>
+        get() = _postsSubscriptions
 
+    private val _postsTrends = MutableLiveData<PagingData<PostData>>()
+    val postsTrends: LiveData<PagingData<PostData>>
+        get() = _postsTrends
+
+    private val posts = MutableLiveData<PagingData<PostData>>()
 
     val getPosts = postRepository.GetPostForProfile()?.cachedIn(externalScope)?.asLiveData()
 
+    fun SetPosition(position: Int) {
+        when (position) {
+            0 -> {
+                GetPostsSubscriptions()
+            }
+            1 -> {
+                GetPostsTrends()
+            }
+        }
+    }
+
+    fun LoadingStatus() {
+        externalScope.launch()
+        {
+            postNewsFeedPagingAdapter.loadStateFlow.collectLatest { loadState ->
+                LoadingPosts(loadState.source.refresh is LoadState.Loading)
+            }
+        }
+    }
 
     fun LoadingPosts(boolean: Boolean) {
         _progressBarloadingAllPosts.postValue(boolean)
     }
+
+    fun GetPostsSubscriptions() {
+        externalScope.launch(ioDispatcher) {
+
+            postRepository.GetPostsSubscriptionForNewsFeed()?.collect {
+                _postsSubscriptions.postValue(it)
+                postNewsFeedPagingAdapter.submitData(it)
+            }
+
+        }
+    }
+
+    fun GetPostsTrends() {
+        externalScope.launch(ioDispatcher) {
+
+            postRepository.GetPostsTrendsForNewsFeed()?.collect {
+                _postsTrends.postValue(it)
+                postNewsFeedPagingAdapter.submitData(it)
+            }
+
+        }
+    }
+
 
 }

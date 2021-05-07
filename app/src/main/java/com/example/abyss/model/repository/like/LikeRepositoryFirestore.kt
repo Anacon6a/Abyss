@@ -20,61 +20,55 @@ class LikeRepositoryFirestore(
     @ExperimentalCoroutinesApi
     override suspend fun GetNumberOfLikes(postId: String, uidProvider: String): Flow<Int?> = flow {
         val numberlikesRef =
-            firestore.collection("posts").document("uid").collection(uidProvider).document(postId).get()
-                .await()
+            firestore.collection("users").document(uidProvider).collection("posts").document(postId)
+                .get().await()
         val number = numberlikesRef.toObject<PostData>()?.numberOfLikes
         emit(number)
     }
 
-    override suspend fun GetLikeStatus(postId: String): Boolean {
+    override suspend fun GetLikeStatus(postId: String, uidProvider: String): Boolean {
         val uid = firebaseAuth.uid!!
 
-            val likesSnap =
-                firestore.collection("likes").document("postId").collection(postId).document(uid)
-                    .get()
-                    .await()
+        val likesSnap =
+            firestore.collection("users").document(uidProvider).collection("posts").document(postId)
+                .collection("likes").document(uid).get().await()
 
         return !likesSnap.data.isNullOrEmpty()
     }
 
-    override suspend fun AddLike(postId: String): Flow<Int> = flow {
-        //Добавляем лайк пользователя
+
+   override suspend fun AddViewsAndGetNumberOfLikesAndStatus(postId: String, uidProvider: String, status: Boolean ): Flow<Pair<Int?, Boolean>> = flow {
         val uid = firebaseAuth.uid!!
         val date = Date(System.currentTimeMillis())
         val like = LikeData(uid, date)
-        firestore.collection("likes").document("postId").collection(postId).document(uid)
-            .set(like)
-        // прибавляем к количеству лайков 1
+        var numberLikes: Int? = 0
+        var statusLike = status
+
+        val likeUserRef =
+            firestore.collection("users").document(uidProvider).collection("posts").document(postId)
+                .collection("likes").document(uid)
         val numberLikesRef =
-            firestore.collection("posts").document("uid").collection(uid).document(postId)
-        var numberLikes = numberLikesRef.get()
-            .await().toObject<PostData>()?.numberOfLikes
-        if (numberLikes != null) {
-            numberLikes += 1
-        } else {
-            numberLikes = 1
-        }
-        numberLikesRef.update("numberOfLikes", numberLikes)
-        emit(numberLikes)
+            firestore.collection("users").document(uidProvider).collection("posts").document(postId)
+
+        firestore.runTransaction {
+            //получаем количетво лайков
+            numberLikes = it.get(numberLikesRef).toObject<PostData>()?.numberOfLikes
+          if (it.get(likeUserRef).data.isNullOrEmpty()) {
+              //добавляем лайк пользователю
+              it.set(likeUserRef, like)
+              // прибавляем к количеству лайков 1
+              numberLikes = numberLikes?.plus(1)
+              statusLike = true
+          }else {
+              it.delete(likeUserRef)
+              numberLikes = if (numberLikes == 0) 0 else numberLikes?.minus(1)
+              statusLike = false
+          }
+            //обновляем пост
+            it.update(numberLikesRef, "numberOfLikes", numberLikes)
+        }.await()
+
+        emit(Pair(numberLikes, statusLike))
     }
-
-    override suspend fun RemoveLike(postId: String): Flow<Int> = flow {
-        val uid = firebaseAuth.uid!!
-        firestore.collection("likes").document("postId").collection(postId).document(uid)
-            .delete()
-
-        val numberLikesRef =
-            firestore.collection("posts").document("uid").collection(uid).document(postId)
-        var numberLikes = numberLikesRef.get()
-            .await().toObject<PostData>()?.numberOfLikes
-        if (numberLikes != null && numberLikes != 0) {
-            numberLikes -= 1
-        } else {
-            numberLikes = 0
-        }
-        numberLikesRef.update("numberOfLikes", numberLikes)
-        emit(numberLikes)
-    }
-
 
 }

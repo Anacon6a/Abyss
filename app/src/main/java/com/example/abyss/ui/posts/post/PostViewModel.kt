@@ -65,89 +65,95 @@ class PostViewModel(
     fun Insert() {
 
         viewModelScope.launch(ioDispatcher) {
-            val deferreds = listOf(
-                async {
-                    GetUserContentProvider()
-                },
-                async {
-                    subscribeButtonVisibility()
-                },
-                async {
-                    GetNumbersOfLikes()
-                },
-                async {
-                    GetStateLike()
-                },
-                async {
-                    AddAndGetViews()
-                },
-                async {
-                    if (postData.get()!!.text != null){
-                        _visibilityTextPost.postValue(true)
-                    } else {
-                        _visibilityTextPost.postValue(false)
-                    }
-                }
-            )
-            deferreds.awaitAll()
+            GetUserContentProvider()
+            subscribeButtonVisibility()
+            GetNumbersOfLikes()
+            GetStateLike()
+            AddAndGetViews()
+            textPostVisibility()
         }
 
     }
 
-    private suspend fun GetUserContentProvider() {
-        userRepository.GetUserContentProviderByUid(postData.get()?.uid!!).collect {
-            _userData.postValue(it)
+    private fun GetUserContentProvider() {
+        externalScope.launch(ioDispatcher) {
+            userRepository.GetUserContentProviderByUid(postData.get()?.uid!!).collect {
+                _userData.postValue(it)
+            }
         }
     }
 
-    private suspend fun subscribeButtonVisibility() {
-        if (myUid == null) {
-            myUid = authRepository.GetUid()
+    private fun subscribeButtonVisibility() {
+        externalScope.launch(ioDispatcher) {
+            if (myUid == null) {
+                myUid = authRepository.GetUid()
+            }
+            _visibilitySubscribe.postValue(myUid != postData.get()?.uid)
         }
-        _visibilitySubscribe.postValue(myUid != postData.get()?.uid)
         ///////////
     }
 
-    private suspend fun GetNumbersOfLikes() {
-        likeRepository.GetNumberOfLikes(postData.get()!!.id!!, postData.get()!!.uid!!)
-            .collect { numbers ->
-                numbers?.let {
-                    if (it != 0) {
-                        _numberOfLikes.postValue(numbers)
+    private fun GetNumbersOfLikes() {
+        externalScope.launch(ioDispatcher) {
+            likeRepository.GetNumberOfLikes(postData.get()!!.id!!, postData.get()!!.uid!!)
+                .collect { numbers ->
+                    numbers?.let {
+                        if (it != 0) {
+                            _numberOfLikes.postValue(numbers)
+                        }
                     }
                 }
-            }
+        }
     }
 
-    private suspend fun GetStateLike() {
-        _stateLike.postValue(likeRepository.GetLikeStatus(postData.get()!!.id!!))
+    private fun GetStateLike() {
+        externalScope.launch(ioDispatcher) {
+            _stateLike.postValue(
+                likeRepository.GetLikeStatus(
+                    postData.get()!!.id!!,
+                    postData.get()!!.uid!!
+                )
+            )
+        }
     }
 
     fun ClickLike() {
         externalScope.launch(ioDispatcher) {
-            if (stateLike.value == true) {
-                likeRepository.RemoveLike(postData.get()!!.id!!).collect {
-                    if (it != 0) {
-                        _numberOfLikes.postValue(it)
-                    } else {
-                        _numberOfLikes.postValue(0)
-                    }
-                    _stateLike.postValue(false)
+            stateLike.value?.let { state ->
+                likeRepository.AddViewsAndGetNumberOfLikesAndStatus(
+                    postData.get()!!.id!!, postData.get()!!.uid!!, state
+                ).collect {
+                    _numberOfLikes.postValue(it.first)
+                    _stateLike.postValue(it.second)
                 }
-            } else if (stateLike.value == false) {
-                likeRepository.AddLike(postData.get()!!.id!!).collect {
-                    if (it != 0) {
-                        _numberOfLikes.postValue(it)
-                    }
-                    _stateLike.postValue(true)
-                }
+
             }
         }
     }
 
-    private suspend fun AddAndGetViews() {
-       _numberOfViews.postValue( viewsRepository.AddViewsAndGetNumberOfViews(postData.get()!!.id!!, postData.get()!!.uid!!))
+    private fun AddAndGetViews() {
+        externalScope.launch(ioDispatcher) {
+
+            viewsRepository.AddViewsAndGetNumberOfLikesAndStatus(
+                postData.get()!!.id!!,
+                postData.get()!!.uid!!
+            ).collect {
+                _numberOfViews.postValue(it)
+            }
+        }
     }
+
+    private fun textPostVisibility() {
+        externalScope.launch(ioDispatcher) {
+            if (postData.get()!!.text != null) {
+                _visibilityTextPost.postValue(true)
+            } else {
+                _visibilityTextPost.postValue(false)
+            }
+
+        }
+    }
+
 
     fun goToUserProfile() {
 

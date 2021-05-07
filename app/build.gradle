@@ -58,6 +58,7 @@ dependencies {
     implementation 'com.google.firebase:firebase-storage-ktx'
     implementation 'com.google.firebase:firebase-database-ktx'
     implementation 'com.google.firebase:firebase-firestore-ktx'
+    implementation 'com.google.firebase:firebase-functions-ktx'
 // библиотека подкачки Paging 3
     def paging_version = "3.0.0-rc01"
     implementation "androidx.paging:paging-runtime-ktx:$paging_version"

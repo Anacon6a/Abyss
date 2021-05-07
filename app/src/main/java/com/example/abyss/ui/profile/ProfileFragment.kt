@@ -12,6 +12,7 @@ import androidx.paging.LoadState
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.abyss.adapters.PostProfilePagingAdapter
 import com.example.abyss.databinding.FragmentProfileBinding
+import com.google.firebase.auth.FirebaseAuth
 import kodeinViewModel
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -40,7 +41,11 @@ class ProfileFragment : Fragment(), KodeinAware {
         binding = FragmentProfileBinding.inflate(inflater, container, false)
         binding.profileViewModel = viewModel
         binding.lifecycleOwner = viewLifecycleOwner
-
+//выход временно
+        binding.button.setOnClickListener {
+            FirebaseAuth.getInstance().signOut()
+        }
+        //////////////////
         setAdapters()
         getPosts()
         return binding.root

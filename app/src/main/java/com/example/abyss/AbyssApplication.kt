@@ -27,6 +27,7 @@ import com.example.abyss.ui.profile.ProfileViewModel
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.functions.FirebaseFunctions
 import com.google.firebase.storage.FirebaseStorage
 import kotlinx.coroutines.*
 import org.kodein.di.Kodein
@@ -46,6 +47,7 @@ class AbyssApplication : Application(), KodeinAware {
         bind<FirebaseDatabase>() with provider { FirebaseDatabase.getInstance() }
         bind<FirebaseStorage>() with provider { FirebaseStorage.getInstance() }
         bind<FirebaseFirestore>() with provider { FirebaseFirestore.getInstance() }
+        bind<FirebaseFunctions>() with provider { FirebaseFunctions.getInstance() }
 // Репозитории
         bind<AuthRepository>() with singleton {
             AuthRepositoryFirebase(instance(), instance(), instance())
@@ -60,7 +62,7 @@ class AbyssApplication : Application(), KodeinAware {
             LikeRepositoryFirestore(instance(), instance(), instance(), instance())
         }
         bind<ViewsRepository>() with provider {
-            ViewsRepositoryFirestore(instance(), instance(), instance(), instance())
+            ViewsRepositoryFirestore(instance(), instance())
         }
 // ViewModelFactory
         bind() from provider { FirstViewModelFactory(instance(), instance()) }
@@ -72,7 +74,7 @@ class AbyssApplication : Application(), KodeinAware {
 // Корутины
         bind<CoroutineScope>() with singleton { CoroutineScope(SupervisorJob()) }// не отменит ни себя, ни остальных своих child при исключениях
         bind<CoroutineDispatcher>() with singleton { Dispatchers.IO }
-        bind<CoroutineDispatcher>(tag = "default") with singleton { Dispatchers.Default }
+        bind<CoroutineDispatcher>(tag = "main") with singleton { Dispatchers.Main }
 
 // ViewModel
         bindViewModel<ProfileViewModel>() with singleton {

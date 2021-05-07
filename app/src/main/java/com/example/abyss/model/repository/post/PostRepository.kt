@@ -8,6 +8,7 @@ import kotlinx.coroutines.flow.Flow
 interface PostRepository {
     suspend fun CreatePost(post: PostData)
     suspend fun AddPostImageInStorage(imageUri: Uri): Flow<String>
-    fun GetPostForProfile():  Flow<PagingData<PostData>>?
-
+    fun GetPostForProfile(): Flow<PagingData<PostData>>?
+    suspend fun GetPostsSubscriptionForNewsFeed(): Flow<PagingData<PostData>>?
+    suspend fun GetPostsTrendsForNewsFeed(): Flow<PagingData<PostData>>?
 }

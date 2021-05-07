@@ -62,14 +62,13 @@ class PostNewsFeedPagingAdapter(
                     }
                 }
             }
-//            externalScope.launch {
+
                 val ratio = String.format("%d:%d", post.widthImage, post.heightImage)
                 set.clone(binding.postContainer)
                 set.setDimensionRatio(binding.iconsImage.id, ratio)
                 set.applyTo(binding.postContainer)
-//            }.invokeOnCompletion {
+
                 binding.iconsImage.loadImage2(post.imageUrl)
-//            }
 
         }
     }

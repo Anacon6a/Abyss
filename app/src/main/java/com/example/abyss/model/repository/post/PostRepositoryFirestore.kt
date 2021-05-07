@@ -3,12 +3,15 @@ package com.example.abyss.model.repository.post
 import android.net.Uri
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
+import androidx.paging.PagingData
 import androidx.paging.cachedIn
 import com.example.abyss.model.data.PostData
+import com.example.abyss.model.pagingsource.PostForNewsFeedPagingSource
 import com.example.abyss.model.pagingsource.PostForProfileFirestorePagingSource
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
+import com.google.firebase.functions.FirebaseFunctions
 import com.google.firebase.storage.FirebaseStorage
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
@@ -24,7 +27,6 @@ class PostRepositoryFirestore(
     private val firebaseStorage: FirebaseStorage,
     private val ioDispatcher: CoroutineDispatcher,
     private val externalScope: CoroutineScope,
-
     ) : PostRepository {
 
     override suspend fun CreatePost(post: PostData) {
@@ -32,19 +34,12 @@ class PostRepositoryFirestore(
 
             val uid = firebaseAuth.uid!!
 
-            val doc = firestore.collection("posts")
-                .document("uid")
-                .collection(uid)
-                .document()
+            val doc = firestore.collection("users").document(uid).collection("posts").document()
 
             post.id = doc.id
             post.uid = uid
 
-            doc.set(post).addOnCompleteListener {
-                Timber.i("Пост добавлен: ${post.id}")
-            }.addOnFailureListener {
-                Timber.i("Ошибка: ${it.message.toString()}")
-            }
+            doc.set(post)
 
         }
             .join()
@@ -69,14 +64,44 @@ class PostRepositoryFirestore(
     override fun GetPostForProfile() =
         Pager(
             PagingConfig(
-                initialLoadSize = 1,
-                pageSize = 1,
-                prefetchDistance = 1
+                initialLoadSize = 20,
+                pageSize = 30,
+                prefetchDistance = 10
             )
         ) {
             val uid = firebaseAuth.uid.toString()
-            val query = firestore.collection("posts").document("uid").collection(uid)
+            val query = firestore.collection("users").document(uid).collection("posts")
                 .orderBy("date", Query.Direction.DESCENDING)
+            PostForProfileFirestorePagingSource(query)
+        }.flow.cachedIn(externalScope)
+
+    override suspend fun GetPostsSubscriptionForNewsFeed(): Flow<PagingData<PostData>>?  =
+        Pager(
+            PagingConfig(
+                initialLoadSize = 20,
+                pageSize = 30,
+                prefetchDistance = 10
+            )
+        ) {
+
+            val uid = firebaseAuth.uid.toString()
+            val querySubscription = firestore.collection("users").document(uid).collection("subscriptions")
+            val queryPosts = firestore
+            PostForNewsFeedPagingSource(querySubscription, queryPosts,ioDispatcher, externalScope)
+        }.flow.cachedIn(externalScope)
+
+
+    override suspend fun GetPostsTrendsForNewsFeed(): Flow<PagingData<PostData>>? =
+        ////за все время изначально
+        Pager(
+            PagingConfig(
+                initialLoadSize = 20,
+                pageSize = 30,
+                prefetchDistance = 10
+            )
+        ) {
+            val query = firestore.collectionGroup("posts")
+
             PostForProfileFirestorePagingSource(query)
         }.flow.cachedIn(externalScope)
 }

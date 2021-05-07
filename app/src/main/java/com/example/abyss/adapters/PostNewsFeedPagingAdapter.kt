@@ -13,11 +13,13 @@ import com.example.abyss.databinding.PostNewsFeedDataBinding
 import com.example.abyss.model.data.PostData
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
 
 class PostNewsFeedPagingAdapter(
     private val externalScope: CoroutineScope,
-    private val ioDispatcher: CoroutineDispatcher,
+    private val mainDispatcher: CoroutineDispatcher,
+
 ) : PagingDataAdapter<PostData, PostNewsFeedPagingAdapter.PostViewHolder>(Companion) {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PostViewHolder {
         val layoutInflater = LayoutInflater.from(parent.context)
@@ -53,7 +55,7 @@ class PostNewsFeedPagingAdapter(
     ) : RecyclerView.ViewHolder(binding.root) {
 
         fun bindPost(post: PostData) {
-            externalScope.launch(ioDispatcher) {
+            externalScope.launch(mainDispatcher) {
                 binding.post = post
                 binding.postContainer.setOnClickListener {
                     onItemClickListener?.let {

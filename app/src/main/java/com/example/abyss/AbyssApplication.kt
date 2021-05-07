@@ -94,7 +94,7 @@ class AbyssApplication : Application(), KodeinAware {
 // Adapter
         bind<PostProfilePagingAdapter>() with provider { PostProfilePagingAdapter() }
         bind() from provider { PostNewsFeedViewPagerAdapter() }
-        bind() from provider { PostNewsFeedPagingAdapter(instance(), instance()) }
+        bind() from provider { PostNewsFeedPagingAdapter(instance(), instance("main") )}
     }
 
     override fun onCreate() {

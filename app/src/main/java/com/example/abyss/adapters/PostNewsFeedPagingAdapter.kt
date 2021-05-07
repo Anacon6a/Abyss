@@ -9,7 +9,7 @@ import androidx.constraintlayout.widget.ConstraintSet
 import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
-import com.example.abyss.databinding.PostNewsFeedDataBinding2
+import com.example.abyss.databinding.PostNewsFeedDataBinding
 import com.example.abyss.model.data.PostData
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
@@ -22,7 +22,7 @@ class PostNewsFeedPagingAdapter(
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PostViewHolder {
         val layoutInflater = LayoutInflater.from(parent.context)
 
-        val binding = PostNewsFeedDataBinding2.inflate(
+        val binding = PostNewsFeedDataBinding.inflate(
             layoutInflater,
             parent,
             false
@@ -49,7 +49,7 @@ class PostNewsFeedPagingAdapter(
     private val set = ConstraintSet()
 
     inner class PostViewHolder(
-        private val binding: PostNewsFeedDataBinding2
+        private val binding: PostNewsFeedDataBinding
     ) : RecyclerView.ViewHolder(binding.root) {
 
         fun bindPost(post: PostData) {

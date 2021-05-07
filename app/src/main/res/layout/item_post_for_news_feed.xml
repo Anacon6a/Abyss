@@ -10,76 +10,82 @@
             type="com.example.abyss.model.data.PostData" />
     </data>
     <androidx.cardview.widget.CardView
+        android:layout_margin="4dp"
         android:layout_width="match_parent"
-        android:layout_height="260dp"
-        android:layout_marginStart="8dp"
+        android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginBottom="8dp"
         app:cardCornerRadius="20dp"
         app:cardElevation="2dp">
 
-        <LinearLayout
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/post_container"
             android:orientation="vertical"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:transitionName="@{@string/postContainer(String.valueOf(post.id))}"
+            android:layout_height="wrap_content"
             android:background="@drawable/bg_post_content">
 
             <ImageView
                 android:id="@+id/icons_image"
                 loadImage="@{post.imageUrl}"
                 tools:src="@drawable/synth"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:scaleType="centerCrop" />
+                android:transitionName="@{@string/postImage(String.valueOf(post.id))}"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:adjustViewBounds="true"
+                app:layout_constraintDimensionRatio="1:1"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"/>
 
-<!--            <LinearLayout-->
-<!--                android:orientation="horizontal"-->
-<!--                android:layout_width="match_parent"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                android:background="@drawable/bg_user_profile_news"-->
-<!--                android:elevation="1dp">-->
+            <!--            <LinearLayout-->
+            <!--                android:orientation="horizontal"-->
+            <!--                android:layout_width="match_parent"-->
+            <!--                android:layout_height="wrap_content"-->
+            <!--                android:background="@drawable/bg_user_profile_news"-->
+            <!--                android:elevation="1dp">-->
 
-<!--                <com.google.android.material.imageview.ShapeableImageView-->
-<!--                    android:id="@+id/profile_image"-->
-<!--                    android:layout_width="40dp"-->
-<!--                    android:layout_height="40dp"-->
-<!--                    android:layout_marginStart="8dp"-->
-<!--                    android:layout_marginTop="4dp"-->
-<!--                    android:layout_marginBottom="4dp"-->
-<!--                    app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.App.CornerSize50Percent" />-->
+            <!--                <com.google.android.material.imageview.ShapeableImageView-->
+            <!--                    android:id="@+id/profile_image"-->
+            <!--                    android:layout_width="40dp"-->
+            <!--                    android:layout_height="40dp"-->
+            <!--                    android:layout_marginStart="8dp"-->
+            <!--                    android:layout_marginTop="4dp"-->
+            <!--                    android:layout_marginBottom="4dp"-->
+            <!--                    app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.App.CornerSize50Percent" />-->
 
-<!--                <TextView-->
-<!--                    android:id="@+id/user_name"-->
-<!--                    android:layout_width="180dp"-->
-<!--                    android:layout_height="wrap_content"-->
-<!--                    android:layout_marginStart="10dp"-->
-<!--                    android:elevation="1dp"-->
-<!--                    android:maxLines="1"-->
-<!--                    android:textColor="@android:color/black"-->
-<!--                    android:textSize="16sp"-->
-<!--                    tools:text="Anaconda" />-->
+            <!--                <TextView-->
+            <!--                    android:id="@+id/user_name"-->
+            <!--                    android:layout_width="180dp"-->
+            <!--                    android:layout_height="wrap_content"-->
+            <!--                    android:layout_marginStart="10dp"-->
+            <!--                    android:elevation="1dp"-->
+            <!--                    android:maxLines="1"-->
+            <!--                    android:textColor="@android:color/black"-->
+            <!--                    android:textSize="16sp"-->
+            <!--                    tools:text="Anaconda" />-->
 
-<!--                <ImageView-->
-<!--                    android:id="@+id/state_like"-->
-<!--                    android:layout_width="40dp"-->
-<!--                    android:layout_height="40dp"-->
-<!--                    android:layout_marginStart="8dp"-->
-<!--                    tools:src="@drawable/ic_like_false" />-->
+            <!--                <ImageView-->
+            <!--                    android:id="@+id/state_like"-->
+            <!--                    android:layout_width="40dp"-->
+            <!--                    android:layout_height="40dp"-->
+            <!--                    android:layout_marginStart="8dp"-->
+            <!--                    tools:src="@drawable/ic_like_false" />-->
 
-<!--                <TextView-->
-<!--                    android:id="@+id/number_of_likes"-->
-<!--                    android:layout_width="96dp"-->
-<!--                    android:layout_height="wrap_content"-->
-<!--                    android:ellipsize="end"-->
-<!--                    android:maxLines="1"-->
-<!--                    android:textColor="@android:color/black"-->
-<!--                    android:layout_marginStart="4dp"-->
-<!--                    tools:text="800 Млн." />-->
-<!--            </LinearLayout>-->
+            <!--                <TextView-->
+            <!--                    android:id="@+id/number_of_likes"-->
+            <!--                    android:layout_width="96dp"-->
+            <!--                    android:layout_height="wrap_content"-->
+            <!--                    android:ellipsize="end"-->
+            <!--                    android:maxLines="1"-->
+            <!--                    android:textColor="@android:color/black"-->
+            <!--                    android:layout_marginStart="4dp"-->
+            <!--                    tools:text="800 Млн." />-->
+            <!--            </LinearLayout>-->
 
-        </LinearLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
     </androidx.cardview.widget.CardView>
 

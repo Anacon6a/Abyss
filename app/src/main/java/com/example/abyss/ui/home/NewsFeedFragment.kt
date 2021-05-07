@@ -51,7 +51,6 @@ class NewsFeedFragment() : Fragment(), KodeinAware {
 
 
         Subscription()
-//        GetPostsForRecyclerview()
         setAdaptersForViewPager()
         setTabLayout()
 
@@ -98,9 +97,6 @@ class NewsFeedFragment() : Fragment(), KodeinAware {
                 setHasFixedSize(false)
                 itemAnimator = null
                 adapter = viewModel.postNewsFeedPagingAdapter
-//                    .withLoadStateFooter(
-//                    footer = PostLoadStateAdapter { postAdapter.retry()}
-//                )
 
 //                viewTreeObserver
 //                    .addOnPreDrawListener {
@@ -109,11 +105,6 @@ class NewsFeedFragment() : Fragment(), KodeinAware {
 //                    }
             }
         }
-//        lifecycleScope.launch {
-//            postNewsFeedPagingAdapter.loadStateFlow.collectLatest { loadState ->
-//                viewModel.LoadingPosts(loadState.source.refresh is LoadState.Loading)
-//            }
-//        }
     }
 
 
@@ -126,13 +117,6 @@ class NewsFeedFragment() : Fragment(), KodeinAware {
         }.attach()
     }
 
-//    private fun GetPostsForRecyclerview() {
-//        viewModel.getPosts?.observe(viewLifecycleOwner, {
-//            lifecycleScope.launch {
-//                postNewsFeedPagingAdapter.submitData(it)
-//            }
-//        })
-//    }
 
 
 }

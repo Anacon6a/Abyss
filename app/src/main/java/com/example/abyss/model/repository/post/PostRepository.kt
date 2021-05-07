@@ -2,6 +2,7 @@ package com.example.abyss.model.repository.post
 
 import android.net.Uri
 import androidx.paging.PagingData
+import com.example.abyss.model.State
 import com.example.abyss.model.data.PostData
 import kotlinx.coroutines.flow.Flow
 
@@ -11,4 +12,5 @@ interface PostRepository {
     fun GetPostForProfile(): Flow<PagingData<PostData>>?
     suspend fun GetPostsSubscriptionForNewsFeed(): Flow<PagingData<PostData>>?
     suspend fun GetPostsTrendsForNewsFeed(): Flow<PagingData<PostData>>?
+    suspend fun listeningForChangesPosts(): Flow<Boolean>
 }

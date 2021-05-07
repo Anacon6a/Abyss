@@ -29,10 +29,6 @@ class ProfileFragment : Fragment(), KodeinAware {
 
     private val viewModel: ProfileViewModel by kodeinViewModel()
 
-    private val postProfileAdapter: PostProfilePagingAdapter by instance()
-
-    var userId: String? = null
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?,
@@ -46,39 +42,14 @@ class ProfileFragment : Fragment(), KodeinAware {
             FirebaseAuth.getInstance().signOut()
         }
         //////////////////
-        setAdapters()
-        getPosts()
+        Subscription()
+        setAdaptersForRecycler()
+
         return binding.root
     }
 
-    // настройка RecyclerView и подключение к адаптерам
-    private fun setAdapters() {
-        lifecycleScope.launch {
-            binding.profilePostsRecyclerView.apply {
-                layoutManager = GridLayoutManager(context, 3)
-                setHasFixedSize(false)
-                itemAnimator = null
-                adapter = postProfileAdapter
-//                    .withLoadStateFooter(
-//                    footer = PostLoadStateAdapter { postAdapter.retry()}
-//                )
-
-//                viewTreeObserver
-//                    .addOnPreDrawListener {
-//                        startPostponedEnterTransition()
-//                        true
-//                    }
-
-                lifecycleScope.launch {
-                    postProfileAdapter.loadStateFlow.collectLatest { loadState ->
-
-                        viewModel.LoadingPosts(loadState.source.refresh is LoadState.Loading)
-
-                    }
-                }
-            }
-        }
-        postProfileAdapter.setOnItemClickListener { postImage, imageView, postContainer ->
+    private fun Subscription() {
+        viewModel.postProfilePagingAdapter.setOnItemClickListener { postImage, imageView, postContainer ->
 
             val action = ProfileFragmentDirections.actionProfileFragmentToPostFragment(postImage)
 
@@ -93,13 +64,32 @@ class ProfileFragment : Fragment(), KodeinAware {
         }
     }
 
-    // получение данных из viewmodel и передача адаптеру
-    private fun getPosts() {
-        viewModel.getPosts?.observe(viewLifecycleOwner, {
-            lifecycleScope.launch {
-                postProfileAdapter.submitData(it)
+    private fun setAdaptersForRecycler() {
+        lifecycleScope.launch {
+            binding.profilePostsRecyclerView.apply {
+                layoutManager = GridLayoutManager(context, 3)
+                setHasFixedSize(false)
+                itemAnimator = null
+                adapter = viewModel.postProfilePagingAdapter
+//                    .withLoadStateFooter(
+//                    footer = PostLoadStateAdapter { postAdapter.retry()}
+//                )
+
+//                viewTreeObserver
+//                    .addOnPreDrawListener {
+//                        startPostponedEnterTransition()
+//                        true
+//                    }
+
+//                lifecycleScope.launch {
+//                    postProfileAdapter.loadStateFlow.collectLatest { loadState ->
+//
+//                        viewModel.LoadingPosts(loadState.source.refresh is LoadState.Loading)
+//
+//                    }
+//                }
             }
-        })
+        }
     }
 }
 

@@ -66,7 +66,7 @@ class AddPostFragment : Fragment(), KodeinAware {
     private fun photoSelection() {
         ImagePicker.with(this)
             .crop().compress(1024)
-            .saveDir(File(Environment.getExternalStorageDirectory(), "Abyss"))
+//            .saveDir(File(Environment.getExternalStorageDirectory(), "Abyss"))
             .start()
     }
 

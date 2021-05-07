@@ -78,7 +78,7 @@ class AbyssApplication : Application(), KodeinAware {
 
 // ViewModel
         bindViewModel<ProfileViewModel>() with singleton {
-            ProfileViewModel(instance(), instance(), instance(), instance())
+            ProfileViewModel(instance(), instance(), instance(), instance(), instance())
         }
         bindViewModel<AddPostViewModel>() with provider {
             AddPostViewModel(instance(), instance(), instance())

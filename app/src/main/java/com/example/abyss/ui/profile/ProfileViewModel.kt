@@ -1,8 +1,13 @@
 package com.example.abyss.ui.profile
 
 import androidx.lifecycle.*
+import androidx.paging.LoadState
+import androidx.paging.PagingData
 import androidx.paging.cachedIn
+import com.example.abyss.adapters.PostNewsFeedPagingAdapter
+import com.example.abyss.adapters.PostProfilePagingAdapter
 import com.example.abyss.model.State
+import com.example.abyss.model.data.PostData
 import com.example.abyss.model.repository.post.PostRepository
 import com.example.abyss.model.repository.user.UserRepository
 import kotlinx.coroutines.*
@@ -14,6 +19,7 @@ class ProfileViewModel(
     private val postRepository: PostRepository,
     private val userRepository: UserRepository,
     private val externalScope: CoroutineScope,
+    val postProfilePagingAdapter: PostProfilePagingAdapter,
 ) : ViewModel() {
 
     private val _userName = MutableLiveData<String>()
@@ -32,32 +38,41 @@ class ProfileViewModel(
     val progressBarloadingAllPosts: LiveData<Boolean>
         get() = _progressBarloadingAllPosts
 
-//    val flow = Pager(
-//        PagingConfig(
-//            initialLoadSize = 40,
-//            pageSize = 40,
-//            prefetchDistance = 40
-//        )
-//    ) {
-//        postForProfileFirestorePagingSource
-//    }.flow.cachedIn(externalScope)
+    private val postsUser = MutableLiveData<PagingData<PostData>>()
 
-    val getPosts = postRepository.GetPostForProfile()?.cachedIn(externalScope)?.asLiveData()
+
+//    val getPosts = postRepository.GetPostForProfile()?.cachedIn(externalScope)?.asLiveData()
 
     init {
+        StatusLoading()
+        GetPostsUser()
+        listeningForChangesPosts()
         GetUser()
+    }
+
+    fun StatusLoading() {
+        externalScope.launch()
+        {
+            postProfilePagingAdapter.loadStateFlow.collectLatest { loadState ->
+                LoadingPosts(loadState.source.refresh is LoadState.Loading)
+            }
+        }
     }
 
     fun LoadingPosts(boolean: Boolean) {
         _progressBarloadingAllPosts.postValue(boolean)
     }
 
-    fun LoadingPost() {
-
+    private fun GetPostsUser() {
+        externalScope.launch(ioDispatcher) {
+            postRepository.GetPostForProfile()?.collect {
+                postsUser.postValue(it)
+                postProfilePagingAdapter.submitData(it)
+            }
+        }
     }
 
-
-    fun GetUser() {
+    private fun GetUser() {
 
         externalScope.launch(ioDispatcher) {
 
@@ -78,6 +93,16 @@ class ProfileViewModel(
             }
         }
 
+    }
+
+    private fun listeningForChangesPosts() {
+        externalScope.launch(ioDispatcher) {
+            postRepository.listeningForChangesPosts().collect {
+                if (it) {
+                    GetPostsUser()
+                }
+            }
+        }
     }
 
 }

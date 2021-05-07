@@ -21,8 +21,7 @@ class NewsFeedViewModel(
 ) : ViewModel() {
 
     init {
-
-        LoadingStatus()
+        StatusLoading()
         GetPostsSubscriptions()
     }
 
@@ -53,7 +52,7 @@ class NewsFeedViewModel(
         }
     }
 
-    fun LoadingStatus() {
+    fun StatusLoading() {
         externalScope.launch()
         {
             postNewsFeedPagingAdapter.loadStateFlow.collectLatest { loadState ->
@@ -61,7 +60,6 @@ class NewsFeedViewModel(
             }
         }
     }
-
     fun LoadingPosts(boolean: Boolean) {
         _progressBarloadingAllPosts.postValue(boolean)
     }

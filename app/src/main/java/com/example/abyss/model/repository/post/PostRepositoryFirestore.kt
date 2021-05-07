@@ -9,14 +9,14 @@ import com.example.abyss.model.data.PostData
 import com.example.abyss.model.pagingsource.PostForNewsFeedPagingSource
 import com.example.abyss.model.pagingsource.PostForProfileFirestorePagingSource
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.DocumentChange
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
-import com.google.firebase.functions.FirebaseFunctions
+import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.storage.FirebaseStorage
-import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.*
+import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.*
-import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 import timber.log.Timber
 import java.util.*
@@ -27,7 +27,7 @@ class PostRepositoryFirestore(
     private val firebaseStorage: FirebaseStorage,
     private val ioDispatcher: CoroutineDispatcher,
     private val externalScope: CoroutineScope,
-    ) : PostRepository {
+) : PostRepository {
 
     override suspend fun CreatePost(post: PostData) {
         externalScope.launch(ioDispatcher) {
@@ -55,10 +55,11 @@ class PostRepositoryFirestore(
         imageRef.putFile(imageUri).await()
         val url = imageRef.downloadUrl.await()
         emit(url.toString())
-    }.shareIn(
-        externalScope,
-        SharingStarted.WhileSubscribed(),
-    )
+    }
+//        .shareIn(
+//        externalScope,
+//        SharingStarted.WhileSubscribed(),
+//    )
 
 
     override fun GetPostForProfile() =
@@ -75,7 +76,8 @@ class PostRepositoryFirestore(
             PostForProfileFirestorePagingSource(query)
         }.flow.cachedIn(externalScope)
 
-    override suspend fun GetPostsSubscriptionForNewsFeed(): Flow<PagingData<PostData>>?  =
+
+    override suspend fun GetPostsSubscriptionForNewsFeed(): Flow<PagingData<PostData>>? =
         Pager(
             PagingConfig(
                 initialLoadSize = 20,
@@ -85,9 +87,10 @@ class PostRepositoryFirestore(
         ) {
 
             val uid = firebaseAuth.uid.toString()
-            val querySubscription = firestore.collection("users").document(uid).collection("subscriptions")
+            val querySubscription =
+                firestore.collection("users").document(uid).collection("subscriptions")
             val queryPosts = firestore
-            PostForNewsFeedPagingSource(querySubscription, queryPosts,ioDispatcher, externalScope)
+            PostForNewsFeedPagingSource(querySubscription, queryPosts, ioDispatcher, externalScope)
         }.flow.cachedIn(externalScope)
 
 
@@ -104,4 +107,42 @@ class PostRepositoryFirestore(
 
             PostForProfileFirestorePagingSource(query)
         }.flow.cachedIn(externalScope)
+
+
+    @ExperimentalCoroutinesApi
+    override suspend fun listeningForChangesPosts(): Flow<Boolean> = callbackFlow {
+        val uid = firebaseAuth.uid.toString()
+        val eventPostsListener = firestore.collection("users").document(uid).collection("posts")
+        var isFirstListener = true
+
+        val subscription = eventPostsListener.addSnapshotListener { snapshots, exception ->
+            exception?.let {
+                Timber.e("Ошибка: ${it.message.toString()}")
+                cancel(it?.message.toString())
+            }
+
+            if (isFirstListener) {
+                isFirstListener = false
+                return@addSnapshotListener
+            }
+
+            for (dc in snapshots!!.documentChanges) {
+                offer(true)
+//                when (dc.type) {
+//                    DocumentChange.Type.ADDED -> {
+//                        val post = dc.document.toObject<PostData>()
+//                        offer(Pair(post, "added"))
+//                    }
+//                    DocumentChange.Type.MODIFIED -> Timber.d("Modified")
+//                    DocumentChange.Type.REMOVED -> Timber.d("Removed")
+//                }
+            }
+        }
+        offer(false)
+        awaitClose { subscription.remove() }
+    }.shareIn(
+        externalScope,
+        SharingStarted.WhileSubscribed(),
+    )
+
 }

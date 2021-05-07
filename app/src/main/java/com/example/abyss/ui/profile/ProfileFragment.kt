@@ -62,6 +62,9 @@ class ProfileFragment : Fragment(), KodeinAware {
                 ).build()
             )
         }
+        binding.swipeRefreshLayout.setOnRefreshListener {
+            Refresh()
+        }
     }
 
     private fun setAdaptersForRecycler() {
@@ -89,6 +92,13 @@ class ProfileFragment : Fragment(), KodeinAware {
 //                    }
 //                }
             }
+        }
+    }
+
+    private fun Refresh() {
+        lifecycleScope.launch {
+            viewModel.Refresh()
+            binding.swipeRefreshLayout.isRefreshing = false
         }
     }
 }

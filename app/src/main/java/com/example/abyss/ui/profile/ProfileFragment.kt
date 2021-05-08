@@ -12,6 +12,7 @@ import androidx.paging.LoadState
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.abyss.adapters.PostProfilePagingAdapter
 import com.example.abyss.databinding.FragmentProfileBinding
+import com.example.abyss.extensions.onClick
 import com.google.firebase.auth.FirebaseAuth
 import kodeinViewModel
 import kotlinx.coroutines.flow.collectLatest
@@ -32,13 +33,14 @@ class ProfileFragment : Fragment(), KodeinAware {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?,
-    ): View? {
+    ): View {
 
         binding = FragmentProfileBinding.inflate(inflater, container, false)
         binding.profileViewModel = viewModel
         binding.lifecycleOwner = viewLifecycleOwner
-//выход временно
-        binding.button.setOnClickListener {
+        //выход временно
+        /**пример как изспользовать onClick, заменить все onClickListener на onClick*/
+        binding.button.onClick {
             FirebaseAuth.getInstance().signOut()
         }
         //////////////////

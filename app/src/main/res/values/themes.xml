@@ -1,6 +1,9 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
     <style name="Theme.Abyss" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
+        <!--НИЖЕ ДВЕ СТРОКИ КОТОРЫЕ ОТКЛЮЧАЮТ МУЛЬТИТАЧ-->
+        <item name="android:windowEnableSplitTouch">false</item>
+        <item name="android:splitMotionEvents">false</item>
         <!-- Primary brand color. -->
         <item name="colorPrimary">@color/purple_500</item>
         <item name="colorPrimaryVariant">@color/purple_700</item>

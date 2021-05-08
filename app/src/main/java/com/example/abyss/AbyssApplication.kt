@@ -12,6 +12,8 @@ import com.example.abyss.model.repository.like.LikeRepository
 import com.example.abyss.model.repository.like.LikeRepositoryFirestore
 import com.example.abyss.model.repository.post.PostRepository
 import com.example.abyss.model.repository.post.PostRepositoryFirestore
+import com.example.abyss.model.repository.subscription.SubscriptionRepository
+import com.example.abyss.model.repository.subscription.SubscriptionRepositoryFirestore
 import com.example.abyss.model.repository.user.UserRepository
 import com.example.abyss.model.repository.user.UserRepositoryFirestore
 import com.example.abyss.model.repository.views.ViewsRepository
@@ -64,6 +66,9 @@ class AbyssApplication : Application(), KodeinAware {
         bind<ViewsRepository>() with provider {
             ViewsRepositoryFirestore(instance(), instance())
         }
+        bind<SubscriptionRepository>() with provider {
+            SubscriptionRepositoryFirestore(instance(), instance(), instance(), instance())
+        }
 // ViewModelFactory
         bind() from provider { FirstViewModelFactory(instance(), instance()) }
         bind() from provider { LoginViewModelFactory(instance(), instance()) }
@@ -85,8 +90,7 @@ class AbyssApplication : Application(), KodeinAware {
         }
         bindViewModel<PostViewModel>() with provider {
             PostViewModel(
-                instance(), instance(), instance(), instance(), instance(), instance(), instance()
-            )
+                instance(), instance(), instance(), instance(), instance(), instance(), instance(), instance())
         }
         bindViewModel<NewsFeedViewModel>() with singleton {
             NewsFeedViewModel(instance(), instance(), instance(), instance())

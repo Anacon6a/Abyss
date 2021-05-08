@@ -60,16 +60,19 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.App.CornerSize50Percent"
-                app:srcCompat="@drawable/ic_launcher_background" />
+                app:srcCompat="@drawable/ic_user_image_profile" />
 
             <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/user_name_text_view"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
                 android:layout_marginTop="45dp"
                 android:layout_marginEnd="20dp"
+                android:maxLines="2"
                 android:text="@{ProfileViewModel.userName}"
                 android:textSize="24sp"
+                tools:text="Anaconda"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/shapeable_image_view"
                 app:layout_constraintTop_toTopOf="parent" />

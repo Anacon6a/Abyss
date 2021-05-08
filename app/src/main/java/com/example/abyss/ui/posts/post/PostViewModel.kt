@@ -10,6 +10,7 @@ import com.example.abyss.model.data.UserData
 import com.example.abyss.model.repository.auth.AuthRepository
 import com.example.abyss.model.repository.like.LikeRepository
 import com.example.abyss.model.repository.post.PostRepository
+import com.example.abyss.model.repository.subscription.SubscriptionRepository
 import com.example.abyss.model.repository.user.UserRepository
 import com.example.abyss.model.repository.views.ViewsRepository
 import kotlinx.coroutines.*
@@ -22,11 +23,12 @@ class PostViewModel(
     private val userRepository: UserRepository,
     private val authRepository: AuthRepository,
     private val likeRepository: LikeRepository,
-    private val viewsRepository: ViewsRepository
+    private val viewsRepository: ViewsRepository,
+    private val subscriptionRepository: SubscriptionRepository
 ) : ViewModel() {
 
-    private val _numberOfSubscribers = MutableLiveData<String>()
-    val numberOfSubscribers: LiveData<String>
+    private val _numberOfSubscribers = MutableLiveData<Int?>()
+    val numberOfSubscribers: LiveData<Int?>
         get() = _numberOfSubscribers
 
     private val _visibilityTextPost = MutableLiveData<Boolean>()
@@ -64,37 +66,35 @@ class PostViewModel(
 
     fun Insert() {
 
-        viewModelScope.launch(ioDispatcher) {
-            GetUserContentProvider()
-            subscribeButtonVisibility()
-            GetNumbersOfLikes()
-            GetStateLike()
-            AddAndGetViews()
-            textPostVisibility()
-        }
-
+        GetUserContentProvider()
+        subscribeButtonVisibility()
+        GetNumbersOfLikes()
+        GetStateLike()
+        AddAndGetViews()
+        textPostVisibility()
     }
 
     private fun GetUserContentProvider() {
-        externalScope.launch(ioDispatcher) {
+        viewModelScope.launch(ioDispatcher) {
             userRepository.GetUserContentProviderByUid(postData.get()?.uid!!).collect {
                 _userData.postValue(it)
+                _numberOfSubscribers.postValue(it!!.numberOfSubscribers)
             }
         }
     }
 
     private fun subscribeButtonVisibility() {
-        externalScope.launch(ioDispatcher) {
+        viewModelScope.launch(ioDispatcher) {
             if (myUid == null) {
                 myUid = authRepository.GetUid()
             }
+            _stateSubscribe.postValue(subscriptionRepository.GetSubscriptionStatus(postData.get()?.uid!!))
             _visibilitySubscribe.postValue(myUid != postData.get()?.uid)
         }
-        ///////////
     }
 
     private fun GetNumbersOfLikes() {
-        externalScope.launch(ioDispatcher) {
+        viewModelScope.launch(ioDispatcher) {
             likeRepository.GetNumberOfLikes(postData.get()!!.id!!, postData.get()!!.uid!!)
                 .collect { numbers ->
                     numbers?.let {
@@ -107,7 +107,7 @@ class PostViewModel(
     }
 
     private fun GetStateLike() {
-        externalScope.launch(ioDispatcher) {
+        viewModelScope.launch(ioDispatcher) {
             _stateLike.postValue(
                 likeRepository.GetLikeStatus(
                     postData.get()!!.id!!,
@@ -120,7 +120,7 @@ class PostViewModel(
     fun ClickLike() {
         externalScope.launch(ioDispatcher) {
             stateLike.value?.let { state ->
-                likeRepository.AddViewsAndGetNumberOfLikesAndStatus(
+                likeRepository.AddLikeAndGetNumberOfLikesAndStatus(
                     postData.get()!!.id!!, postData.get()!!.uid!!, state
                 ).collect {
                     _numberOfLikes.postValue(it.first)
@@ -134,7 +134,7 @@ class PostViewModel(
     private fun AddAndGetViews() {
         externalScope.launch(ioDispatcher) {
 
-            viewsRepository.AddViewsAndGetNumberOfLikesAndStatus(
+            viewsRepository.AddViewsAndGetNumber(
                 postData.get()!!.id!!,
                 postData.get()!!.uid!!
             ).collect {
@@ -144,7 +144,7 @@ class PostViewModel(
     }
 
     private fun textPostVisibility() {
-        externalScope.launch(ioDispatcher) {
+        viewModelScope.launch(ioDispatcher) {
             if (postData.get()!!.text != null) {
                 _visibilityTextPost.postValue(true)
             } else {
@@ -154,13 +154,23 @@ class PostViewModel(
         }
     }
 
-
     fun goToUserProfile() {
 
     }
 
     fun subscribeToAccount() {
-
+        externalScope.launch(ioDispatcher) {
+            stateSubscribe.value?.let {
+                subscriptionRepository.AddSubscriptionAndGetNumberOfSubscribersAndStatus(
+                    postData.get()!!.uid!!,
+                    stateSubscribe.value!!
+                )
+                    .collect {
+                        _stateSubscribe.postValue(it.second)
+                        _numberOfSubscribers.postValue(it.first)
+                    }
+            }
+        }
     }
 
     fun savePost() {

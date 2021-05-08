@@ -37,10 +37,9 @@ class LikeRepositoryFirestore(
     }
 
 
-   override suspend fun AddViewsAndGetNumberOfLikesAndStatus(postId: String, uidProvider: String, status: Boolean ): Flow<Pair<Int?, Boolean>> = flow {
+   override suspend fun AddLikeAndGetNumberOfLikesAndStatus(postId: String, uidProvider: String, status: Boolean ): Flow<Pair<Int?, Boolean>> = flow {
         val uid = firebaseAuth.uid!!
-        val date = Date(System.currentTimeMillis())
-        val like = LikeData(uid, date)
+        val like = LikeData(uid)
         var numberLikes: Int? = 0
         var statusLike = status
 

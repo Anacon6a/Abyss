@@ -65,7 +65,9 @@ fun LikeIfTrue(imageView: ImageView, boolean: Boolean) {
 
 @BindingAdapter("loadImage")
 fun loadImage(imageView: ImageView, url: String?) {
-    Glide.with(imageView).load(url).into(imageView)
+    url?.let {
+        Glide.with(imageView).load(it).into(imageView)
+    }
 }
 
 
@@ -158,5 +160,27 @@ fun textForNumberLikes(textView: TextView, numbers: Int) {
         textView.text = "${numbers / 1000} Тыс."
     } else {
         textView.text = "${numbers / 1000000} Млн."
+    }
+}
+
+@SuppressLint("SetTextI18n")
+@BindingAdapter("textForNumberSubscribers")
+fun textForNumberSubscribers(textView: TextView, numbers: Int?) {
+
+    if (numbers == 0 || numbers == null) {
+        textView.text = "Нет подписчиков"
+    } else if ( numbers < 1000 && (numbers % 100) > 10 && (numbers % 100) < 15 ) {
+        textView.text = " $numbers подписчиков"
+    } else if (numbers < 1000 && (numbers % 10) > 0 && (numbers % 10) < 5) {
+        when (numbers % 10) {
+            1 -> textView.text = " $numbers подписчик"
+            2, 3, 4 -> textView.text = " $numbers подписчика"
+        }
+    }else if (numbers in 10000..999999) {
+        textView.text = " ${numbers / 1000} Тыс. подписчиков"
+    }else if (numbers >= 1000000) {
+        textView.text = " ${numbers / 1000000} Млн. подписчиков"
+    } else {
+        textView.text = " $numbers подписчиков"
     }
 }

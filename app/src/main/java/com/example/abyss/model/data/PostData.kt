@@ -10,11 +10,11 @@ import java.util.*
 data class PostData(
     val imageUrl: String? = null,
     val text: String? = null,
-    val date: Date? = null,
     val widthImage: Int? = null,
     val heightImage: Int? = null,
-    val numberOfLikes: Int? = null,
-    val numberOfViews: Int? = null,
+    val date: Date? = Date(System.currentTimeMillis()),
+    val numberOfLikes: Int? = 0,
+    val numberOfViews: Int? = 0,
     var id: String? = null,
     var uid: String? = null,
 

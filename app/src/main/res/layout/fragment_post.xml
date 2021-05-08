@@ -74,6 +74,7 @@
                         android:layout_width="50dp"
                         android:layout_height="50dp"
                         android:scaleType="centerCrop"
+                        app:srcCompat="@drawable/ic_user_image_profile"
                         android:onClick="@{() -> PostViewModel.goToUserProfile()}"
                         loadImage="@{PostViewModel.userData.profileImageUrl}"
                         app:layout_constraintBottom_toBottomOf="parent"
@@ -113,15 +114,15 @@
                             android:layout_height="wrap_content"
                             android:ellipsize="end"
                             android:maxLines="1"
-                            android:text="@{PostViewModel.numberOfSubscribers}"
+                            textForNumberSubscribers="@{PostViewModel.numberOfSubscribers}"
                             tools:text="20 Млн. подписчиков" />
                     </LinearLayout>
 
-                    <Button
+                    <androidx.appcompat.widget.AppCompatButton
                         android:id="@+id/subscribe_btn"
                         SubIfTrue="@{PostViewModel.stateSubscribe}"
                         hideIfFalse="@{PostViewModel.visibilitySubscribe}"
-                        android:layout_width="wrap_content"
+                        android:layout_width="135dp"
                         android:layout_height="wrap_content"
                         android:onClick="@{() -> PostViewModel.subscribeToAccount()}"
                         android:textAllCaps="false"
@@ -129,6 +130,7 @@
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toEndOf="@+id/user_profile_linear_layout"
                         app:layout_constraintTop_toTopOf="parent"
+                        android:textColor="@color/white"
                         tools:background="@drawable/bg_com_btn"
                         tools:text="Подписаться" />
 

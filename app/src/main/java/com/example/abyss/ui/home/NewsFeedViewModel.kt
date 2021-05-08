@@ -52,7 +52,7 @@ class NewsFeedViewModel(
         }
     }
 
-    fun StatusLoading() {
+    private fun StatusLoading() {
         externalScope.launch()
         {
             postNewsFeedPagingAdapter.loadStateFlow.collectLatest { loadState ->
@@ -60,11 +60,11 @@ class NewsFeedViewModel(
             }
         }
     }
-    fun LoadingPosts(boolean: Boolean) {
+    private fun LoadingPosts(boolean: Boolean) {
         _progressBarloadingAllPosts.postValue(boolean)
     }
 
-    fun GetPostsSubscriptions() {
+    private fun GetPostsSubscriptions() {
         externalScope.launch(ioDispatcher) {
 
             postRepository.GetPostsSubscriptionForNewsFeed()?.collect {
@@ -75,7 +75,7 @@ class NewsFeedViewModel(
         }
     }
 
-    fun GetPostsTrends() {
+    private fun GetPostsTrends() {
         externalScope.launch(ioDispatcher) {
 
             postRepository.GetPostsTrendsForNewsFeed()?.collect {

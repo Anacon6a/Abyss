@@ -7,5 +7,5 @@ import java.util.*
 @Parcelize
 data class ViewData(
     val uidRated: String? = null,
-    val date: Date? = null
+    val date: Date? = Date(System.currentTimeMillis())
 ) : Parcelable

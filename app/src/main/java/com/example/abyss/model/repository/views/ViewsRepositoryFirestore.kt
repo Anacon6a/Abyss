@@ -16,57 +16,8 @@ class ViewsRepositoryFirestore(
     private val firebaseAuth: FirebaseAuth,
     private val firestore: FirebaseFirestore,
 ) : ViewsRepository {
-//    override suspend fun AddViewsAndGetNumberOfViews(postId: String, uidProvider: String): Int? {
-//
-//        var numberViews = 0
-//
-//        externalScope.launch(ioDispatcher) {
-//            val uid = firebaseAuth.uid!!
-//
-//            val userProvider = uid == uidProvider
-//            //получаем просмотр пользователя
-//            val viewsSnap = if (!userProvider) {
-//                firestore.collection("users").document(uidProvider).collection("posts")
-//                    .document(postId)
-//                    .collection("views").document(uid).get().await()
-//            } else {
-//                null
-//            }
-//
-//            val deferreds = listOf(
-//                async {
-//                    //все просмотры
-//                    val numberViewsRef =
-//                        firestore.collection("users").document(uidProvider).collection("posts")
-//                            .document(postId)
-//
-//                    var number = numberViewsRef.get().await().toObject<PostData>()?.numberOfViews
-//                    if (number == null) {
-//                        number = 0
-//                    }
-//                    //если пользователь не просматривал + 1
-//                    numberViews = if (!userProvider && viewsSnap?.data.isNullOrEmpty()) {
-//
-//                        numberViewsRef.update("numberOfViews", number + 1)
-//                        number + 1
-//                    } else {
-//                        number
-//                    }
-//                },
-//                async {
-//                    // добавляем просмотр пользователю
-//                    if (!userProvider && viewsSnap?.data.isNullOrEmpty()) {
-//                        val view = ViewData(uid, Date(System.currentTimeMillis()))
-//                        firestore.collection("users").document(uidProvider).collection("posts")
-//                            .document(postId).collection("views").document(uid).set(view)
-//                    }
-//                })
-//            deferreds.awaitAll()
-//        }.join()
-//        return numberViews
-//    }
 
-    override suspend fun AddViewsAndGetNumberOfLikesAndStatus(
+    override suspend fun AddViewsAndGetNumber(
         postId: String,
         uidProvider: String
     ): Flow<Int?> = flow {
@@ -86,7 +37,7 @@ class ViewsRepositoryFirestore(
             if (uid != uidProvider) {
                 //если не просматривал
                 if (it.get(viewUserRef).data.isNullOrEmpty()) {
-                    val view = ViewData(uid, Date(System.currentTimeMillis()))
+                    val view = ViewData(uid)
                     it.set(viewUserRef, view)
                     numberViews = numberViews?.plus(1)
                     it.update(numberViewsRef, "numberOfViews", numberViews)

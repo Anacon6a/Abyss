@@ -74,9 +74,8 @@ class AddPostViewModel(
 
                 val url = postRepository.AddPostImageInStorage(it).collect { url ->
 
-                    val date = Date(System.currentTimeMillis())
                     val post =
-                        PostData(url, signature.value, date, widthImage.get(), heightImage.get(), 0, 0)
+                        PostData(url, signature.value, widthImage.get(), heightImage.get())
                     postRepository.CreatePost(post)
                     Timber.i("пост создан")
                 }

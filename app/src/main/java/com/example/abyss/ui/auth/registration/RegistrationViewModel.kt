@@ -117,8 +117,7 @@ class RegistrationViewModel(
 
     private fun AddUser(url: String){
         viewModelScope.launch(ioDispatcher) {
-            val date = Date(System.currentTimeMillis())
-            val user = UserData(username!!, email!!, url, date)
+            val user = UserData(username!!, email!!, url)
             userRepository.CreateUser(user)
             onSuccessRegistration()
             loading(false)

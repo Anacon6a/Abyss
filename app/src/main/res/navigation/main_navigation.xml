@@ -81,4 +81,7 @@
             android:name="post"
             app:argType="com.example.abyss.model.data.PostData" />
     </fragment>
+    <action android:id="@+id/action_global_addPostFragment"
+        app:destination="@id/addPostFragment"/>
+
 </navigation>

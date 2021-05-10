@@ -8,19 +8,15 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.FragmentNavigator
 import androidx.navigation.fragment.findNavController
-import androidx.paging.LoadState
 import androidx.recyclerview.widget.GridLayoutManager
-import com.example.abyss.adapters.PostProfilePagingAdapter
 import com.example.abyss.databinding.FragmentProfileBinding
 import com.example.abyss.extensions.onClick
-import com.example.abyss.ui.HidingNavigationBar
+import com.example.abyss.utils.HidingNavigationBar
 import com.google.firebase.auth.FirebaseAuth
 import kodeinViewModel
-import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import org.kodein.di.KodeinAware
 import org.kodein.di.android.x.kodein
-import org.kodein.di.generic.instance
 
 
 class ProfileFragment : Fragment(), KodeinAware {

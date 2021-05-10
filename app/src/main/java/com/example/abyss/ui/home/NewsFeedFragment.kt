@@ -16,7 +16,7 @@ import com.example.abyss.adapters.PostNewsFeedViewPagerAdapter
 import com.example.abyss.databinding.FragmentNewsFeedBinding
 import com.example.abyss.databinding.PostNewsFeedRecyclerDataBinding
 import com.example.abyss.extensions.ignorePullToRefresh
-import com.example.abyss.ui.HidingNavigationBar
+import com.example.abyss.utils.HidingNavigationBar
 import com.google.android.material.tabs.TabLayoutMediator
 import kodeinViewModel
 import kotlinx.coroutines.CoroutineDispatcher

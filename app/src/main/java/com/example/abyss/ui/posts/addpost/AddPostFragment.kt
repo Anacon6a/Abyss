@@ -2,22 +2,19 @@ package com.example.abyss.ui.posts.addpost
 
 import android.app.Activity
 import android.content.Intent
-import android.graphics.drawable.BitmapDrawable
 import android.os.Bundle
-import android.os.Environment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.example.abyss.databinding.FragmentAddPostBinding
-import com.example.abyss.ui.HidingNavigationBar
+import com.example.abyss.utils.HidingNavigationBar
 import com.github.dhaval2404.imagepicker.ImagePicker
 import kodeinViewModel
 import org.kodein.di.KodeinAware
 import org.kodein.di.android.x.kodein
 import timber.log.Timber
-import java.io.File
 
 
 class AddPostFragment : Fragment(), KodeinAware {

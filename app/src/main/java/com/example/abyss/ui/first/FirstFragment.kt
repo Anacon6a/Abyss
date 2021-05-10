@@ -9,7 +9,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.example.abyss.databinding.FragmentFirstBinding
-import com.example.abyss.ui.HidingNavigationBar
+import com.example.abyss.utils.HidingNavigationBar
 import org.kodein.di.KodeinAware
 import org.kodein.di.android.x.kodein
 import org.kodein.di.generic.instance

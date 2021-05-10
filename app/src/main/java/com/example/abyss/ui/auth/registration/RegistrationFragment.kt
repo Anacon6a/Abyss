@@ -12,7 +12,7 @@ import android.view.ViewGroup
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import com.example.abyss.databinding.FragmentRegistrationBinding
-import com.example.abyss.ui.HidingNavigationBar
+import com.example.abyss.utils.HidingNavigationBar
 import com.github.dhaval2404.imagepicker.ImagePicker
 import org.kodein.di.KodeinAware
 import org.kodein.di.android.x.kodein

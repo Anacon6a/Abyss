@@ -8,21 +8,17 @@ import android.view.ViewGroup
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.FragmentNavigator
 import androidx.navigation.fragment.findNavController
-import androidx.paging.LoadState
-import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import androidx.viewpager2.widget.ViewPager2
 import com.example.abyss.adapters.PostNewsFeedPagingAdapter
 import com.example.abyss.adapters.PostNewsFeedViewPagerAdapter
-import com.example.abyss.adapters.PostProfilePagingAdapter
 import com.example.abyss.databinding.FragmentNewsFeedBinding
 import com.example.abyss.databinding.PostNewsFeedRecyclerDataBinding
-import com.example.abyss.ui.profile.ProfileFragmentDirections
+import com.example.abyss.extensions.ignorePullToRefresh
 import com.google.android.material.tabs.TabLayoutMediator
-import com.google.firebase.auth.FirebaseAuth
 import kodeinViewModel
-import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.launch
 import org.kodein.di.KodeinAware
 import org.kodein.di.android.x.kodein
@@ -33,10 +29,12 @@ class NewsFeedFragment() : Fragment(), KodeinAware {
 
     override val kodein by kodein()
     private val viewModel: NewsFeedViewModel by kodeinViewModel()
+    private val mainDispatcher: CoroutineDispatcher by instance("main")
+
     private lateinit var binding: FragmentNewsFeedBinding
+
     private lateinit var bindingRecycler: PostNewsFeedRecyclerDataBinding
 
-    //    private val postNewsFeedPagingAdapter: PostNewsFeedPagingAdapter by instance()
     private val postNewsFeedViewPagerAdapter: PostNewsFeedViewPagerAdapter by instance()
 
 
@@ -48,39 +46,59 @@ class NewsFeedFragment() : Fragment(), KodeinAware {
         binding = FragmentNewsFeedBinding.inflate(inflater, container, false)
         binding.newsFeedViewModel = viewModel
         binding.lifecycleOwner = viewLifecycleOwner
+        binding.viewPagerPosts.ignorePullToRefresh(binding.swipeRefreshLayout)
 
-
-        Subscription()
-        setAdaptersForViewPager()
-        setTabLayout()
+        lifecycleScope.launch(mainDispatcher) {
+            viewModel.initial()
+            Subscription()
+            setTabLayout()
+            setAdaptersForViewPager()
+        }
 
         return binding.root
     }
 
     private fun Subscription() {
-        viewModel.postNewsFeedPagingAdapter.setOnItemClickListener { post, imageView, postContainer ->
-            val action = NewsFeedFragmentDirections.actionNewsFeedFragmentToPostFragment(post)
-            findNavController().navigate(
-                action, FragmentNavigator.Extras.Builder().addSharedElements(
-                    mapOf(
-//                                imageView to imageView.transitionName,
-                        postContainer to postContainer.transitionName
-                    )
-                ).build()
-            )
-        }
-        postNewsFeedViewPagerAdapter.setOnCreatePostViewHolder {
-            bindingRecycler = it
-            setAdaptersForRecycler()
-        }
+        viewModel.listTitles.observe(viewLifecycleOwner, { listTitles ->
+            listTitles?.let {
+                if (postNewsFeedViewPagerAdapter.cout != listTitles.size) {
+                    postNewsFeedViewPagerAdapter.cout = listTitles.size
+                    postNewsFeedViewPagerAdapter.notifyDataSetChanged()
+                }
+                setTabLayout()
+            }
+        })
         binding.viewPagerPosts.registerOnPageChangeCallback(object :
             ViewPager2.OnPageChangeCallback() {
             override fun onPageSelected(position: Int) {
                 super.onPageSelected(position)
-                viewModel.SetPosition(position)
+                viewModel.getPosts(position)
             }
         })
+
+        postNewsFeedViewPagerAdapter.setOnCreatePostViewHolder { bind, pos ->
+            bindingRecycler = bind
+            viewModel.listPostPagingAdapters.value?.get(pos)?.let {
+                it.setOnItemClickListener { post, imageView, postContainer ->
+                    val action =
+                        NewsFeedFragmentDirections.actionNewsFeedFragmentToPostFragment(post)
+                    findNavController().navigate(
+                        action, FragmentNavigator.Extras.Builder().addSharedElements(
+                            mapOf(
+//                                imageView to imageView.transitionName,
+                                postContainer to postContainer.transitionName
+                            )
+                        ).build()
+                    )
+                }
+                setAdaptersForRecycler(it)
+            }
+        }
+        binding.swipeRefreshLayout.setOnRefreshListener {
+            refresh()
+        }
     }
+
 
     private fun setAdaptersForViewPager() {
         lifecycleScope.launch {
@@ -90,13 +108,13 @@ class NewsFeedFragment() : Fragment(), KodeinAware {
         }
     }
 
-    private fun setAdaptersForRecycler() {
+    private fun setAdaptersForRecycler(postNewsFeedPagingAdapter: PostNewsFeedPagingAdapter) {
         lifecycleScope.launch {
             bindingRecycler.postRecyclerView.apply {
                 layoutManager = StaggeredGridLayoutManager(2, RecyclerView.VERTICAL)
                 setHasFixedSize(false)
                 itemAnimator = null
-                adapter = viewModel.postNewsFeedPagingAdapter
+                adapter = postNewsFeedPagingAdapter
 
 //                viewTreeObserver
 //                    .addOnPreDrawListener {
@@ -107,16 +125,21 @@ class NewsFeedFragment() : Fragment(), KodeinAware {
         }
     }
 
-
     private fun setTabLayout() {
-        TabLayoutMediator(binding.newsFeedTabLayout, binding.viewPagerPosts) { tablayout, position ->
-            tablayout.text = when(position) {
-                0 -> "Подписки"
-                else -> "Тренды"
-            }
-        }.attach()
+        lifecycleScope.launch(mainDispatcher) {
+            TabLayoutMediator(
+                binding.newsFeedTabLayout,
+                binding.viewPagerPosts
+            ) { tablayout, position ->
+                tablayout.text = viewModel.listTitles.value?.get(position)
+            }.attach()
+        }
     }
 
-
-
+    private fun refresh() {
+        lifecycleScope.launch {
+            viewModel.onRefresh()
+            binding.swipeRefreshLayout.isRefreshing = false
+        }
+    }
 }

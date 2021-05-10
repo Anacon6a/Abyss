@@ -31,8 +31,11 @@ import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
 class PostNewsFeedViewPagerAdapter : RecyclerView.Adapter<PostNewsFeedViewPagerAdapter.PostViewHolder>() {
+
+    var cout = 2
+
     override fun getItemCount(): Int {
-        return 2
+        return cout
     }
 
     @SuppressLint("ResourceType")
@@ -48,7 +51,7 @@ class PostNewsFeedViewPagerAdapter : RecyclerView.Adapter<PostNewsFeedViewPagerA
 
     @SuppressLint("SetTextI18n")
     override fun onBindViewHolder(holder: PostViewHolder, position: Int) {
-        holder.bindRecycer()
+        holder.bindRecycler(position)
     }
 
 
@@ -57,16 +60,16 @@ class PostNewsFeedViewPagerAdapter : RecyclerView.Adapter<PostNewsFeedViewPagerA
     ) : RecyclerView.ViewHolder(binding.root) {
 
         @SuppressLint("SetTextI18n")
-        fun bindRecycer() {
+        fun bindRecycler(position: Int) {
 
             onCreatePostViewHolder?.let {
-                it(binding)
+                it(binding, position)
             }
         }
     }
-    private var onCreatePostViewHolder: ((PostNewsFeedRecyclerDataBinding) -> Unit)? = null
+    private var onCreatePostViewHolder: ((PostNewsFeedRecyclerDataBinding, Int) -> Unit)? = null
 
-    fun setOnCreatePostViewHolder(listener: (PostNewsFeedRecyclerDataBinding) -> Unit) {
+    fun setOnCreatePostViewHolder(listener: (PostNewsFeedRecyclerDataBinding, Int) -> Unit) {
         onCreatePostViewHolder = listener
     }
 }

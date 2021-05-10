@@ -8,6 +8,7 @@ import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.example.abyss.databinding.PostProfileDataBinding
+import com.example.abyss.extensions.onClick
 import com.example.abyss.model.data.PostData
 
 class PostProfilePagingAdapter : PagingDataAdapter<PostData, PostProfilePagingAdapter.PostViewHolder>(Companion) {
@@ -45,7 +46,7 @@ class PostProfilePagingAdapter : PagingDataAdapter<PostData, PostProfilePagingAd
         fun bindPost(post: PostData) {
             binding.post = post
 
-            binding.postContainer.setOnClickListener {
+            binding.postContainer.onClick {
                 onItemClickListener?.let {
 
                     it(post,  binding.iconsImage, binding.postContainer)

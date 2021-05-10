@@ -50,22 +50,9 @@ class PostFragment : Fragment(), KodeinAware {
 
         viewModel.postData.set(args.post)
         viewModel.Insert()
-//        InsertPost()
+
 
         return binding.root
     }
 
-
-    fun InsertPost() {
-        lifecycleScope.launch {
-//            if (viewModel.postImageUrl.value == null) {
-//                viewModel.InsertPost(args.post)
-//            }
-//            Glide.with(requireContext()).load(args.post.imageUrl).into(binding.postImage)
-        }
-    }
-
-    fun InsertImage() {
-
-    }
 }

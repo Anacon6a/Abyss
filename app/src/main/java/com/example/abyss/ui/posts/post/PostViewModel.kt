@@ -73,7 +73,7 @@ class PostViewModel(
         AddAndGetViews()
         textPostVisibility()
     }
-
+//пользователь, выложевший пост
     private fun GetUserContentProvider() {
         viewModelScope.launch(ioDispatcher) {
             userRepository.GetUserContentProviderByUid(postData.get()?.uid!!).collect {
@@ -82,7 +82,7 @@ class PostViewModel(
             }
         }
     }
-
+// отображение кнопки подписки
     private fun subscribeButtonVisibility() {
         viewModelScope.launch(ioDispatcher) {
             if (myUid == null) {
@@ -92,7 +92,7 @@ class PostViewModel(
             _visibilitySubscribe.postValue(myUid != postData.get()?.uid)
         }
     }
-
+// получение количества лайков. ИЗМЕНИТЬ!!
     private fun GetNumbersOfLikes() {
         viewModelScope.launch(ioDispatcher) {
             likeRepository.GetNumberOfLikes(postData.get()!!.id!!, postData.get()!!.uid!!)
@@ -105,7 +105,7 @@ class PostViewModel(
                 }
         }
     }
-
+// поставлен ли лайк у пользователя
     private fun GetStateLike() {
         viewModelScope.launch(ioDispatcher) {
             _stateLike.postValue(
@@ -120,17 +120,17 @@ class PostViewModel(
     fun ClickLike() {
         externalScope.launch(ioDispatcher) {
             stateLike.value?.let { state ->
+                _stateLike.postValue(!stateLike.value!!)
                 likeRepository.AddLikeAndGetNumberOfLikesAndStatus(
                     postData.get()!!.id!!, postData.get()!!.uid!!, state
                 ).collect {
                     _numberOfLikes.postValue(it.first)
-                    _stateLike.postValue(it.second)
                 }
 
             }
         }
     }
-
+// добавление просмотра, если пользователь не просматривал
     private fun AddAndGetViews() {
         externalScope.launch(ioDispatcher) {
 
@@ -161,12 +161,12 @@ class PostViewModel(
     fun subscribeToAccount() {
         externalScope.launch(ioDispatcher) {
             stateSubscribe.value?.let {
+                _stateSubscribe.postValue(!stateSubscribe.value!!)
                 subscriptionRepository.AddSubscriptionAndGetNumberOfSubscribersAndStatus(
                     postData.get()!!.uid!!,
                     stateSubscribe.value!!
                 )
                     .collect {
-                        _stateSubscribe.postValue(it.second)
                         _numberOfSubscribers.postValue(it.first)
                     }
             }

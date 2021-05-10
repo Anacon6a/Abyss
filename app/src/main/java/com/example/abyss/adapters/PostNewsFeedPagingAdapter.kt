@@ -10,6 +10,7 @@ import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.example.abyss.databinding.PostNewsFeedDataBinding
+import com.example.abyss.extensions.onClick
 import com.example.abyss.model.data.PostData
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
@@ -57,7 +58,7 @@ class PostNewsFeedPagingAdapter(
         fun bindPost(post: PostData) {
             externalScope.launch(mainDispatcher) {
                 binding.post = post
-                binding.postContainer.setOnClickListener {
+                binding.postContainer.onClick {
                     onItemClickListener?.let {
 
                         it(post, binding.iconsImage, binding.postContainer)

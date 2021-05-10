@@ -93,7 +93,7 @@ class AbyssApplication : Application(), KodeinAware {
                 instance(), instance(), instance(), instance(), instance(), instance(), instance(), instance())
         }
         bindViewModel<NewsFeedViewModel>() with singleton {
-            NewsFeedViewModel(instance(), instance(), instance(), instance())
+            NewsFeedViewModel(instance(), instance(), instance(), kodein.direct)
         }
 // Adapter
         bind<PostProfilePagingAdapter>() with provider { PostProfilePagingAdapter() }

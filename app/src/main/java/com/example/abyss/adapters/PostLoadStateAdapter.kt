@@ -28,7 +28,7 @@ class PostLoadStateAdapter(
 //    override fun onBindViewHolder(holder: LoadStateViewHolder, loadState: LoadState) {
 //        holder.bind(loadState)
 ////
-////        holder.itemView.btnLoadStateRetry.setOnClickListener {
+////        holder.itemView.btnLoadStateRetry.OnClick {
 ////            retry.invoke()
 ////        }
 //    }

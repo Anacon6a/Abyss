@@ -31,9 +31,13 @@ class ProfileViewModel(
     val profileImageUrl: LiveData<String>
         get() = _profileImageUrl
 
-    private val _loadingAddPost = MutableLiveData<Boolean>()
-    val loadingAddPost: LiveData<Boolean>
-        get() = _loadingAddPost
+    private val _numbersOfSubscribers = MutableLiveData<Int>()
+    val numbersOfSubscribers: LiveData<Int>
+        get() = _numbersOfSubscribers
+
+    private val _numbersOfSubscriptions = MutableLiveData<Int>()
+    val numbersOfSubscriptions: LiveData<Int>
+        get() = _numbersOfSubscriptions
 
     private val _progressBarloadingAllPosts = MutableLiveData<Boolean>()
     val progressBarloadingAllPosts: LiveData<Boolean>
@@ -84,8 +88,18 @@ class ProfileViewModel(
 
                     }
                     is State.Success -> {
-                        _userName.postValue(state.data?.userName!!)
-                        _profileImageUrl.postValue(state.data?.profileImageUrl!!)
+                        if (userName.value != state.data?.userName!!) {
+                            _userName.postValue(state.data.userName!!)
+                        }
+                        if (profileImageUrl.value != state.data.profileImageUrl!!) {
+                            _profileImageUrl.postValue(state.data.profileImageUrl!!)
+                        }
+                        if (numbersOfSubscribers.value != state.data.numberOfSubscribers){
+                            _numbersOfSubscribers.postValue(state.data.numberOfSubscribers!!)
+                        }
+                        if (numbersOfSubscriptions.value != state.data.numberOfSubscriptions!!){
+                            _numbersOfSubscriptions.postValue(state.data.numberOfSubscriptions!!)
+                        }
                     }
                     is State.Failed -> {
                         Timber.e("Ошибка получения пользователя: ${state.message}")
@@ -106,7 +120,7 @@ class ProfileViewModel(
         }
     }
 
-    fun Refresh(){
+    fun Refresh() {
         GetPostsUser()
         GetUser()
     }

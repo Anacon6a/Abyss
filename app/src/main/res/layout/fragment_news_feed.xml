@@ -81,6 +81,10 @@ tools:context=".ui.home.NewsFeedFragment">
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/news_feed_tab_layout">
 
+            <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+                android:id="@+id/swipe_refresh_layout"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
             <com.example.abyss.NestedScrollableHost
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
@@ -97,11 +101,12 @@ tools:context=".ui.home.NewsFeedFragment">
                     android:orientation="horizontal" />
 
             </com.example.abyss.NestedScrollableHost>
+            </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
             <com.github.ybq.android.spinkit.SpinKitView
                 android:id="@+id/progress_bar_loading_all_posts"
                 style="@style/SpinKitView.MultiplePulse"
-                hideIfFalse="@{NewsFeedViewModel.progressBarloadingAllPosts}"
+                hideIfFalse="@{NewsFeedViewModel.progressBarLoadingAllPosts}"
                 android:layout_width="32dp"
                 android:layout_height="32dp"
                 app:SpinKit_Color="@color/purple_700"

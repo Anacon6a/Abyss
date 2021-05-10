@@ -10,6 +10,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.navArgs
 import com.example.abyss.adapters.loadImageStatusTracking
 import com.example.abyss.databinding.FragmentPostBinding
+import com.example.abyss.ui.HidingNavigationBar
 import kodeinViewModel
 import kotlinx.coroutines.launch
 import org.kodein.di.KodeinAware
@@ -32,8 +33,8 @@ class PostFragment : Fragment(), KodeinAware {
 
         binding = FragmentPostBinding.inflate(inflater, container, false)
         binding.postViewModel = viewModel
-
         binding.lifecycleOwner = viewLifecycleOwner
+        (activity as HidingNavigationBar).hideNavigationBar(false)
 
         //откладывает переход
         postponeEnterTransition()

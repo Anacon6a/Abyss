@@ -46,8 +46,8 @@ class NewsFeedViewModel(
     private suspend fun getNumberAdapters() {
         //сначала получить пользовательские категории
         //добавить в _listTitles
-        _listTitles.add("Маникюр")
-        _listTitles.add("Маникюр")
+//        _listTitles.add("Маникюр")
+//        _listTitles.add("Маникюр")
     }
 
     private fun getAdapter(): PostNewsFeedPagingAdapter {

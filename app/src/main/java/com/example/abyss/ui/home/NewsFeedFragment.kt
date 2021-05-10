@@ -16,6 +16,7 @@ import com.example.abyss.adapters.PostNewsFeedViewPagerAdapter
 import com.example.abyss.databinding.FragmentNewsFeedBinding
 import com.example.abyss.databinding.PostNewsFeedRecyclerDataBinding
 import com.example.abyss.extensions.ignorePullToRefresh
+import com.example.abyss.ui.HidingNavigationBar
 import com.google.android.material.tabs.TabLayoutMediator
 import kodeinViewModel
 import kotlinx.coroutines.CoroutineDispatcher
@@ -46,6 +47,8 @@ class NewsFeedFragment() : Fragment(), KodeinAware {
         binding = FragmentNewsFeedBinding.inflate(inflater, container, false)
         binding.newsFeedViewModel = viewModel
         binding.lifecycleOwner = viewLifecycleOwner
+        (activity as HidingNavigationBar).hideNavigationBar(false)
+
         binding.viewPagerPosts.ignorePullToRefresh(binding.swipeRefreshLayout)
 
         lifecycleScope.launch(mainDispatcher) {

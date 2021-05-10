@@ -44,7 +44,6 @@
             <!--                android:orientation="horizontal"-->
             <!--                android:layout_width="match_parent"-->
             <!--                android:layout_height="wrap_content"-->
-            <!--                android:background="@drawable/bg_user_profile_news"-->
             <!--                android:elevation="1dp">-->
 
             <!--                <com.google.android.material.imageview.ShapeableImageView-->

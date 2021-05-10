@@ -54,6 +54,7 @@ tools:context=".ui.home.NewsFeedFragment">
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             android:background="@drawable/bg_search"
+            android:visibility="invisible"
             android:textColor="@color/white"
             android:textColorHint="@color/white"/>
 

@@ -11,6 +11,7 @@ import android.view.ViewGroup
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import com.example.abyss.databinding.FragmentLoginBinding
+import com.example.abyss.ui.HidingNavigationBar
 import org.kodein.di.android.x.kodein
 import org.kodein.di.KodeinAware
 import org.kodein.di.generic.instance
@@ -35,8 +36,8 @@ class LoginFragment : Fragment(), KodeinAware {
         binding = FragmentLoginBinding.inflate(inflater, container, false)
         binding.loginViewModel = viewModel
         binding.lifecycleOwner = viewLifecycleOwner
-        //задали представление фрагмента в качестве владельца жизненного цикла. Это определяет область действия
-        // LiveData объекта выше, позволяя объекту автоматически обновлять виды в fragment_login.xml
+        (activity as HidingNavigationBar).hideNavigationBar(true)
+
         Subscription()
 
 

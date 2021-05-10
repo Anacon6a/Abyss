@@ -1,22 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item android:id="@+id/newsFeedFragment"
-        android:icon="@drawable/ic_baseline_home_24"
+        android:icon="@drawable/ic_menu_news_feed"
         android:title="Home"/>
 
-    <item android:id="@+id/favorites"
-        android:icon="@drawable/ic_baseline_bookmark_24"
-        android:title="Favorites"/>
+<!--    <item android:id="@+id/addPostFragment"-->
+<!--        android:icon="@drawable/ic_baseline_image_24"-->
+<!--        android:title="AddPost"/>-->
 
-    <item android:id="@+id/addPostFragment"
-        android:icon="@drawable/ic_baseline_image_24"
-        android:title="AddPost"/>
-
-    <item android:id="@+id/notifications"
-        android:icon="@drawable/ic_like_false"
+    <item android:id="@+id/notificationsFragment"
+        android:icon="@drawable/ic_menu_notifications"
         android:title="Notifications"/>
 
     <item android:id="@+id/profileFragment"
-        android:icon="@drawable/ic_baseline_account_circle_24"
+        android:icon="@drawable/ic_menu_profile"
         android:title="Account"/>
 </menu>

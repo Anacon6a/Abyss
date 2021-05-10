@@ -11,6 +11,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.example.abyss.databinding.FragmentAddPostBinding
+import com.example.abyss.ui.HidingNavigationBar
 import com.github.dhaval2404.imagepicker.ImagePicker
 import kodeinViewModel
 import org.kodein.di.KodeinAware
@@ -35,6 +36,7 @@ class AddPostFragment : Fragment(), KodeinAware {
         binding = FragmentAddPostBinding.inflate(inflater, container, false)
         binding.addPostViewModel = viewModel
         binding.lifecycleOwner = viewLifecycleOwner
+        (activity as HidingNavigationBar).hideNavigationBar(true)
 
         Subscription()
 

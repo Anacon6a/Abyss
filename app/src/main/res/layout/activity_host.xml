@@ -64,45 +64,5 @@
         app:maxImageSize="35dp"
         app:tint="@color/white"/>
 
-<!--    <com.google.android.material.bottomappbar.BottomAppBar-->
-<!--        android:id="@+id/bottom_app_bar"-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:layout_gravity="bottom"-->
-<!--        android:backgroundTint="@color/white"-->
-<!--        app:fabAlignmentMode="end"-->
-<!--        app:fabCradleRoundedCornerRadius="20dp"-->
-<!--        app:hideOnScroll="true"-->
-<!--        app:fabCradleMargin="6dp"-->
-<!--        app:menu="@menu/bottom_menu_bar"-->
-<!--        app:itemIconTint="@drawable/item_selector"/>-->
-
-<!--    <com.google.android.material.floatingactionbutton.FloatingActionButton-->
-<!--        app:layout_anchor="@id/bottom_app_bar"-->
-<!--        android:layout_width="wrap_content"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        app:hideOnScroll="true"-->
-<!--        android:src="@drawable/ic_menu_add_post"-->
-<!--        android:backgroundTint="@color/purple_500"-->
-<!--        app:maxImageSize="35dp"-->
-<!--        app:tint="@color/white"/>-->
-
-    <!--        <com.google.android.material.bottomnavigation.BottomNavigationView-->
-    <!--            android:id="@+id/bottom_nav"-->
-    <!--            android:layout_width="match_parent"-->
-    <!--            android:layout_height="wrap_content"-->
-    <!--            android:layout_gravity="bottom"-->
-    <!--            android:layout_margin="15dp"-->
-    <!--            android:background="@drawable/bg_bottom_nav"-->
-    <!--            app:elevation="2dp"-->
-    <!--            app:itemIconSize="30dp"-->
-    <!--            app:menu="@menu/bottom_nav_menu"-->
-    <!--            app:labelVisibilityMode="unlabeled"-->
-    <!--            app:itemRippleColor="@android:color/transparent"-->
-    <!--            app:itemIconTint="@drawable/item_selector"-->
-    <!--            tools:ignore="MissingConstraints" />-->
-
-    <!--    </androidx.coordinatorlayout.widget.CoordinatorLayout>-->
-
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
 </layout>

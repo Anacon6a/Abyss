@@ -65,8 +65,8 @@ fun LikeIfTrue(imageView: ImageView, boolean: Boolean) {
 
 @BindingAdapter("loadImage")
 fun loadImage(imageView: ImageView, url: String?) {
-    url?.let {
-        Glide.with(imageView).load(it).into(imageView)
+    if (!url.isNullOrEmpty()) {
+        Glide.with(imageView).load(url).into(imageView)
     }
 }
 

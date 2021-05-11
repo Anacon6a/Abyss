@@ -140,7 +140,9 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
-                    tools:listitem="@layout/item_post_for_profile" />
+                    tools:listitem="@layout/item_post_for_profile"
+                    android:paddingBottom="60dp"
+                    android:clipToPadding="false"/>
             </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
             <com.github.ybq.android.spinkit.SpinKitView

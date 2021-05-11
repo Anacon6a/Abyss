@@ -2,6 +2,7 @@
 
 <layout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
     <data class="PostNewsFeedRecyclerDataBinding"/>
@@ -20,7 +21,9 @@
             android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="#FFFFFF" />
+            android:background="#FFFFFF"
+            android:paddingBottom="60dp"
+            android:clipToPadding="false" />
     </com.example.abyss.NestedScrollableHost>
 
 </LinearLayout>

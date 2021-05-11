@@ -16,12 +16,6 @@
         app:defaultNavHost="true"
         app:navGraph="@navigation/main_navigation" />
 
-
-    <!--    <androidx.coordinatorlayout.widget.CoordinatorLayout-->
-    <!--        android:layout_width="match_parent"-->
-    <!--        android:layout_height="wrap_content"-->
-    <!--        app:layout_constraintBottom_toBottomOf="@+id/fragments_host">-->
-
     <com.google.android.material.bottomappbar.BottomAppBar
         android:id="@+id/bottom_app_bar"
         android:layout_width="match_parent"

@@ -54,13 +54,23 @@ class NotificationsPagingAdapter(
         }
     }
 
+    private var onPostClickListener: ((PostData) -> Unit)? = null
+
+    fun setOnPostClickListener(listener: (PostData) -> Unit) {
+        onPostClickListener = listener
+    }
+    private var onUserClickListener: ((String) -> Unit)? = null
+
+    fun setOnUserClickListener(listener: (String) -> Unit) {
+        onUserClickListener = listener
+    }
 
     inner class ViewedNotificationsViewHolder(
         private val binding: NotificationsDataBinding,
     ) : RecyclerView.ViewHolder(binding.root) {
 
         fun bindNotification(notificationData: NotificationData) {
-            externalScope.launch(mainDispatcher) {
+//            externalScope.launch(mainDispatcher) {
                 binding.notifications = notificationData
                 binding.notificationsText.textForNotification(
                     notificationData.action,
@@ -70,17 +80,6 @@ class NotificationsPagingAdapter(
 
                 if (!notificationData.postImageUrl.isNullOrEmpty()) {
                     binding.postImage.onClick {
-                        onPostClickListener?.let {
-                            val post = PostData(
-                                id = notificationData.postId,
-                                text = notificationData.postText,
-                                uid = notificationData.uid,
-                                imageUrl = notificationData.postImageUrl
-                            )
-                            it(post)
-                        }
-                    }
-                    binding.notificationsText.onClick {
                         onPostClickListener?.let {
                             val post = PostData(
                                 id = notificationData.postId,
@@ -103,19 +102,7 @@ class NotificationsPagingAdapter(
                         }
                     }
                 }
-            }
+//            }
         }
     }
-
-    private var onPostClickListener: ((PostData) -> Unit)? = null
-
-    fun setOnPostClickListener(listener: (PostData) -> Unit) {
-        onPostClickListener = listener
-    }
-    private var onUserClickListener: ((String) -> Unit)? = null
-
-    fun setOnUserClickListener(listener: (String) -> Unit) {
-        onUserClickListener = listener
-    }
-
 }

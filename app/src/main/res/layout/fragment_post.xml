@@ -218,20 +218,21 @@
                     tools:text="10.11.2021" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
-
+<!--            hideIfFalse="@{PostViewModel.visibilityTextPost}"-->
             <ru.rhanza.constraintexpandablelayout.ExpandableLayout
-                android:id="@+id/text_posts"
-                hideIfFalse="@{PostViewModel.visibilityTextPost}"
+                android:id="@+id/text_post"
+                displayTextForExpandable = "@{PostViewModel.postText}"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="1dp"
                 android:background="@drawable/bg_post_content"
                 android:padding="20dp"
                 app:el_animationDuration="80"
-                app:el_collapsedHeight="60dp"
+                app:el_collapsedHeight="40dp"
                 app:el_moreColor="@android:color/black"
                 app:el_moreText=""
-                app:el_shadowHeight="40dp"
+                app:el_initialState="collapsed"
+                app:el_shadowHeight="20dp"
                 app:el_showButton="true"
                 app:el_showShadow="true"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -239,14 +240,13 @@
                 app:layout_constraintTop_toBottomOf="@+id/post_constraint_layout">
 
                 <TextView
-                    android:id="@+id/text_this_post"
+                    android:id="@+id/expand_text"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="@{PostViewModel.postText}"
                     android:textSize="16sp"
                     tools:text="Текст публикации" />
             </ru.rhanza.constraintexpandablelayout.ExpandableLayout>
-
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/comments_list"
@@ -257,7 +257,7 @@
                 android:padding="20dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/text_posts"
+                app:layout_constraintTop_toBottomOf="@+id/text_post"
                 />
 
 

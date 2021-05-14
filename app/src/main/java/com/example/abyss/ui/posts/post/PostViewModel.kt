@@ -103,7 +103,7 @@ class PostViewModel(
             subscribeButtonVisibility()
             getStateLike()
             addAndGetViews()
-            textPostVisibility()
+//            textPostVisibility()
         }
     }
 
@@ -172,15 +172,15 @@ class PostViewModel(
         }
     }
 
-    private fun textPostVisibility() {
-        viewModelScope.launch(ioDispatcher) {
-            if (!postText.value.isNullOrEmpty()) {
-                _visibilityTextPost.postValue(true)
-            } else {
-                _visibilityTextPost.postValue(false)
-            }
-        }
-    }
+//    private fun textPostVisibility() {
+//        viewModelScope.launch(ioDispatcher) {
+//            if (!postText.value.isNullOrEmpty()) {
+//                _visibilityTextPost.postValue(true)
+//            } else {
+//                _visibilityTextPost.postValue(false)
+//            }
+//        }
+//    }
 
     fun goToUserProfile() {
 

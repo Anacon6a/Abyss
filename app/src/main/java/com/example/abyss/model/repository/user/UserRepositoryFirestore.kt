@@ -27,11 +27,15 @@ class UserRepositoryFirestore(
     override suspend fun CreateUser(user: UserData) {
 
         externalScope.launch(ioDispatcher) {
-            val uid = firebaseAuth.uid!!
+            try {
+                val uid = firebaseAuth.uid!!
 
-            firestore.collection("users")
-                .document(uid)
-                .set(user)
+                firestore.collection("users")
+                    .document(uid)
+                    .set(user)
+            } catch (e: Exception){
+                Timber.e(e.message)
+            }
         }
 
     }
@@ -46,6 +50,8 @@ class UserRepositoryFirestore(
         val url = imageRef.downloadUrl.await()
 
         emit(url.toString())
+    }.catch {
+        Timber.e(it)
     }.shareIn(
         externalScope,
         SharingStarted.WhileSubscribed(),
@@ -89,6 +95,8 @@ class UserRepositoryFirestore(
         val user = userRef.toObject<UserData>()
         emit(user)
 
+    }.catch {
+        Timber.e(it)
     }.shareIn(
         externalScope,
         SharingStarted.WhileSubscribed(),

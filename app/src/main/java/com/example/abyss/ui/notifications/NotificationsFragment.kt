@@ -75,6 +75,7 @@ class NotificationsFragment : Fragment(), KodeinAware {
         }
         viewModel.newNotificationsPagingAdapter.setOnUserClickListener {  }
         viewModel.viewedNotificationsPagingAdapter.setOnUserClickListener {  }
+
         binding.swipeRefreshLayout.setOnRefreshListener {
             refresh()
         }

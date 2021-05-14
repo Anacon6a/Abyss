@@ -51,12 +51,18 @@ class PostNewsFeedPagingAdapter(
 
     private val set = ConstraintSet()
 
+    private var onItemClickListener: ((PostData, ImageView, ConstraintLayout) -> Unit)? = null
+
+    fun setOnItemClickListener(listener: (PostData, ImageView, ConstraintLayout) -> Unit) {
+        onItemClickListener = listener
+    }
+
     inner class PostViewHolder(
         private val binding: PostNewsFeedDataBinding
     ) : RecyclerView.ViewHolder(binding.root) {
 
         fun bindPost(post: PostData) {
-            externalScope.launch(mainDispatcher) {
+//            externalScope.launch(mainDispatcher) {
                 binding.post = post
                 binding.postContainer.onClick {
                     onItemClickListener?.let {
@@ -64,7 +70,7 @@ class PostNewsFeedPagingAdapter(
                         it(post, binding.iconsImage, binding.postContainer)
                     }
                 }
-            }
+//            }
 
                 val ratio = String.format("%d:%d", post.widthImage, post.heightImage)
                 set.clone(binding.postContainer)
@@ -76,10 +82,4 @@ class PostNewsFeedPagingAdapter(
         }
     }
 
-
-    private var onItemClickListener: ((PostData, ImageView, ConstraintLayout) -> Unit)? = null
-
-    fun setOnItemClickListener(listener: (PostData, ImageView, ConstraintLayout) -> Unit) {
-        onItemClickListener = listener
-    }
 }

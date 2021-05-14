@@ -14,6 +14,8 @@ import com.bumptech.glide.load.engine.GlideException
 import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.target.Target
 import com.example.abyss.R
+import ru.rhanza.constraintexpandablelayout.ExpandableLayout
+import ru.rhanza.constraintexpandablelayout.State
 import java.text.SimpleDateFormat
 
 @BindingAdapter("hideIfEmpty")
@@ -239,4 +241,17 @@ fun loadImageOrGone(imageView: ImageView, url: String?) {
         imageView.visibility = View.GONE
     }
 }
+
+@BindingAdapter("displayTextForExpandable")
+fun displayTextForExpandable(exp: ExpandableLayout, text: String?) {
+    if (!text.isNullOrEmpty()) {
+        exp.invalidateState(State.Collapsed)
+        exp.visibility = View.VISIBLE
+    }
+    else {
+        exp.visibility = View.GONE
+    }
+}
+
+
 

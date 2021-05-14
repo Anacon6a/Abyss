@@ -38,6 +38,11 @@ class PostProfilePagingAdapter : PagingDataAdapter<PostData, PostProfilePagingAd
         }
     }
 
+    private var onItemClickListener: ((PostData, ImageView, ConstraintLayout) -> Unit)? = null
+
+    fun setOnItemClickListener(listener: (PostData, ImageView, ConstraintLayout) -> Unit) {
+        onItemClickListener = listener
+    }
 
     inner class PostViewHolder(
         private val binding: PostProfileDataBinding,
@@ -55,9 +60,4 @@ class PostProfilePagingAdapter : PagingDataAdapter<PostData, PostProfilePagingAd
         }
     }
 
-    private var onItemClickListener: ((PostData, ImageView, ConstraintLayout) -> Unit)? = null
-
-    fun setOnItemClickListener(listener: (PostData, ImageView, ConstraintLayout) -> Unit) {
-        onItemClickListener = listener
-    }
 }

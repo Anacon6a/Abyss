@@ -49,15 +49,11 @@ class NotificationsViewModel(
             }
         }
     }
-var f: Int = 4
+
     private fun getNewNotificationsForPagingAdapter() {
         viewModelScope.launch {
             statisticsRepository.getNewNotification()?.collect {
-                if (f == 0){
-                    newNotificationsPagingAdapter.submitData(PagingData.empty())
-                } else {
-                newNotificationsPagingAdapter.submitData(it) }
-                f -= 1
+                newNotificationsPagingAdapter.submitData(it)
             }
         }
     }

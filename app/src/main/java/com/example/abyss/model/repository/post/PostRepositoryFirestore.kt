@@ -85,6 +85,8 @@ class PostRepositoryFirestore(
                     .get().await().toObject<PostData>()
         }.join()
         emit(post)
+    } .catch {
+        Timber.e(it)
     }
 
 

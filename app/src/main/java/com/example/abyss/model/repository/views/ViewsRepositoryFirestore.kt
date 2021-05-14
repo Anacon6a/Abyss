@@ -8,8 +8,10 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ktx.toObject
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.tasks.await
+import timber.log.Timber
 import java.util.*
 
 class ViewsRepositoryFirestore(
@@ -45,5 +47,7 @@ class ViewsRepositoryFirestore(
             }
         }.await()
         emit(numberViews)
+    }. catch {
+        Timber.e(it)
     }
 }

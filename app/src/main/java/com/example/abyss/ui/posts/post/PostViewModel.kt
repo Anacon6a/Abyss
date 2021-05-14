@@ -79,13 +79,21 @@ class PostViewModel(
 
     private var myUid: String? = null
 
-    fun insertPost(post: PostData) {
+   suspend fun insertPost(post: PostData) {
         if (postData.value == null) {
             postData.value = post
             _postImage.value = post.imageUrl!!
-            _postText.value = post.text
-            _numberOfLikes.value = post.numberOfLikes!!
-            _numberOfViews.value = post.numberOfViews!!
+            postRepository.getPostById(post.id!!, post.uid!!).collect {
+                if (it != null) {
+                    if (postImage.value != it.imageUrl)
+                    {
+                        _postImage.postValue(it.imageUrl!!)
+                    }
+                    _postText.value = it.text
+                    _numberOfLikes.value = it.numberOfLikes!!
+                    _numberOfViews.value = it.numberOfViews!!
+                }
+            }
         }
     }
 

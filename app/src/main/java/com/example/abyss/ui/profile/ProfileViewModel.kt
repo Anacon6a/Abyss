@@ -3,9 +3,6 @@ package com.example.abyss.ui.profile
 import androidx.lifecycle.*
 import androidx.paging.LoadState
 import androidx.paging.PagingData
-import androidx.paging.PagingSource
-import androidx.paging.cachedIn
-import com.example.abyss.adapters.PostNewsFeedPagingAdapter
 import com.example.abyss.adapters.PostProfilePagingAdapter
 import com.example.abyss.model.State
 import com.example.abyss.model.data.PostData
@@ -70,7 +67,7 @@ class ProfileViewModel(
 
     private fun GetPostsUser() {
         externalScope.launch(ioDispatcher) {
-            postRepository.GetPostForProfile()?.collect {
+            postRepository.getPostsForProfile()?.collect {
                 postsUser.postValue(it)
                 postProfilePagingAdapter.submitData(it)
             }

@@ -8,7 +8,6 @@ import com.example.abyss.model.repository.post.PostRepository
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.collect
 import timber.log.Timber
-import java.util.*
 
 class AddPostViewModel(
     private val ioDispatcher: CoroutineDispatcher,
@@ -70,11 +69,11 @@ class AddPostViewModel(
         externalScope.launch(ioDispatcher) {
             postImageUrl.value?.let {
 
-                val url = postRepository.AddPostImageInStorage(it).collect { url ->
+                val url = postRepository.addPostImageInStorage(it).collect { url ->
 
                     val post =
                         PostData(url, signature.value, widthImage.get(), heightImage.get())
-                    postRepository.CreatePost(post)
+                    postRepository.createPost(post)
                     Timber.i("пост создан")
                 }
             }

@@ -30,7 +30,7 @@ class PostRepositoryFirestore(
     private val externalScope: CoroutineScope,
 ) : PostRepository {
 
-    override suspend fun CreatePost(post: PostData) {
+    override suspend fun createPost(post: PostData) {
         externalScope.launch(ioDispatcher) {
 
             val uid = firebaseAuth.uid!!
@@ -46,7 +46,7 @@ class PostRepositoryFirestore(
             .join()
     }
 
-    override suspend fun AddPostImageInStorage(imageUri: Uri): Flow<String> = flow {
+    override suspend fun addPostImageInStorage(imageUri: Uri): Flow<String> = flow {
 
         val uid = firebaseAuth.uid!!
 
@@ -63,7 +63,7 @@ class PostRepositoryFirestore(
 //    )
 
 
-    override fun GetPostForProfile() =
+    override fun getPostsForProfile() =
         Pager(
             PagingConfig(
                 initialLoadSize = 20,
@@ -77,8 +77,18 @@ class PostRepositoryFirestore(
             PostForProfileFirestorePagingSource(query)
         }.flow.cachedIn(externalScope)
 
+    override suspend fun getPostById(postId: String, uidProvider: String): Flow<PostData?> = flow {
+        var post: PostData? = null
+        externalScope.launch(ioDispatcher) {
+             post =
+                firestore.collection("users").document(uidProvider).collection("posts").document(postId)
+                    .get().await().toObject<PostData>()
+        }.join()
+        emit(post)
+    }
 
-    override suspend fun GetPostsSubscriptionForNewsFeed(): Flow<PagingData<PostData>>? =
+
+    override suspend fun getPostsSubscriptionForNewsFeed(): Flow<PagingData<PostData>>? =
         Pager(
             PagingConfig(
                 initialLoadSize = 20,
@@ -95,7 +105,7 @@ class PostRepositoryFirestore(
         }.flow.cachedIn(externalScope)
 
 
-    override suspend fun GetPostsTrendsForNewsFeed(): Flow<PagingData<PostData>>? =
+    override suspend fun getPostsTrendsForNewsFeed(): Flow<PagingData<PostData>>? =
         ////за все время изначально
         Pager(
             PagingConfig(

@@ -7,11 +7,12 @@ import com.example.abyss.model.data.PostData
 import kotlinx.coroutines.flow.Flow
 
 interface PostRepository {
-    suspend fun CreatePost(post: PostData)
-    suspend fun AddPostImageInStorage(imageUri: Uri): Flow<String>
-    fun GetPostForProfile(): Flow<PagingData<PostData>>?
-    suspend fun GetPostsSubscriptionForNewsFeed(): Flow<PagingData<PostData>>?
-    suspend fun GetPostsTrendsForNewsFeed(): Flow<PagingData<PostData>>?
+    suspend fun createPost(post: PostData)
+    suspend fun addPostImageInStorage(imageUri: Uri): Flow<String>
+    fun getPostsForProfile(): Flow<PagingData<PostData>>?
+    suspend fun getPostById(postId: String, uidProvider: String): Flow<PostData?>
+    suspend fun getPostsSubscriptionForNewsFeed(): Flow<PagingData<PostData>>?
+    suspend fun getPostsTrendsForNewsFeed(): Flow<PagingData<PostData>>?
     suspend fun listeningForChangesPosts(): Flow<Boolean>
     suspend fun listeningForChangesPost(postId: String): Flow<PostData?>
 }

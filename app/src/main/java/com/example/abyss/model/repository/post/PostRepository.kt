@@ -13,4 +13,5 @@ interface PostRepository {
     suspend fun GetPostsSubscriptionForNewsFeed(): Flow<PagingData<PostData>>?
     suspend fun GetPostsTrendsForNewsFeed(): Flow<PagingData<PostData>>?
     suspend fun listeningForChangesPosts(): Flow<Boolean>
+    suspend fun listeningForChangesPost(postId: String): Flow<PostData?>
 }

@@ -3,6 +3,7 @@ package com.example.abyss
 import android.app.Application
 import androidx.lifecycle.ViewModelProvider
 import bindViewModel
+import com.example.abyss.adapters.NotificationsPagingAdapter
 import com.example.abyss.adapters.PostNewsFeedPagingAdapter
 import com.example.abyss.adapters.PostNewsFeedViewPagerAdapter
 import com.example.abyss.adapters.PostProfilePagingAdapter
@@ -12,6 +13,8 @@ import com.example.abyss.model.repository.like.LikeRepository
 import com.example.abyss.model.repository.like.LikeRepositoryFirestore
 import com.example.abyss.model.repository.post.PostRepository
 import com.example.abyss.model.repository.post.PostRepositoryFirestore
+import com.example.abyss.model.repository.statistics.StatisticsRepository
+import com.example.abyss.model.repository.statistics.StatisticsRepositoryFirebase
 import com.example.abyss.model.repository.subscription.SubscriptionRepository
 import com.example.abyss.model.repository.subscription.SubscriptionRepositoryFirestore
 import com.example.abyss.model.repository.user.UserRepository
@@ -23,6 +26,7 @@ import com.example.abyss.ui.first.FirstViewModelFactory
 import com.example.abyss.ui.auth.login.LoginViewModelFactory
 import com.example.abyss.ui.auth.registration.RegistrationViewModelFactory
 import com.example.abyss.ui.home.NewsFeedViewModel
+import com.example.abyss.ui.notifications.NotificationsViewModel
 import com.example.abyss.ui.posts.addpost.AddPostViewModel
 import com.example.abyss.ui.posts.post.PostViewModel
 import com.example.abyss.ui.profile.ProfileViewModel
@@ -69,6 +73,9 @@ class AbyssApplication : Application(), KodeinAware {
         bind<SubscriptionRepository>() with provider {
             SubscriptionRepositoryFirestore(instance(), instance(), instance(), instance())
         }
+        bind<StatisticsRepository>() with provider {
+            StatisticsRepositoryFirebase(instance(), instance(), instance(), instance())
+        }
 // ViewModelFactory
         bind() from provider { FirstViewModelFactory(instance(), instance()) }
         bind() from provider { LoginViewModelFactory(instance(), instance()) }
@@ -95,10 +102,14 @@ class AbyssApplication : Application(), KodeinAware {
         bindViewModel<NewsFeedViewModel>() with singleton {
             NewsFeedViewModel(instance(), instance(), instance(), kodein.direct)
         }
+        bindViewModel<NotificationsViewModel>() with provider {
+            NotificationsViewModel(instance(), instance(), instance())
+        }
 // Adapter
         bind<PostProfilePagingAdapter>() with provider { PostProfilePagingAdapter() }
         bind() from provider { PostNewsFeedViewPagerAdapter() }
         bind() from provider { PostNewsFeedPagingAdapter(instance(), instance("main") )}
+        bind() from provider { NotificationsPagingAdapter(instance(), instance()) }
     }
 
     override fun onCreate() {

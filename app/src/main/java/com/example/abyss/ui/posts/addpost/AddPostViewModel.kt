@@ -68,8 +68,6 @@ class AddPostViewModel(
 
     fun addPost() {
         externalScope.launch(ioDispatcher) {
-
-
             postImageUrl.value?.let {
 
                 val url = postRepository.AddPostImageInStorage(it).collect { url ->

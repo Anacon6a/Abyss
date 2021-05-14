@@ -4,10 +4,6 @@
         android:icon="@drawable/ic_menu_news_feed"
         android:title="Home"/>
 
-<!--    <item android:id="@+id/addPostFragment"-->
-<!--        android:icon="@drawable/ic_baseline_image_24"-->
-<!--        android:title="AddPost"/>-->
-
     <item android:id="@+id/notificationsFragment"
         android:icon="@drawable/ic_menu_notifications"
         android:title="Notifications"/>

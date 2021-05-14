@@ -1,6 +1,5 @@
 package com.example.abyss.ui.posts.post
 
-import androidx.databinding.ObservableField
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -27,9 +26,34 @@ class PostViewModel(
     private val subscriptionRepository: SubscriptionRepository
 ) : ViewModel() {
 
+    private val _profileImage = MutableLiveData<String>()
+    val profileImage: LiveData<String>
+        get() = _profileImage
+
+    private val _userName = MutableLiveData<String>()
+    val userName: LiveData<String>
+        get() = _userName
+
     private val _numberOfSubscribers = MutableLiveData<Int?>()
     val numberOfSubscribers: LiveData<Int?>
         get() = _numberOfSubscribers
+
+    private val _postImage = MutableLiveData<String>()
+    val postImage: LiveData<String>
+        get() = _postImage
+
+    private val _postText = MutableLiveData<String?>()
+    val postText: LiveData<String?>
+        get() = _postText
+
+    private val _numberOfViews = MutableLiveData<Int>()
+    val numberOfViews: LiveData<Int>
+        get() = _numberOfViews
+
+    private val _numberOfLikes = MutableLiveData<Int>()
+    val numberOfLikes: LiveData<Int>
+        get() = _numberOfLikes
+
 
     private val _visibilityTextPost = MutableLiveData<Boolean>()
     val visibilityTextPost: LiveData<Boolean>
@@ -47,71 +71,64 @@ class PostViewModel(
     val stateLike: LiveData<Boolean>
         get() = _stateLike
 
-    private val _numberOfLikes = MutableLiveData<Int>()
-    val numberOfLikes: LiveData<Int>
-        get() = _numberOfLikes
-
-
-    private val _numberOfViews = MutableLiveData<Int>()
-    val numberOfViews: LiveData<Int>
-        get() = _numberOfViews
-
     private val _userData = MutableLiveData<UserData>()
     val userData: LiveData<UserData>
         get() = _userData
 
-    var postData = ObservableField<PostData>()
+    val postData = MutableLiveData<PostData>()
 
     private var myUid: String? = null
 
-    fun Insert() {
-
-        GetUserContentProvider()
-        subscribeButtonVisibility()
-        GetNumbersOfLikes()
-        GetStateLike()
-        AddAndGetViews()
-        textPostVisibility()
+    fun insertPost(post: PostData) {
+        if (postData.value == null) {
+            postData.value = post
+            _postImage.value = post.imageUrl!!
+            _postText.value = post.text
+            _numberOfLikes.value = post.numberOfLikes!!
+            _numberOfViews.value = post.numberOfViews!!
+        }
     }
-//пользователь, выложевший пост
-    private fun GetUserContentProvider() {
+
+    fun ininitialization() {
+        if (userData.value == null) {
+            getUserContentProvider()
+            subscribeButtonVisibility()
+            getStateLike()
+            addAndGetViews()
+            textPostVisibility()
+        }
+    }
+
+    //пользователь, выложивший пост
+    private fun getUserContentProvider() {
         viewModelScope.launch(ioDispatcher) {
-            userRepository.GetUserContentProviderByUid(postData.get()?.uid!!).collect {
+            userRepository.GetUserContentProviderByUid(postData.value!!.uid!!).collect {
                 _userData.postValue(it)
-                _numberOfSubscribers.postValue(it!!.numberOfSubscribers)
+                _userName.postValue(it!!.userName!!)
+                _profileImage.postValue(it.profileImageUrl!!)
+                _numberOfSubscribers.postValue(it.numberOfSubscribers)
             }
         }
     }
-// отображение кнопки подписки
+
+    // отображение кнопки подписки
     private fun subscribeButtonVisibility() {
         viewModelScope.launch(ioDispatcher) {
             if (myUid == null) {
                 myUid = authRepository.GetUid()
             }
-            _stateSubscribe.postValue(subscriptionRepository.GetSubscriptionStatus(postData.get()?.uid!!))
-            _visibilitySubscribe.postValue(myUid != postData.get()?.uid)
+            _stateSubscribe.postValue(subscriptionRepository.GetSubscriptionStatus(postData.value?.uid!!))
+            _visibilitySubscribe.postValue(myUid != postData.value!!.uid)
         }
     }
-// получение количества лайков. ИЗМЕНИТЬ!!
-    private fun GetNumbersOfLikes() {
-        viewModelScope.launch(ioDispatcher) {
-            likeRepository.GetNumberOfLikes(postData.get()!!.id!!, postData.get()!!.uid!!)
-                .collect { numbers ->
-                    numbers?.let {
-                        if (it != 0) {
-                            _numberOfLikes.postValue(numbers)
-                        }
-                    }
-                }
-        }
-    }
-// поставлен ли лайк у пользователя
-    private fun GetStateLike() {
+
+    // поставлен ли лайк у пользователя
+    private fun getStateLike() {
         viewModelScope.launch(ioDispatcher) {
             _stateLike.postValue(
                 likeRepository.GetLikeStatus(
-                    postData.get()!!.id!!,
-                    postData.get()!!.uid!!
+                    postData.value!!.id!!,
+                    postData.value!!.uid!!
                 )
             )
         }
@@ -120,23 +137,27 @@ class PostViewModel(
     fun ClickLike() {
         externalScope.launch(ioDispatcher) {
             stateLike.value?.let { state ->
-                _stateLike.postValue(!stateLike.value!!)
-                likeRepository.AddLikeAndGetNumberOfLikesAndStatus(
-                    postData.get()!!.id!!, postData.get()!!.uid!!, state
-                ).collect {
-                    _numberOfLikes.postValue(it.first)
+                if (stateLike.value!!) {
+                    _numberOfLikes.postValue(numberOfLikes.value!!.minus(1))
+                } else {
+                    _numberOfLikes.postValue(numberOfLikes.value!!.plus(1))
                 }
+                _stateLike.postValue(!stateLike.value!!)
 
+                likeRepository.AddLikeAndGetNumberOfLikesAndStatus(
+                    postData.value!!.id!!, postData.value!!.uid!!
+                )
             }
         }
     }
-// добавление просмотра, если пользователь не просматривал
-    private fun AddAndGetViews() {
+
+    // добавление просмотра, если пользователь не просматривал
+    private fun addAndGetViews() {
         externalScope.launch(ioDispatcher) {
 
             viewsRepository.AddViewsAndGetNumber(
-                postData.get()!!.id!!,
-                postData.get()!!.uid!!
+                postData.value!!.id!!,
+                postData.value!!.uid!!
             ).collect {
                 _numberOfViews.postValue(it)
             }
@@ -145,12 +166,11 @@ class PostViewModel(
 
     private fun textPostVisibility() {
         viewModelScope.launch(ioDispatcher) {
-            if (postData.get()!!.text != null) {
+            if (!postText.value.isNullOrEmpty()) {
                 _visibilityTextPost.postValue(true)
             } else {
                 _visibilityTextPost.postValue(false)
             }
-
         }
     }
 
@@ -160,15 +180,18 @@ class PostViewModel(
 
     fun subscribeToAccount() {
         externalScope.launch(ioDispatcher) {
-            stateSubscribe.value?.let {
-                _stateSubscribe.postValue(!stateSubscribe.value!!)
-                subscriptionRepository.AddSubscriptionAndGetNumberOfSubscribersAndStatus(
-                    postData.get()!!.uid!!,
-                    stateSubscribe.value!!
-                )
-                    .collect {
-                        _numberOfSubscribers.postValue(it.first)
+            userData.value?.let {
+                stateSubscribe.value?.let {
+                    if (stateSubscribe.value!!) {
+                        _numberOfSubscribers.postValue(numberOfSubscribers.value!!.minus(1))
+                    } else {
+                        _numberOfSubscribers.postValue(numberOfSubscribers.value!!.plus(1))
                     }
+                    _stateSubscribe.postValue(!stateSubscribe.value!!)
+                    subscriptionRepository.AddSubscriptionAndGetNumberOfSubscribersAndStatus(
+                        postData.value!!.uid!!
+                    )
+                }
             }
         }
     }

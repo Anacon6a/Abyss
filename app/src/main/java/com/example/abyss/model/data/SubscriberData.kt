@@ -4,5 +4,5 @@ import java.util.*
 
 data class SubscriberData(
     val uidSubscriber: String? = null,
-    val date: Date? = Date(System.currentTimeMillis()),
+    val date: Date = Date(System.currentTimeMillis()),
 )

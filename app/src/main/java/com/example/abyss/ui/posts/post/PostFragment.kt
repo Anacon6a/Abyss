@@ -39,17 +39,17 @@ class PostFragment : Fragment(), KodeinAware {
         //переход перемещение
         sharedElementEnterTransition =
             TransitionInflater.from(context).inflateTransition(android.R.transition.move)
+
+        viewModel.insertPost(args.post)
         // отслеживаем загрузку изображения
-        binding.postImage.loadImageStatusTracking(args.post.imageUrl) {
+        binding.postImage.loadImageStatusTracking(viewModel.postImage.value) {
             //переход
             startPostponedEnterTransition()
         }
 
         binding.executePendingBindings()
 
-        viewModel.postData.set(args.post)
-        viewModel.Insert()
-
+        viewModel.ininitialization()
 
         return binding.root
     }

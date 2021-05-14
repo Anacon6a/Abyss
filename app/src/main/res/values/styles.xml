@@ -20,7 +20,7 @@
         <item name="cornerSize">50%</item>
     </style>
     
-    <style name="ShapeAppearanceOverlay.DifferentCornerSize." parent="">
+    <style name="ShapeAppearanceOverlay.DifferentCornerSize.CornerSize20Percent" parent="">
         <item name="cornerSize">20%</item>
     </style>
     
@@ -28,6 +28,15 @@
         <item name="cornerSizeTopRight">50dp</item>
         <item name="cornerSizeTopLeft">50dp</item>
     </style>
+
+    <style name="AppTheme.Divider">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">1dp</item>
+        <item name="android:layout_marginBottom">8dp</item>
+        <item name="android:layout_marginTop">4dp</item>
+        <item name="android:background">#BDBDBD</item>
+    </style>
+
 
 <!--    <style name="AppTheme.NoActionBar">-->
 <!--        <item name="windowActionBar">false</item>-->

@@ -13,10 +13,9 @@ data class PostData(
     val widthImage: Int? = null,
     val heightImage: Int? = null,
     val date: Date? = Date(System.currentTimeMillis()),
-    val numberOfLikes: Int? = 0,
-    val numberOfViews: Int? = 0,
+    var numberOfLikes: Int? = 0,
+    var numberOfViews: Int? = 0,
     var id: String? = null,
     var uid: String? = null,
-
-) : Parcelable
+    ) : Parcelable
 

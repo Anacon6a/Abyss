@@ -42,13 +42,9 @@ class HostActivity : AppCompatActivity(), HidingNavigationBar {
 
     override fun hideNavigationBar(isHide: Boolean) {
         binding.run {
+            if (isHide) floatingActionButton.hide() else floatingActionButton.show()
             bottomAppBar.visibility = if (isHide) View.GONE else View.VISIBLE
-            floatingActionButton.visibility = if (isHide) View.GONE else View.VISIBLE
         }
     }
 
-//    private fun navigateToSearch() {
-//        val directions = SearchFragmentDirections.actionGlobalSearchFragment()
-//        findNavController(R.id.nav_host_fragment).navigate(directions)
-//    }
 }

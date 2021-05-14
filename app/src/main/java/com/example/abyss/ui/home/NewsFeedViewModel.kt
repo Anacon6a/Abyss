@@ -35,6 +35,7 @@ class NewsFeedViewModel(
     val listTitles =
         MutableLiveData<ArrayList<String>>().apply { value = _listTitles }
 
+
     private val wasInitialization = MutableLiveData<Boolean>().apply { value = false}
 
    suspend fun initial() {
@@ -54,12 +55,6 @@ class NewsFeedViewModel(
         return kodein.instance() as PostNewsFeedPagingAdapter
     }
 
-    //    private fun addAdapters(i: Int) {
-//        getAdapter().let {
-//            listPostPagingAdapters.value!!.add(it)
-//        }
-//        statusLoading(listPostPagingAdapters.value!![i])
-//    }
     private suspend fun addAdapters() {
        externalScope.launch(ioDispatcher) {
             getNumberAdapters()

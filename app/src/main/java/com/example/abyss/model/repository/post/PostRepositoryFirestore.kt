@@ -6,6 +6,7 @@ import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
 import com.example.abyss.model.data.PostData
+import com.example.abyss.model.data.UserData
 import com.example.abyss.model.pagingsource.PostForNewsFeedPagingSource
 import com.example.abyss.model.pagingsource.PostForProfileFirestorePagingSource
 import com.google.firebase.auth.FirebaseAuth
@@ -145,4 +146,28 @@ class PostRepositoryFirestore(
         SharingStarted.WhileSubscribed(),
     )
 
+    @ExperimentalCoroutinesApi
+    override suspend fun listeningForChangesPost(postId: String): Flow<PostData?> = callbackFlow {
+        val uid = firebaseAuth.uid.toString()
+        val eventPostListener =
+            firestore.collection("users").document(uid).collection("posts").document(postId)
+
+        val subscription = eventPostListener.addSnapshotListener { snapshot, exception ->
+            exception?.let {
+                Timber.e("Ошибка: ${it.message.toString()}")
+                cancel(it?.message.toString())
+            }
+
+            if (snapshot != null && snapshot.exists()) {
+                val post = snapshot.toObject<PostData>()
+                offer(post)
+            }
+        }
+        offer(null)
+        awaitClose { subscription.remove() }
+
+    }.shareIn(
+        externalScope,
+        SharingStarted.WhileSubscribed(),
+    )
 }

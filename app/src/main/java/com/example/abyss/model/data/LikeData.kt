@@ -7,5 +7,5 @@ import java.util.*
 @Parcelize
 data class LikeData(
     val uidRated: String? = null,
-    val date: Date? = Date(System.currentTimeMillis())
+    val date: Date = Date(System.currentTimeMillis())
 ) : Parcelable

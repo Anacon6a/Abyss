@@ -78,7 +78,7 @@
                         android:scaleType="centerCrop"
                         app:srcCompat="@drawable/ic_user_image_profile"
                         android:onClick="@{() -> PostViewModel.goToUserProfile()}"
-                        loadImage="@{PostViewModel.userData.profileImageUrl}"
+                        loadImage="@{PostViewModel.profileImage}"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent"
@@ -104,7 +104,7 @@
                             android:layout_height="wrap_content"
                             android:ellipsize="end"
                             android:maxLines="1"
-                            android:text="@{PostViewModel.userData.userName}"
+                            android:text="@{PostViewModel.userName}"
                             android:textColor="@color/black"
                             android:textSize="18sp"
                             android:typeface="monospace"
@@ -228,11 +228,10 @@
                 android:background="@drawable/bg_post_content"
                 android:padding="20dp"
                 app:el_animationDuration="80"
-                app:el_collapsedHeight="100dp"
-                app:el_initialState="collapsed"
+                app:el_collapsedHeight="60dp"
                 app:el_moreColor="@android:color/black"
                 app:el_moreText=""
-                app:el_shadowHeight="60dp"
+                app:el_shadowHeight="40dp"
                 app:el_showButton="true"
                 app:el_showShadow="true"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -243,7 +242,7 @@
                     android:id="@+id/text_this_post"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="@{PostViewModel.postData.text}"
+                    android:text="@{PostViewModel.postText}"
                     android:textSize="16sp"
                     tools:text="Текст публикации" />
             </ru.rhanza.constraintexpandablelayout.ExpandableLayout>
@@ -259,7 +258,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/text_posts"
-                android:visibility="invisible"/>
+                />
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>

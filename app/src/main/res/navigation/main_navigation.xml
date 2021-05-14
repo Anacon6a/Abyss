@@ -82,6 +82,15 @@
             app:argType="com.example.abyss.model.data.PostData" />
     </fragment>
     <action android:id="@+id/action_global_addPostFragment"
-        app:destination="@id/addPostFragment"/>
+        app:destination="@id/addPostFragment" />
+    <fragment
+        android:id="@+id/notificationsFragment"
+        android:name="com.example.abyss.ui.notifications.NotificationsFragment"
+        android:label="fragment_notifications"
+        tools:layout="@layout/fragment_notifications" >
+        <action
+            android:id="@+id/action_notificationsFragment_to_postFragment"
+            app:destination="@id/postFragment" />
+    </fragment>
 
 </navigation>

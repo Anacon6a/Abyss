@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-xmlns:app="http://schemas.android.com/apk/res-auto"
-xmlns:tools="http://schemas.android.com/tools"
-tools:context=".ui.home.NewsFeedFragment">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".ui.home.NewsFeedFragment">
 
-<data>
-    <variable
-        name="NewsFeedViewModel"
-        type="com.example.abyss.ui.home.NewsFeedViewModel" />
-</data>
+    <data>
+        <variable
+            name="NewsFeedViewModel"
+            type="com.example.abyss.ui.home.NewsFeedViewModel" />
+    </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -30,94 +30,94 @@ tools:context=".ui.home.NewsFeedFragment">
 
         <!--            </com.google.android.material.appbar.AppBarLayout>-->
 
-
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/constraint_layout"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_marginTop="20dp"
-        android:background="@drawable/bg_profile_content"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
-
-<!--        android:background="@drawable/search_bar_background"-->
-<!--        android:drawableEnd="@drawable/search_btn"-->
-<!--        android:hint="@string/search_bar_hint"-->
-        <androidx.appcompat.widget.SearchView
-            android:id="@+id/search_post"
-            android:layout_width="300dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            android:background="@drawable/bg_search"
-            android:visibility="invisible"
-            android:textColor="@color/white"
-            android:textColorHint="@color/white"/>
-
-
-
-        <com.google.android.material.tabs.TabLayout
-            android:id="@+id/news_feed_tab_layout"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="7dp"
-            android:layout_marginTop="4dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/search_post"
-            app:tabMode="scrollable"
-            android:background="@drawable/bg_profile_content"/>
-
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/constraint_layout_for_posts"
+        <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+            android:id="@+id/swipe_refresh_layout"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_marginTop="4dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/news_feed_tab_layout">
+            app:layout_constraintTop_toTopOf="parent">
 
-            <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-                android:id="@+id/swipe_refresh_layout"
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/constraint_layout"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
-            <com.example.abyss.NestedScrollableHost
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginStart="4dp"
-                android:layout_marginEnd="4dp"
-                android:background="@color/transparent"
-                app:layout_behavior="@string/appbar_scrolling_view_behavior"
-                app:layout_constraintTop_toTopOf="parent">
+                android:layout_height="0dp"
+                android:layout_marginTop="20dp"
+                android:background="@drawable/bg_profile_content">
 
-                <androidx.viewpager2.widget.ViewPager2
-                    android:id="@+id/view_pager_posts"
+                <!--        android:background="@drawable/search_bar_background"-->
+                <!--        android:drawableEnd="@drawable/search_btn"-->
+                <!--        android:hint="@string/search_bar_hint"-->
+                <androidx.appcompat.widget.SearchView
+                    android:id="@+id/search_post"
+                    android:layout_width="300dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    android:background="@drawable/bg_search"
+                    android:textColor="@color/white"
+                    android:textColorHint="@color/white"
+                    android:visibility="invisible"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+
+                <com.google.android.material.tabs.TabLayout
+                    android:id="@+id/news_feed_tab_layout"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:layout_marginBottom="7dp"
+                    android:background="@drawable/bg_profile_content"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/search_post"
+                    app:tabMode="scrollable" />
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/constraint_layout_for_posts"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:orientation="horizontal" />
+                    android:layout_height="0dp"
+                    android:layout_marginTop="4dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/news_feed_tab_layout">
 
-            </com.example.abyss.NestedScrollableHost>
-            </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+                    <!--            <androidx.swiperefreshlayout.widget.SwipeRefreshLayout-->
+                    <!--                android:id="@+id/swipe_refresh_layout"-->
+                    <!--                android:layout_width="match_parent"-->
+                    <!--                android:layout_height="match_parent">-->
+                    <com.example.abyss.NestedScrollableHost
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_marginStart="4dp"
+                        android:layout_marginEnd="4dp"
+                        android:background="@color/transparent"
+                        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+                        app:layout_constraintTop_toTopOf="parent">
 
-            <com.github.ybq.android.spinkit.SpinKitView
-                android:id="@+id/progress_bar_loading_all_posts"
-                style="@style/SpinKitView.MultiplePulse"
-                hideIfFalse="@{NewsFeedViewModel.progressBarLoadingAllPosts}"
-                android:layout_width="32dp"
-                android:layout_height="32dp"
-                app:SpinKit_Color="@color/purple_700"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.4" />
-        </androidx.constraintlayout.widget.ConstraintLayout>
+                        <androidx.viewpager2.widget.ViewPager2
+                            android:id="@+id/view_pager_posts"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:orientation="horizontal" />
+                    </com.example.abyss.NestedScrollableHost>
+                    <!--            </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>-->
+
+                    <com.github.ybq.android.spinkit.SpinKitView
+                        android:id="@+id/progress_bar_loading_all_posts"
+                        style="@style/SpinKitView.MultiplePulse"
+                        hideIfFalse="@{NewsFeedViewModel.progressBarLoadingAllPosts}"
+                        android:layout_width="32dp"
+                        android:layout_height="32dp"
+                        app:SpinKit_Color="@color/purple_700"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintVertical_bias="0.4" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

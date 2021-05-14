@@ -132,16 +132,16 @@ fun textForNumberViews(textView: TextView, numbers: Int) {
 
     if (numbers == 0) {
         textView.text = " Нет просмотров"
-    } else if ( numbers < 1000 && (numbers % 100) > 10 && (numbers % 100) < 15 ) {
+    } else if (numbers < 1000 && (numbers % 100) > 10 && (numbers % 100) < 15) {
         textView.text = " $numbers просмотров"
     } else if (numbers < 1000 && (numbers % 10) > 0 && (numbers % 10) < 5) {
         when (numbers % 10) {
             1 -> textView.text = " $numbers просмотр"
             2, 3, 4 -> textView.text = " $numbers просмотра"
         }
-    }else if (numbers in 10000..999999) {
-       textView.text = " ${numbers / 1000} Тыс. просмотров"
-    }else if (numbers >= 1000000) {
+    } else if (numbers in 10000..999999) {
+        textView.text = " ${numbers / 1000} Тыс. просмотров"
+    } else if (numbers >= 1000000) {
         textView.text = " ${numbers / 1000000} Млн. просмотров"
     } else {
         textView.text = " $numbers просмотров"
@@ -154,7 +154,7 @@ fun textForNumberViews(textView: TextView, numbers: Int) {
 fun textForNumberLikes(textView: TextView, numbers: Int) {
     if (numbers == 0) {
         textView.text = ""
-    } else if ( numbers < 10000 ) {
+    } else if (numbers < 10000) {
         textView.text = "$numbers"
     } else if (numbers in 10000..999999) {
         textView.text = "${numbers / 1000} Тыс."
@@ -169,18 +169,74 @@ fun textForNumberSubscribers(textView: TextView, numbers: Int?) {
 
     if (numbers == 0 || numbers == null) {
         textView.text = "Нет подписчиков"
-    } else if ( numbers < 1000 && (numbers % 100) > 10 && (numbers % 100) < 15 ) {
+    } else if (numbers < 1000 && (numbers % 100) > 10 && (numbers % 100) < 15) {
         textView.text = " $numbers подписчиков"
     } else if (numbers < 1000 && (numbers % 10) > 0 && (numbers % 10) < 5) {
         when (numbers % 10) {
             1 -> textView.text = " $numbers подписчик"
             2, 3, 4 -> textView.text = " $numbers подписчика"
         }
-    }else if (numbers in 10000..999999) {
+    } else if (numbers in 10000..999999) {
         textView.text = " ${numbers / 1000} Тыс. подписчиков"
-    }else if (numbers >= 1000000) {
+    } else if (numbers >= 1000000) {
         textView.text = " ${numbers / 1000000} Млн. подписчиков"
     } else {
         textView.text = " $numbers подписчиков"
     }
 }
+
+@SuppressLint("SetTextI18n")
+@BindingAdapter("textForNumberSubscriptions")
+fun textForNumberSubscriptions(textView: TextView, numbers: Int?) {
+
+    if (numbers == 0 || numbers == null) {
+        textView.text = "Нет подписок"
+    } else if (numbers < 1000 && (numbers % 100) > 10 && (numbers % 100) < 15) {
+        textView.text = " $numbers подписок"
+    } else if (numbers < 1000 && (numbers % 10) > 0 && (numbers % 10) < 5) {
+        when (numbers % 10) {
+            1 -> textView.text = " $numbers подписка"
+            2, 3, 4 -> textView.text = " $numbers подписки"
+        }
+    } else if (numbers in 10000..999999) {
+        textView.text = " ${numbers / 1000} Тыс. подписок"
+    } else if (numbers >= 1000000) {
+        textView.text = " ${numbers / 1000000} Млн. подписок"
+    } else {
+        textView.text = " $numbers подписок"
+    }
+}
+
+
+@SuppressLint("SetTextI18n")
+fun TextView.textForNotification(
+    action: String,
+    name: String,
+    comment: String?
+) {
+    when (action) {
+        "like" -> {
+            this.text = "$name нравится ваша публикация."
+        }
+        "subscribe" -> {
+            this.text = "$name подписался(-ась) на ваш аккаунт."
+        }
+        "unsubscribe" -> {
+            this.text = "$name отписался(-ась) от вашего аккаунта."
+        }
+        "comment" -> {
+            this.text = "$name оставил(а) комментарий под публикацией: $comment"
+        }
+    }
+}
+
+@BindingAdapter("loadImageOrGone")
+fun loadImageOrGone(imageView: ImageView, url: String?) {
+    if (!url.isNullOrEmpty()) {
+        Glide.with(imageView).load(url).into(imageView)
+        imageView.visibility = View.VISIBLE
+    } else {
+        imageView.visibility = View.GONE
+    }
+}
+

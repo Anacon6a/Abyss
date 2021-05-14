@@ -48,9 +48,9 @@ class ProfileFragment : Fragment(), KodeinAware {
     }
 
     private fun Subscription() {
-        viewModel.postProfilePagingAdapter.setOnItemClickListener { postImage, imageView, postContainer ->
+        viewModel.postProfilePagingAdapter.setOnItemClickListener { postData, imageView, postContainer ->
 
-            val action = ProfileFragmentDirections.actionProfileFragmentToPostFragment(postImage)
+            val action = ProfileFragmentDirections.actionProfileFragmentToPostFragment(postData)
 
             findNavController().navigate(
                 action, FragmentNavigator.Extras.Builder().addSharedElements(

@@ -29,6 +29,7 @@ import com.example.abyss.ui.home.NewsFeedViewModel
 import com.example.abyss.ui.notifications.NotificationsViewModel
 import com.example.abyss.ui.posts.addpost.AddPostViewModel
 import com.example.abyss.ui.posts.post.PostViewModel
+import com.example.abyss.ui.profile.ModalBottomSheetForProfileViewModel
 import com.example.abyss.ui.profile.ProfileViewModel
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.FirebaseDatabase
@@ -104,6 +105,9 @@ class AbyssApplication : Application(), KodeinAware {
         }
         bindViewModel<NotificationsViewModel>() with provider {
             NotificationsViewModel(instance(), instance(), instance())
+        }
+        bindViewModel<ModalBottomSheetForProfileViewModel>() with provider {
+            ModalBottomSheetForProfileViewModel(instance())
         }
 // Adapter
         bind<PostProfilePagingAdapter>() with provider { PostProfilePagingAdapter() }

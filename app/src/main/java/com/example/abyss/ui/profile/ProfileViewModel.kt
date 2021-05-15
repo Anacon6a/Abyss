@@ -42,9 +42,6 @@ class ProfileViewModel(
 
     private val postsUser = MutableLiveData<PagingData<PostData>>()
 
-
-//    val getPosts = postRepository.GetPostForProfile()?.cachedIn(externalScope)?.asLiveData()
-
     init {
         StatusLoading()
         GetPostsUser()

@@ -7,9 +7,11 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.example.abyss.adapters.loadImageStatusTracking
 import com.example.abyss.databinding.FragmentPostBinding
+import com.example.abyss.extensions.onClick
 import com.example.abyss.utils.HidingNavigationBar
 import kodeinViewModel
 import kotlinx.coroutines.CoroutineDispatcher
@@ -44,11 +46,8 @@ class PostFragment : Fragment(), KodeinAware {
 
         lifecycleScope.launch(mainDispatcher) {
             viewModel.insertPost(args.post)
-            // отслеживаем загрузку изображения
-            binding.postImage.loadImageStatusTracking(viewModel.postImage.value) {
-                //переход
-                startPostponedEnterTransition()
-            }
+
+            subscription()
 
             binding.executePendingBindings()
 
@@ -56,6 +55,22 @@ class PostFragment : Fragment(), KodeinAware {
         }
 
         return binding.root
+    }
+
+    private fun subscription() {
+        lifecycleScope.launch(mainDispatcher) {
+            // отслеживаем загрузку изображения
+            binding.postImage.loadImageStatusTracking(viewModel.postImage.value) {
+                //переход
+                startPostponedEnterTransition()
+            }
+            binding.backBtn.onClick {
+                findNavController().popBackStack()
+            }
+            binding.moreBtn.onClick {
+                findNavController().navigate(PostFragmentDirections.actionPostFragmentToEditPostModalBottomSheetFragment())
+            }
+        }
     }
 
 }

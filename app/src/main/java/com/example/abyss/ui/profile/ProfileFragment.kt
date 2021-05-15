@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.GridLayoutManager
 import com.example.abyss.databinding.FragmentProfileBinding
 import com.example.abyss.extensions.onClick
 import com.example.abyss.utils.HidingNavigationBar
+import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.firebase.auth.FirebaseAuth
 import kodeinViewModel
 import kotlinx.coroutines.launch
@@ -36,11 +37,7 @@ class ProfileFragment : Fragment(), KodeinAware {
         binding.profileViewModel = viewModel
         binding.lifecycleOwner = viewLifecycleOwner
         (activity as HidingNavigationBar).hideNavigationBar(false)
-        //выход временно
-        binding.button.onClick {
-            FirebaseAuth.getInstance().signOut()
-        }
-        //////////////////
+
         Subscription()
         setAdaptersForRecycler()
 
@@ -91,6 +88,9 @@ class ProfileFragment : Fragment(), KodeinAware {
 //                    }
 //                }
             }
+        }
+        binding.btnMore.onClick {
+            findNavController().navigate(ProfileFragmentDirections.actionProfileFragmentToModalBottomSheetFragment())
         }
     }
 

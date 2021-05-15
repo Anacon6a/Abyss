@@ -26,7 +26,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
             android:text="@string/registration"
-            android:textColor="@color/teal_700"
+            android:textColor="@color/black"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -129,16 +129,20 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/password_edit" />
 
-        <Button
+        <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/registration"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_marginTop="16dp"
-            android:background="@drawable/bg_com_btn"
+            android:background="@drawable/bg_com_btn_with_enabled"
             android:enabled="@{RegistrationViewModel.buttonEnabled}"
             android:onClick="@{() -> RegistrationViewModel.onRegistration()}"
             android:text="@string/sign_up"
+            android:paddingStart="20dp"
+            android:paddingEnd="20dp"
+            android:textAllCaps="false"
+            android:textColor="@color/white"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/registration_error" />
@@ -152,7 +156,7 @@
             android:enabled="@{RegistrationViewModel.viewEnabled}"
             android:onClick="@{() -> RegistrationViewModel.onGoToLogin()}"
             android:text="@string/login"
-            android:textColor="@color/grey"
+            android:textColor="@color/purple_500"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/registration" />
 

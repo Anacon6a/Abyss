@@ -54,14 +54,13 @@ class PostViewModel(
     val numberOfLikes: LiveData<Int>
         get() = _numberOfLikes
 
-
-    private val _visibilityTextPost = MutableLiveData<Boolean>()
-    val visibilityTextPost: LiveData<Boolean>
-        get() = _visibilityTextPost
-
     private val _visibilitySubscribe = MutableLiveData<Boolean>()
     val visibilitySubscribe: LiveData<Boolean>
         get() = _visibilitySubscribe
+
+    private val _visibilityMoreBtn = MutableLiveData<Boolean>()
+    val visibilityMoreBtn: LiveData<Boolean>
+        get() = _visibilityMoreBtn
 
     private val _stateSubscribe = MutableLiveData<Boolean>()
     val stateSubscribe: LiveData<Boolean>
@@ -103,7 +102,6 @@ class PostViewModel(
             subscribeButtonVisibility()
             getStateLike()
             addAndGetViews()
-//            textPostVisibility()
         }
     }
 
@@ -127,6 +125,7 @@ class PostViewModel(
             }
             _stateSubscribe.postValue(subscriptionRepository.GetSubscriptionStatus(postData.value?.uid!!))
             _visibilitySubscribe.postValue(myUid != postData.value!!.uid)
+            _visibilityMoreBtn.postValue(myUid == postData.value!!.uid)
         }
     }
 
@@ -171,16 +170,6 @@ class PostViewModel(
             }
         }
     }
-
-//    private fun textPostVisibility() {
-//        viewModelScope.launch(ioDispatcher) {
-//            if (!postText.value.isNullOrEmpty()) {
-//                _visibilityTextPost.postValue(true)
-//            } else {
-//                _visibilityTextPost.postValue(false)
-//            }
-//        }
-//    }
 
     fun goToUserProfile() {
 

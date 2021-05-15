@@ -5,7 +5,6 @@
     tools:context=".ui.profile.ProfileFragment">
 
     <data>
-
         <variable
             name="ProfileViewModel"
             type="com.example.abyss.ui.profile.ProfileViewModel" />
@@ -15,26 +14,28 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="?attr/colorPrimaryDark"
-        android:theme="@style/AppTheme">
+        android:theme="@style/ProfileTheme">
 
-        <Button
-            android:id="@+id/button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:layout_marginBottom="37dp"
-            android:text="Выйти"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="1.0"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.023" />
+        <!--        <Button-->
+        <!--            android:id="@+id/button"-->
+        <!--            android:layout_width="wrap_content"-->
+        <!--            android:layout_height="wrap_content"-->
+        <!--            android:layout_marginTop="16dp"-->
+        <!--            android:layout_marginBottom="37dp"-->
+        <!--            android:text="Выйти"-->
+        <!--            app:layout_constraintEnd_toEndOf="parent"-->
+        <!--            app:layout_constraintHorizontal_bias="1.0"-->
+        <!--            app:layout_constraintStart_toStartOf="parent"-->
+        <!--            app:layout_constraintTop_toTopOf="parent"-->
+        <!--            app:layout_constraintVertical_bias="0.023" />-->
 
         <com.google.android.material.appbar.AppBarLayout
             android:id="@+id/appbar"
+            style="@style/Widget.MaterialComponents.Toolbar.Primary"
             android:layout_width="match_parent"
-            android:layout_height="280dp"
+            android:layout_height="wrap_content"
             android:fitsSystemWindows="true">
+
 
             <com.google.android.material.appbar.CollapsingToolbarLayout
                 android:id="@+id/collapsing_toolbar"
@@ -47,14 +48,16 @@
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent">
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="top"
+                    app:layout_behavior="@+id/toolbar">
 
                     <com.google.android.material.imageview.ShapeableImageView
                         android:id="@+id/shapeable_image_view"
                         loadImage="@{ProfileViewModel.profileImageUrl}"
                         android:layout_width="100dp"
                         android:layout_height="100dp"
-                        android:layout_marginStart="21dp"
+                        android:layout_marginStart="50dp"
                         android:layout_marginTop="30dp"
                         android:layout_marginEnd="30dp"
                         android:scaleType="centerCrop"
@@ -68,52 +71,100 @@
                         android:id="@+id/user_name_text_view"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="10dp"
-                        android:layout_marginTop="45dp"
+                        android:layout_marginTop="15dp"
                         android:layout_marginEnd="20dp"
                         android:maxLines="2"
                         android:text="@{ProfileViewModel.userName}"
-                        android:textSize="24sp"
+                        android:textSize="20sp"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toEndOf="@+id/shapeable_image_view"
-                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintTop_toTopOf="@id/shapeable_image_view"
                         tools:text="Anaconda" />
-
-                    <com.google.android.material.textview.MaterialTextView
-                        android:id="@+id/number_of_subscribers"
-                        textForNumberSubscriptions="@{ProfileViewModel.numbersOfSubscriptions}"
-                        android:layout_width="120dp"
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:id="@+id/subscr_linear_layout"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="10dp"
-                        android:layout_marginTop="25dp"
-                        android:ellipsize="end"
-                        android:maxLines="2"
-                        android:textSize="18sp"
                         app:layout_constraintStart_toStartOf="@+id/shapeable_image_view"
                         app:layout_constraintTop_toBottomOf="@id/shapeable_image_view"
-                        tools:text="120 подписок" />
+                        android:orientation="horizontal"
+                        android:layout_marginTop="30dp"
+                        android:gravity="center_horizontal">
 
-                    <com.google.android.material.textview.MaterialTextView
-                        android:id="@+id/number_of_subscriptions"
-                        textForNumberSubscribers="@{ProfileViewModel.numbersOfSubscribers}"
-                        android:layout_width="120dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="15dp"
-                        android:ellipsize="end"
-                        android:maxLines="2"
-                        android:textSize="18sp"
-                        app:layout_constraintStart_toEndOf="@+id/number_of_subscribers"
-                        app:layout_constraintTop_toTopOf="@id/number_of_subscribers"
-                        tools:text="15 Млн подписчиков" />
+                        <com.google.android.material.textview.MaterialTextView
+                            android:id="@+id/number_of_subscriptions"
+                            textForNumberSubscriptions="@{ProfileViewModel.numbersOfSubscriptions}"
+                            android:layout_width="120dp"
+                            android:layout_height="wrap_content"
+                            android:ellipsize="end"
+                            android:maxLines="2"
+                            android:textSize="18sp"
+                            tools:text="120   подписок" />
 
+                        <com.google.android.material.textview.MaterialTextView
+                            android:id="@+id/number_of_subscribers"
+                            textForNumberSubscribers="@{ProfileViewModel.numbersOfSubscribers}"
+                            android:layout_width="120dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="30dp"
+                            android:ellipsize="end"
+                            android:maxLines="2"
+                            android:textSize="18sp"
+                            tools:text="15 Млн подписчиков" />
+                    </LinearLayout>
+<!--                    <com.google.android.material.floatingactionbutton.FloatingActionButton-->
+<!--                        android:layout_width="wrap_content"-->
+<!--                        android:layout_height="wrap_content"-->
+<!--                        android:backgroundTint="@color/purple_500"-->
+<!--                        android:baselineAlignBottom="false"-->
+<!--                        android:clickable="true"-->
+<!--                        android:focusable="true"-->
+<!--                        android:src="@drawable/ic_more"-->
+<!--                        app:borderWidth="0dp"-->
+<!--                        app:fabSize="normal"-->
+<!--                        app:maxImageSize="30dp"-->
+<!--                        app:tint="@color/white"-->
+<!--                        android:id="@+id/btn_more2" />-->
                 </androidx.constraintlayout.widget.ConstraintLayout>
+<!--                <androidx.appcompat.widget.Toolbar-->
+<!--                    android:id="@+id/toolbar"-->
+<!--                    android:layout_width="match_parent"-->
+<!--                    android:layout_height="?attr/actionBarSize"-->
+<!--                    app:layout_collapseMode="pin">-->
 
-                <androidx.appcompat.widget.Toolbar
-                    android:id="@+id/toolbar"
-                    android:layout_width="match_parent"
-                    android:layout_height="?attr/actionBarSize"
-                    app:layout_collapseMode="pin" />
+<!--                    <androidx.constraintlayout.widget.ConstraintLayout-->
+<!--                        android:layout_width="match_parent"-->
+<!--                        android:layout_height="match_parent">-->
 
+<!--                        <TextView-->
+<!--                            android:layout_width="wrap_content"-->
+<!--                            android:layout_height="wrap_content"-->
+<!--                            android:maxLength="16"-->
+<!--                            android:text="Мой профиль"-->
+<!--                            android:textColor="@color/white"-->
+<!--                            android:textSize="18dp"-->
+<!--                            app:layout_constraintStart_toStartOf="parent"-->
+<!--                            app:layout_constraintTop_toTopOf="parent"-->
+<!--                            app:layout_constraintBottom_toBottomOf="parent"-->
+<!--                            app:layout_constraintEnd_toStartOf="@+id/btn_more" />-->
+
+                        <com.google.android.material.floatingactionbutton.FloatingActionButton
+                            android:id="@+id/btn_more"
+                            android:layout_width="40dp"
+                            android:layout_height="40dp"
+                            android:backgroundTint="@color/black"
+                            android:baselineAlignBottom="false"
+                            android:clickable="true"
+                            android:focusable="true"
+                            android:src="@drawable/ic_more"
+                            app:borderWidth="0dp"
+                            app:fabSize="mini"
+                            app:tint="@color/white"
+                            android:layout_marginEnd="20dp"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintBottom_toBottomOf="parent"/>
+<!--                    </androidx.constraintlayout.widget.ConstraintLayout>-->
+<!--                </androidx.appcompat.widget.Toolbar>-->
             </com.google.android.material.appbar.CollapsingToolbarLayout>
         </com.google.android.material.appbar.AppBarLayout>
 
@@ -121,6 +172,7 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:layout_marginTop="30dp"
             android:background="@drawable/bg_profile_content"
             app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior">
 
@@ -129,20 +181,19 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
 
-
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/profile_posts_recycler_view"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_height="0dp"
                     android:layout_marginTop="12dp"
+                    android:clipToPadding="false"
                     android:padding="12dp"
+                    android:paddingBottom="60dp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
-                    tools:listitem="@layout/item_post_for_profile"
-                    android:paddingBottom="60dp"
-                    android:clipToPadding="false"/>
+                    tools:listitem="@layout/item_post_for_profile" />
             </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
             <com.github.ybq.android.spinkit.SpinKitView
@@ -160,22 +211,7 @@
                 app:layout_constraintVertical_bias="0.2" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
-
-
-        <!--    <com.google.android.material.floatingactionbutton.FloatingActionButton-->
-        <!--        android:layout_width="wrap_content"-->
-        <!--        android:layout_height="wrap_content"-->
-        <!--        android:baselineAlignBottom="false"-->
-        <!--        android:clickable="true"-->
-        <!--        android:src="@drawable/ic_add_post"-->
-        <!--        app:fabSize="normal"-->
-        <!--        app:layout_anchor="@id/appbar"-->
-        <!--        app:layout_anchorGravity="end|bottom"-->
-        <!--        android:layout_marginStart="30dp"-->
-        <!--        android:backgroundTint="?attr/colorAccent"-->
-        <!--        android:focusable="true" />-->
-
-
+        
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
 </layout>

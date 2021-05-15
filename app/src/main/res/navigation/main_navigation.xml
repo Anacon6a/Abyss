@@ -62,6 +62,9 @@
             android:id="@+id/action_profileFragment_to_postFragment"
             app:destination="@id/postFragment"
             app:popUpToInclusive="true" />
+        <action
+            android:id="@+id/action_profileFragment_to_modalBottomSheetFragment"
+            app:destination="@id/modalBottomSheetFragment" />
     </fragment>
     <fragment
         android:id="@+id/addPostFragment"
@@ -80,9 +83,15 @@
         <argument
             android:name="post"
             app:argType="com.example.abyss.model.data.PostData" />
+        <action
+            android:id="@+id/action_postFragment_to_editPostModalBottomSheetFragment"
+            app:destination="@id/editPostModalBottomSheetFragment"
+            app:popUpToInclusive="true" />
     </fragment>
-    <action android:id="@+id/action_global_addPostFragment"
-        app:destination="@id/addPostFragment" />
+    <action
+        android:id="@+id/action_global_addPostFragment"
+        app:destination="@id/addPostFragment"
+        app:popUpToInclusive="true" />
     <fragment
         android:id="@+id/notificationsFragment"
         android:name="com.example.abyss.ui.notifications.NotificationsFragment"
@@ -92,5 +101,19 @@
             android:id="@+id/action_notificationsFragment_to_postFragment"
             app:destination="@id/postFragment" />
     </fragment>
+    <dialog
+        android:id="@+id/modalBottomSheetFragment"
+        android:name="com.example.abyss.ui.profile.ModalBottomSheetForProfileFragment"
+        android:label="fragment_modal_bottom_sheet"
+        tools:layout="@layout/fragment_modal_bottom_sheet_for_profile" >
+        <action
+            android:id="@+id/action_modalBottomSheetFragment_to_loginFragment"
+            app:destination="@id/loginFragment" />
+    </dialog>
+    <dialog
+        android:id="@+id/editPostModalBottomSheetFragment"
+        android:name="com.example.abyss.ui.posts.post.ModalBottomSheetForPostFragment"
+        android:label="EditPostModalBottomSheetFragment"
+        tools:layout="@layout/fragment_modal_bottom_sheet_for_post" />
 
 </navigation>

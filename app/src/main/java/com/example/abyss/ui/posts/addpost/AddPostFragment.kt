@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.example.abyss.databinding.FragmentAddPostBinding
+import com.example.abyss.extensions.onClick
 import com.example.abyss.utils.HidingNavigationBar
 import com.github.dhaval2404.imagepicker.ImagePicker
 import kodeinViewModel
@@ -35,12 +36,12 @@ class AddPostFragment : Fragment(), KodeinAware {
         binding.lifecycleOwner = viewLifecycleOwner
         (activity as HidingNavigationBar).hideNavigationBar(true)
 
-        Subscription()
+        subscription()
 
         return binding.root
     }
 
-    private fun Subscription() {
+    private fun subscription() {
         viewModel.eventOnAddPost.observe(viewLifecycleOwner, { event ->
             if (event) {
                 viewModel.widthImage.set(binding.imageViewNewPost.width)
@@ -60,6 +61,9 @@ class AddPostFragment : Fragment(), KodeinAware {
                 viewModel.endEventImageSelection()
             }
         })
+        binding.close.onClick {
+            findNavController().popBackStack()
+        }
     }
 
     private fun photoSelection() {

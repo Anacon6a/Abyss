@@ -12,6 +12,7 @@ import androidx.navigation.fragment.navArgs
 import com.example.abyss.adapters.loadImageStatusTracking
 import com.example.abyss.databinding.FragmentPostBinding
 import com.example.abyss.extensions.onClick
+import com.example.abyss.ui.profile.ProfileFragmentDirections
 import com.example.abyss.utils.HidingNavigationBar
 import kodeinViewModel
 import kotlinx.coroutines.CoroutineDispatcher
@@ -68,9 +69,24 @@ class PostFragment : Fragment(), KodeinAware {
                 findNavController().popBackStack()
             }
             binding.moreBtn.onClick {
-                findNavController().navigate(PostFragmentDirections.actionPostFragmentToEditPostModalBottomSheetFragment())
+                val post = viewModel.postData.value
+                if (post != null) {
+                    findNavController().navigate(
+                        PostFragmentDirections.actionPostFragmentToEditPostModalBottomSheetFragment(
+                            post
+                        )
+                    )
+                }
+            }
+            binding.swipeRefreshLayout.setOnRefreshListener {
+                refresh()
             }
         }
+    }
+
+    private fun refresh() {
+        viewModel.refresh()
+        binding.swipeRefreshLayout.isRefreshing = false
     }
 
 }

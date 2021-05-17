@@ -5,16 +5,56 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
 import com.example.abyss.R
+import com.example.abyss.databinding.FragmentModalBottomSheetForPostBinding
+import com.example.abyss.databinding.FragmentModalBottomSheetForProfileBinding
+import com.example.abyss.extensions.onClick
+import com.example.abyss.ui.profile.ModalBottomSheetForProfileFragmentDirections
+import com.example.abyss.ui.profile.ModalBottomSheetForProfileViewModel
+import com.google.android.material.bottomsheet.BottomSheetDialogFragment
+import kodeinViewModel
+import org.kodein.di.KodeinAware
+import org.kodein.di.android.x.kodein
 
-class ModalBottomSheetForPostFragment : Fragment() {
+class ModalBottomSheetForPostFragment : BottomSheetDialogFragment(), KodeinAware {
+
+    override val kodein by kodein()
+    private lateinit var binding: FragmentModalBottomSheetForPostBinding
+    private val viewModel: ModalBottomSheetForPostViewModel by kodeinViewModel()
+    private val args: ModalBottomSheetForPostFragmentArgs by navArgs()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_modal_bottom_sheet_for_post, container, false)
+
+        binding = FragmentModalBottomSheetForPostBinding.inflate(inflater, container, false)
+        binding.modalBottomSheetForPostViewModel = viewModel
+        binding.lifecycleOwner = viewLifecycleOwner
+
+        subscription()
+
+        return binding.root
+    }
+
+    private fun subscription() {
+        binding.editBtn.onClick {
+            findNavController().navigate(
+                ModalBottomSheetForPostFragmentDirections.actionEditPostModalBottomSheetFragmentToEditPostFragment(
+                    args.post
+                )
+            )
+        }
+        binding.deleteBtn.onClick {
+            viewModel.deletePost(args.post)
+            findNavController().navigate(ModalBottomSheetForPostFragmentDirections.actionEditPostModalBottomSheetFragmentToProfileFragment())
+        }
+//        viewModel.eventDeletePost.observe(viewLifecycleOwner, { event ->
+//            if (event) {
+//            }
+//        })
     }
 
 }

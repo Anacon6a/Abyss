@@ -6,11 +6,9 @@ import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
 import com.example.abyss.model.data.PostData
-import com.example.abyss.model.data.UserData
 import com.example.abyss.model.pagingsource.PostForNewsFeedPagingSource
 import com.example.abyss.model.pagingsource.PostForProfileFirestorePagingSource
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.firestore.DocumentChange
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.ktx.toObject
@@ -20,6 +18,7 @@ import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.tasks.await
 import timber.log.Timber
+import java.lang.Exception
 import java.util.*
 
 class PostRepositoryFirestore(
@@ -30,38 +29,60 @@ class PostRepositoryFirestore(
     private val externalScope: CoroutineScope,
 ) : PostRepository {
 
-    override suspend fun createPost(post: PostData) {
+    override suspend fun createPost(post: PostData, imageUri: Uri) {
         externalScope.launch(ioDispatcher) {
 
-            val uid = firebaseAuth.uid!!
+            try {
+                val uid = firebaseAuth.uid!!
+                val fileName = UUID.randomUUID().toString()
+                val imageRef = firebaseStorage.getReference("postImages").child(uid).child(fileName)
+                imageRef.putFile(imageUri).await()
+                val url = imageRef.downloadUrl.await()
+                Timber.i("картинка добавлена")
 
-            val doc = firestore.collection("users").document(uid).collection("posts").document()
+                val doc = firestore.collection("users").document(uid).collection("posts").document()
+                post.id = doc.id
+                post.uid = uid
+                post.imageUrl = url.toString()
+                post.imageFileName = fileName
 
-            post.id = doc.id
-            post.uid = uid
-
-            doc.set(post)
+                doc.set(post)
+                Timber.i("пост добавлен")
+            } catch (e: Exception) {
+                Timber.e("Ошибка: ${e.message}")
+            }
 
         }
-            .join()
     }
 
-    override suspend fun addPostImageInStorage(imageUri: Uri): Flow<String> = flow {
-
-        val uid = firebaseAuth.uid!!
-
-        val fileName = UUID.randomUUID().toString()
-
-        val imageRef = firebaseStorage.getReference("postImages").child(uid).child(fileName)
-        imageRef.putFile(imageUri).await()
-        val url = imageRef.downloadUrl.await()
-        emit(url.toString())
-    }
+//    override suspend fun addPostImageInStorage(imageUri: Uri): Flow<String> = flow {
+//
+//        val uid = firebaseAuth.uid!!
+//
+//        val fileName = UUID.randomUUID().toString()
+//
+//        val imageRef = firebaseStorage.getReference("postImages").child(uid).child(fileName)
+//        imageRef.putFile(imageUri).await()
+//        val url = imageRef.downloadUrl.await()
+//        emit(url.toString())
+//    }
 //        .shareIn(
 //        externalScope,
 //        SharingStarted.WhileSubscribed(),
 //    )
 
+    override suspend fun getPostById(postId: String, uidProvider: String): Flow<PostData?> = flow {
+        var post: PostData? = null
+        externalScope.launch(ioDispatcher) {
+            post =
+                firestore.collection("users").document(uidProvider).collection("posts")
+                    .document(postId)
+                    .get().await().toObject<PostData>()
+        }.join()
+        emit(post)
+    }.catch {
+        Timber.e(it)
+    }
 
     override fun getPostsForProfile() =
         Pager(
@@ -76,19 +97,6 @@ class PostRepositoryFirestore(
                 .orderBy("date", Query.Direction.DESCENDING)
             PostForProfileFirestorePagingSource(query)
         }.flow.cachedIn(externalScope)
-
-    override suspend fun getPostById(postId: String, uidProvider: String): Flow<PostData?> = flow {
-        var post: PostData? = null
-        externalScope.launch(ioDispatcher) {
-             post =
-                firestore.collection("users").document(uidProvider).collection("posts").document(postId)
-                    .get().await().toObject<PostData>()
-        }.join()
-        emit(post)
-    } .catch {
-        Timber.e(it)
-    }
-
 
     override suspend fun getPostsSubscriptionForNewsFeed(): Flow<PagingData<PostData>>? =
         Pager(
@@ -182,4 +190,87 @@ class PostRepositoryFirestore(
         externalScope,
         SharingStarted.WhileSubscribed(),
     )
+
+    override suspend fun editPost(
+        post: PostData,
+        imageUri: Uri?,
+        width: Int?,
+        height: Int?,
+        text: String?
+    ): String? {
+        var urlPostImage = ""
+        externalScope.launch(ioDispatcher) {
+            try {
+                val uid = post.uid!!
+                val snapPost = firestore.collection("users").document(uid).collection("posts")
+                    .document(post.id!!).get().await().toObject<PostData>()
+
+                val postRef = firestore.collection("users").document(uid).collection("posts")
+                    .document(snapPost!!.id!!)
+
+                val d = ArrayList<Deferred<Unit?>>()
+
+                if (imageUri != null) {
+                    val newFileName = UUID.randomUUID().toString()
+                    d.add(async {
+                        val imageRef =
+                            firebaseStorage.getReference("postImages").child(uid)
+                                .child(newFileName)
+                        imageRef.putFile(imageUri).await()
+                        urlPostImage = imageRef.downloadUrl.await().toString()
+                        val u = postRef.update("imageUrl", urlPostImage).await()
+                    })
+                    d.add(async {
+                        val f = postRef.update("imageFileName", snapPost!!.imageFileName!!).await()
+                    })
+                    try {
+                    d.add(async {
+                        val imageRef =
+                            firebaseStorage.getReference("postImages").child(uid)
+                                .child(snapPost!!.imageFileName!!).delete().await()
+                    })
+                    } catch (e: Exception){
+                        Timber.e("Ошибка удаления из FirebaseStorage: ${e.message}")
+                    }
+                    d.add(async {
+                        if (width != snapPost!!.widthImage) {
+                            postRef.update("widthImage", width).await()
+                        }
+                    })
+                    d.add(async {
+                        if (height != snapPost!!.heightImage) {
+                            postRef.update("heightImage", height).await()
+                        }
+                    })
+                }
+                d.add(async {
+                    if (text != snapPost!!.text) {
+                        postRef.update("text", text).await()
+                    }
+                })
+            } catch (e: Exception) {
+                Timber.e("Ошибка: ${e.message}")
+            }
+        }.join()
+        return urlPostImage
+    }
+
+    override suspend fun deletePost(post: PostData) {
+        externalScope.launch(ioDispatcher) {
+            try {
+                firestore.collection("users").document(post.uid!!).collection("posts")
+                    .document(post.id!!).delete().await()
+                try {
+
+                    firebaseStorage.getReference("postImages").child(post.uid!!).child(post.imageFileName!!)
+                        .delete().await()
+                } catch (e:Exception){
+                    Timber.e("Ошмбка удаления изображения поста из FirebaseStorage: ${e.message}")
+                }
+            } catch (e: Exception){
+                Timber.e("Ошибка удаления поста: ${e.message}")
+            }
+
+        }
+    }
 }

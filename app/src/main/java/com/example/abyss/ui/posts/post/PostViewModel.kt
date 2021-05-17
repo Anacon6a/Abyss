@@ -78,20 +78,24 @@ class PostViewModel(
 
     private var myUid: String? = null
 
-   suspend fun insertPost(post: PostData) {
+    suspend fun insertPost(post: PostData) {
         if (postData.value == null) {
             postData.value = post
             _postImage.value = post.imageUrl!!
-            postRepository.getPostById(post.id!!, post.uid!!).collect {
-                if (it != null) {
-                    if (postImage.value != it.imageUrl)
-                    {
-                        _postImage.postValue(it.imageUrl!!)
-                    }
-                    _postText.value = it.text
-                    _numberOfLikes.value = it.numberOfLikes!!
-                    _numberOfViews.value = it.numberOfViews!!
+            getPost()
+        }
+    }
+
+    private suspend fun getPost() {
+        postRepository.getPostById(postData.value!!.id!!, postData.value!!.uid!!).collect {
+            if (it != null) {
+                postData.postValue(it)
+                if (postImage.value != it.imageUrl) {
+                    _postImage.postValue(it.imageUrl!!)
                 }
+                _postText.value = it.text
+                _numberOfLikes.value = it.numberOfLikes!!
+                _numberOfViews.value = it.numberOfViews!!
             }
         }
     }
@@ -193,7 +197,24 @@ class PostViewModel(
         }
     }
 
+    fun refresh() {
+        viewModelScope.launch {
+            getPost()
+            getUserContentProvider()
+        }
+    }
+
     fun savePost() {
 
     }
+
+//    fun clear() {
+//        getActivity().getViewModelStore().clear();
+//        for (vm in mMap.values()) {
+//            vm.clear()
+//        }
+//
+//        viewmodelstoreowner.clear ()
+//        mMap.clear()
+//    }
 }

@@ -68,17 +68,17 @@ class AddPostViewModel(
     fun addPost() {
         externalScope.launch(ioDispatcher) {
             postImageUrl.value?.let {
-
-                val url = postRepository.addPostImageInStorage(it).collect { url ->
-
-                    val post =
-                        PostData(url, signature.value, widthImage.get(), heightImage.get())
-                    postRepository.createPost(post)
+//                val url = postRepository.addPostImageInStorage(it).collect { url ->
+//                    val post =
+//                        PostData(url, signature.value, widthImage.get(), heightImage.get())
+                val post = PostData(text = signature.value, widthImage =  widthImage.get(), heightImage =  heightImage.get())
+                    postRepository.createPost(post, it)
                     Timber.i("пост создан")
-                }
+                _eventPostAdded.postValue(true)
+//                }
             }
         }
-        _eventPostAdded.value = true
+//        _eventPostAdded.value = true
     }
 
 }

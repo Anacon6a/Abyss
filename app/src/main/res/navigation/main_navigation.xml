@@ -114,6 +114,32 @@
         android:id="@+id/editPostModalBottomSheetFragment"
         android:name="com.example.abyss.ui.posts.post.ModalBottomSheetForPostFragment"
         android:label="EditPostModalBottomSheetFragment"
-        tools:layout="@layout/fragment_modal_bottom_sheet_for_post" />
+        tools:layout="@layout/fragment_modal_bottom_sheet_for_post">
+        <argument
+            android:name="post"
+            app:argType="com.example.abyss.model.data.PostData" />
+        <action
+            android:id="@+id/action_editPostModalBottomSheetFragment_to_editPostFragment"
+            app:destination="@id/editPostFragment"
+            app:popUpTo="@id/editPostModalBottomSheetFragment"
+            app:popUpToInclusive="true" />
+        <action
+            android:id="@+id/action_editPostModalBottomSheetFragment_to_profileFragment"
+            app:destination="@id/profileFragment" />
+    </dialog>
+    <fragment
+        android:id="@+id/editPostFragment"
+        android:name="com.example.abyss.ui.posts.editpost.EditPostFragment"
+        android:label="fragment_edit_post"
+        tools:layout="@layout/fragment_edit_post" >
+        <argument
+            android:name="post"
+            app:argType="com.example.abyss.model.data.PostData" />
+        <action
+            android:id="@+id/action_editPostFragment_to_postFragment"
+            app:destination="@id/postFragment"
+            app:popUpTo="@id/postFragment"
+            app:popUpToInclusive="true" />
+    </fragment>
 
 </navigation>

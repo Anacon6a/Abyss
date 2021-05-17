@@ -13,6 +13,7 @@ import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.firestore.ktx.toObjects
 import kotlinx.coroutines.*
 import kotlinx.coroutines.tasks.await
+import timber.log.Timber
 
 class NotificationsPagingSource(
     private val query: Query,
@@ -60,38 +61,75 @@ class NotificationsPagingSource(
         var notificationData: ArrayList<NotificationData> = arrayListOf()
         externalScope.launch(ioDispatcher) {
                 for (s in statisticsData) {
-                    when (s.action) {
-                        "like" -> {
-                            var post: PostData? = null
-                            var user: UserData? = null
-                            val d = listOf(
-                                async {
-                                    post = firestore.collection("users").document(s.uid!!)
-                                        .collection("posts").document(s.postId!!).get().await()
-                                        .toObject<PostData>()!!
-                                },
-                                async {
-                                    user =
-                                        firestore.collection("users").document(s.uidWhoActed!!).get().await()
-                                            .toObject<UserData>()!!
-                                })
-                            d.awaitAll()
-                            val n = NotificationData(s.id!!, s.action ,s.date!!, s.uid!!, s.uidWhoActed!!, user!!.userName!!, user!!.profileImageUrl!!,
-                                s.viewed!!, post!!.id, post!!.imageUrl, post!!.text)
-                            notificationData.add(n)
-                        }
-                        "subscribe", "unsubscribe" -> {
-                            var user: UserData? = null
-                            user =
-                                firestore.collection("users").document(s.uidWhoActed!!).get().await()
-                                    .toObject<UserData>()!!
-                            val n = NotificationData(s.id!!, s.action ,s.date!!, s.uid!!, s.uidWhoActed!!, user!!.userName!!, user!!.profileImageUrl!!,
-                                s.viewed!!)
-                            notificationData.add(n)
-                        }
-                        "comment" -> {
+                    try {
+                        when (s.action) {
+                            "like" -> {
+                                var post: PostData? = null
+                                var user: UserData? = null
+                                val d = listOf(
+                                    async {
+                                        val postSnap =
+                                            firestore.collection("users").document(s.uid!!)
+                                                .collection("posts").document(s.postId!!).get()
+                                                .await()
+                                        post = if (postSnap == null) {
+                                            null
+                                        } else {
+                                            firestore.collection("users").document(s.uid!!)
+                                                .collection("posts").document(s.postId!!).get()
+                                                .await()
+                                                .toObject<PostData>()
+                                        }
 
+                                    },
+                                    async {
+                                        user =
+                                            firestore.collection("users").document(s.uidWhoActed!!)
+                                                .get().await()
+                                                .toObject<UserData>()!!
+                                    })
+                                d.awaitAll()
+                                if (post != null) {
+                                    val n = NotificationData(
+                                        s.id!!,
+                                        s.action,
+                                        s.date!!,
+                                        s.uid!!,
+                                        s.uidWhoActed!!,
+                                        user!!.userName!!,
+                                        user!!.profileImageUrl!!,
+                                        s.viewed!!,
+                                        post!!.id,
+                                        post!!.imageUrl,
+                                        post!!.text
+                                    )
+                                    notificationData.add(n)
+                                }
+                            }
+                            "subscribe", "unsubscribe" -> {
+                                var user: UserData? = null
+                                user =
+                                    firestore.collection("users").document(s.uidWhoActed!!).get()
+                                        .await()
+                                        .toObject<UserData>()!!
+                                val n = NotificationData(
+                                    s.id!!,
+                                    s.action,
+                                    s.date!!,
+                                    s.uid!!,
+                                    s.uidWhoActed!!,
+                                    user!!.userName!!,
+                                    user!!.profileImageUrl!!,
+                                    s.viewed!!
+                                )
+                                notificationData.add(n)
+                            }
+                            "comment" -> {
+
+                            }
                         }
+                    } catch (e: Exception){
+
                     }
                 }
         }.join()
@@ -101,8 +139,12 @@ class NotificationsPagingSource(
     private fun notificationsViewed(statisticsData: List<StatisticsData>){
         externalScope.launch(ioDispatcher){
             for (s in statisticsData) {
-             firestore.collection("users").document(s.uid!!).collection("statistics")
-                 .document(s.id!!).update("viewed", true)
+                try {
+                    firestore.collection("users").document(s.uid!!).collection("statistics")
+                        .document(s.id!!).update("viewed", true)
+                } catch (e: Exception){
+                   Timber.e("Ошибка добаления в статистику - просомтрено, ошибка: ${e.message}")
+                }
             }
         }
     }

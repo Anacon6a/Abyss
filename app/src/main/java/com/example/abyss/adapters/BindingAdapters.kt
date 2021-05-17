@@ -69,6 +69,8 @@ fun LikeIfTrue(imageView: ImageView, boolean: Boolean) {
 fun loadImage(imageView: ImageView, url: String?) {
     if (!url.isNullOrEmpty()) {
         Glide.with(imageView).load(url).into(imageView)
+    } else {
+        imageView.setImageResource(R.drawable.ic_user_image_profile)
     }
 }
 
@@ -82,6 +84,7 @@ fun ImageView.loadImageStatusTracking(url: String?, onLoadingFinished: () -> Uni
             target: Target<Drawable>?,
             isFirstResource: Boolean
         ): Boolean {
+            onLoadingFinished()
             return false
         }
 
@@ -99,8 +102,6 @@ fun ImageView.loadImageStatusTracking(url: String?, onLoadingFinished: () -> Uni
 
     Glide.with(this)
         .load(url)
-        .onlyRetrieveFromCache(true)
-//        .dontTransform()
         .listener(listener)
         .into(this)
 }

@@ -17,17 +17,26 @@ class PostForProfileFirestorePagingSource(
 
             //ссылка на первые 10 элементов
             val currentPage = params.key ?: query.limit(20).get().await()
-            //ссылка на последний элемент
-            val lastVisiblePost = currentPage.documents[currentPage.size() - 1]
-            //сылка на следующие 10
-            val nextPage = query.startAfter(lastVisiblePost).limit(20).get().await()
+            if (!currentPage.isEmpty) {
+                //ссылка на последний элемент
+                val lastVisiblePost = currentPage.documents[currentPage.size() - 1]
+                //сылка на следующие 10
+                val nextPage = query.startAfter(lastVisiblePost).limit(20).get().await()
 
-            //удачная загрузка
-            LoadResult.Page(
-                data = currentPage.toObjects(PostData::class.java),
-                prevKey = null,
-                nextKey = nextPage
-            )
+                LoadResult.Page(
+                    data = currentPage.toObjects(PostData::class.java),
+                    prevKey = null,
+                    nextKey = nextPage
+                )
+            } else {
+                LoadResult.Page(
+                    data = emptyList(),
+                    prevKey = null,
+                    nextKey = null
+                )
+            }
+
+
         } catch (e: Exception) {
             LoadResult.Error(e)
         }

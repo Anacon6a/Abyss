@@ -8,7 +8,7 @@ import java.util.*
 
 @Parcelize
 data class PostData(
-    val imageUrl: String? = null,
+    var imageUrl: String? = null,
     val text: String? = null,
     val widthImage: Int? = null,
     val heightImage: Int? = null,
@@ -17,5 +17,6 @@ data class PostData(
     var numberOfViews: Int? = 0,
     var id: String? = null,
     var uid: String? = null,
+    var imageFileName: String? = null
     ) : Parcelable
 

@@ -96,7 +96,7 @@ class ProfileFragment : Fragment(), KodeinAware {
 
     private fun refresh() {
         lifecycleScope.launch {
-            viewModel.Refresh()
+            viewModel.refresh()
             binding.swipeRefreshLayout.isRefreshing = false
         }
     }

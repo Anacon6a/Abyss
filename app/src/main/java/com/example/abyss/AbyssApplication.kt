@@ -28,6 +28,8 @@ import com.example.abyss.ui.auth.registration.RegistrationViewModelFactory
 import com.example.abyss.ui.home.NewsFeedViewModel
 import com.example.abyss.ui.notifications.NotificationsViewModel
 import com.example.abyss.ui.posts.addpost.AddPostViewModel
+import com.example.abyss.ui.posts.editpost.EditPostViewModel
+import com.example.abyss.ui.posts.post.ModalBottomSheetForPostViewModel
 import com.example.abyss.ui.posts.post.PostViewModel
 import com.example.abyss.ui.profile.ModalBottomSheetForProfileViewModel
 import com.example.abyss.ui.profile.ProfileViewModel
@@ -109,6 +111,12 @@ class AbyssApplication : Application(), KodeinAware {
         bindViewModel<ModalBottomSheetForProfileViewModel>() with provider {
             ModalBottomSheetForProfileViewModel(instance())
         }
+        bindViewModel<ModalBottomSheetForPostViewModel>() with provider {
+            ModalBottomSheetForPostViewModel(instance())
+        }
+        bindViewModel<EditPostViewModel>() with provider {
+            EditPostViewModel(instance(), instance(), instance())
+        }
 // Adapter
         bind<PostProfilePagingAdapter>() with provider { PostProfilePagingAdapter() }
         bind() from provider { PostNewsFeedViewPagerAdapter() }
@@ -118,7 +126,6 @@ class AbyssApplication : Application(), KodeinAware {
 
     override fun onCreate() {
         super.onCreate()
-
         Timber.plant(Timber.DebugTree())
     }
 }

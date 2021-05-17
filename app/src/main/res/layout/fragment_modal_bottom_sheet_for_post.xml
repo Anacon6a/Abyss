@@ -1,14 +1,67 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".ui.posts.EditPostModalBottomSheetFragment">
+    tools:context=".ui.posts.post.ModalBottomSheetForPostFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+
+    <data>
+        <variable
+            name="ModalBottomSheetForPostViewModel"
+            type="com.example.abyss.ui.posts.post.ModalBottomSheetForPostViewModel" />
+    </data>
+
+    <LinearLayout
+        android:background="@drawable/bg_profile_content"
+        android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
+        android:layout_height="wrap_content"
+        android:id="@+id/bottom_sheet">
 
-</FrameLayout>
+        <View
+            android:layout_width="50dp"
+            android:layout_height="3dp"
+            android:layout_marginTop="20dp"
+            android:layout_gravity="center_horizontal"
+            android:background="@drawable/bg_view_for_bottom_sheet"/>
+        <LinearLayout
+            android:id="@+id/edit_btn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_gravity="center_vertical"
+            android:paddingHorizontal="20dp"
+            android:paddingVertical="10dp"
+            android:layout_marginTop="20dp">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:textSize="16dp"
+                android:text="Изменить"/>
+        </LinearLayout>
+        <View
+            android:layout_width="match_parent"
+            android:background="@drawable/bg_view_for_bottom_sheet"
+            android:layout_height="1sp"
+            android:layout_marginHorizontal="20dp"/>
+        <LinearLayout
+            android:id="@+id/delete_btn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_gravity="center_vertical"
+            android:paddingHorizontal="20dp"
+            android:paddingVertical="10dp"
+            android:layout_marginBottom="10dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="16dp"
+                android:layout_marginLeft="20dp"
+                android:text="Удалить"/>
+        </LinearLayout>
+
+    </LinearLayout>
+
+</layout>

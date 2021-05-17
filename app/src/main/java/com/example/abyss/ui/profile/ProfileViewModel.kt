@@ -114,7 +114,7 @@ class ProfileViewModel(
         }
     }
 
-    fun Refresh() {
+    fun refresh() {
         GetPostsUser()
         GetUser()
     }

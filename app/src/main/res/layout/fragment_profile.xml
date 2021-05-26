@@ -5,6 +5,7 @@
     tools:context=".ui.profile.ProfileFragment">
 
     <data>
+
         <variable
             name="ProfileViewModel"
             type="com.example.abyss.ui.profile.ProfileViewModel" />
@@ -28,6 +29,20 @@
         <!--            app:layout_constraintStart_toStartOf="parent"-->
         <!--            app:layout_constraintTop_toTopOf="parent"-->
         <!--            app:layout_constraintVertical_bias="0.023" />-->
+<!--        <LinearLayout-->
+<!--            android:id="@+id/ggg"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="56dp"-->
+<!--            android:orientation="horizontal">-->
+
+<!--            <ImageView-->
+<!--                android:id="@+id/btn_more"-->
+<!--                android:layout_width="40dp"-->
+<!--                android:layout_height="40dp"-->
+<!--                android:layout_gravity="end"-->
+<!--                android:layout_marginEnd="40dp"-->
+<!--                android:src="@drawable/ic_more" />-->
+<!--        </LinearLayout>-->
 
         <com.google.android.material.appbar.AppBarLayout
             android:id="@+id/appbar"
@@ -44,7 +59,43 @@
                 android:background="?attr/colorPrimaryDark"
                 android:fitsSystemWindows="true"
                 app:contentScrim="?attr/colorPrimaryDark"
-                app:layout_scrollFlags="scroll|snap|enterAlwaysCollapsed">
+                app:layout_scrollFlags="scroll|exitUntilCollapsed">
+
+                <androidx.appcompat.widget.Toolbar
+                    android:id="@+id/toolbar"
+                    android:layout_width="match_parent"
+                    app:layout_collapseMode="pin"
+                    android:layout_height="?attr/actionBarSize">
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="?attr/actionBarSize">
+
+<!--                        <TextView-->
+<!--                            android:id="@+id/my_profile"-->
+<!--                            android:layout_width="wrap_content"-->
+<!--                            android:layout_height="wrap_content"-->
+<!--                            android:maxLength="16"-->
+<!--                            android:text="Мой профиль"-->
+<!--                            android:textColor="@color/white"-->
+<!--                            android:textSize="18dp"-->
+<!--                            app:layout_constraintBottom_toBottomOf="parent"-->
+<!--                            android:layout_marginStart="20dp"-->
+<!--                            app:layout_constraintStart_toStartOf="parent"-->
+<!--                            app:layout_constraintTop_toTopOf="parent" />-->
+                        <ImageView
+                            android:id="@+id/btn_more"
+                            android:layout_width="40dp"
+                            android:layout_height="40dp"
+                            android:src="@drawable/ic_more"
+                            android:layout_marginEnd="40dp"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+                </androidx.appcompat.widget.Toolbar>
+
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
@@ -57,8 +108,8 @@
                         loadImage="@{ProfileViewModel.profileImageUrl}"
                         android:layout_width="100dp"
                         android:layout_height="100dp"
-                        android:layout_marginStart="50dp"
-                        android:layout_marginTop="30dp"
+                        android:layout_marginStart="20dp"
+                        android:layout_marginTop="56dp"
                         android:layout_marginEnd="30dp"
                         android:scaleType="centerCrop"
                         app:layout_constraintEnd_toStartOf="@+id/user_name_text_view"
@@ -80,15 +131,16 @@
                         app:layout_constraintStart_toEndOf="@+id/shapeable_image_view"
                         app:layout_constraintTop_toTopOf="@id/shapeable_image_view"
                         tools:text="Anaconda" />
+
                     <LinearLayout
-                        android:layout_width="match_parent"
                         android:id="@+id/subscr_linear_layout"
-                        android:layout_height="wrap_content"
-                        app:layout_constraintStart_toStartOf="@+id/shapeable_image_view"
-                        app:layout_constraintTop_toBottomOf="@id/shapeable_image_view"
-                        android:orientation="horizontal"
+                        android:layout_width="match_parent"
+                        android:layout_height="80dp"
                         android:layout_marginTop="30dp"
-                        android:gravity="center_horizontal">
+                        android:gravity="center_horizontal"
+                        android:orientation="horizontal"
+                        app:layout_constraintStart_toStartOf="@+id/shapeable_image_view"
+                        app:layout_constraintTop_toBottomOf="@id/shapeable_image_view">
 
                         <com.google.android.material.textview.MaterialTextView
                             android:id="@+id/number_of_subscriptions"
@@ -111,60 +163,32 @@
                             android:textSize="18sp"
                             tools:text="15 Млн подписчиков" />
                     </LinearLayout>
-<!--                    <com.google.android.material.floatingactionbutton.FloatingActionButton-->
-<!--                        android:layout_width="wrap_content"-->
-<!--                        android:layout_height="wrap_content"-->
-<!--                        android:backgroundTint="@color/purple_500"-->
-<!--                        android:baselineAlignBottom="false"-->
-<!--                        android:clickable="true"-->
-<!--                        android:focusable="true"-->
-<!--                        android:src="@drawable/ic_more"-->
-<!--                        app:borderWidth="0dp"-->
-<!--                        app:fabSize="normal"-->
-<!--                        app:maxImageSize="30dp"-->
-<!--                        app:tint="@color/white"-->
-<!--                        android:id="@+id/btn_more2" />-->
+
                 </androidx.constraintlayout.widget.ConstraintLayout>
-<!--                <androidx.appcompat.widget.Toolbar-->
-<!--                    android:id="@+id/toolbar"-->
-<!--                    android:layout_width="match_parent"-->
-<!--                    android:layout_height="?attr/actionBarSize"-->
-<!--                    app:layout_collapseMode="pin">-->
+                <!--                <androidx.appcompat.widget.Toolbar-->
+                <!--                    android:id="@+id/toolbar"-->
+                <!--                    android:layout_width="match_parent"-->
+                <!--                    android:layout_height="?attr/actionBarSize"-->
+                <!--                    app:layout_collapseMode="pin">-->
 
-<!--                    <androidx.constraintlayout.widget.ConstraintLayout-->
-<!--                        android:layout_width="match_parent"-->
-<!--                        android:layout_height="match_parent">-->
+                <!--                    <androidx.constraintlayout.widget.ConstraintLayout-->
+                <!--                        android:layout_width="match_parent"-->
+                <!--                        android:layout_height="match_parent">-->
 
-<!--                        <TextView-->
-<!--                            android:layout_width="wrap_content"-->
-<!--                            android:layout_height="wrap_content"-->
-<!--                            android:maxLength="16"-->
-<!--                            android:text="Мой профиль"-->
-<!--                            android:textColor="@color/white"-->
-<!--                            android:textSize="18dp"-->
-<!--                            app:layout_constraintStart_toStartOf="parent"-->
-<!--                            app:layout_constraintTop_toTopOf="parent"-->
-<!--                            app:layout_constraintBottom_toBottomOf="parent"-->
-<!--                            app:layout_constraintEnd_toStartOf="@+id/btn_more" />-->
+                <!--                        <TextView-->
+                <!--                            android:layout_width="wrap_content"-->
+                <!--                            android:layout_height="wrap_content"-->
+                <!--                            android:maxLength="16"-->
+                <!--                            android:text="Мой профиль"-->
+                <!--                            android:textColor="@color/white"-->
+                <!--                            android:textSize="18dp"-->
+                <!--                            app:layout_constraintStart_toStartOf="parent"-->
+                <!--                            app:layout_constraintTop_toTopOf="parent"-->
+                <!--                            app:layout_constraintBottom_toBottomOf="parent"-->
+                <!--                            app:layout_constraintEnd_toStartOf="@+id/btn_more" />-->
 
-                        <com.google.android.material.floatingactionbutton.FloatingActionButton
-                            android:id="@+id/btn_more"
-                            android:layout_width="40dp"
-                            android:layout_height="40dp"
-                            android:backgroundTint="@color/black"
-                            android:baselineAlignBottom="false"
-                            android:clickable="true"
-                            android:focusable="true"
-                            android:src="@drawable/ic_more"
-                            app:borderWidth="0dp"
-                            app:fabSize="mini"
-                            app:tint="@color/white"
-                            android:layout_marginEnd="20dp"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintTop_toTopOf="parent"
-                            app:layout_constraintBottom_toBottomOf="parent"/>
-<!--                    </androidx.constraintlayout.widget.ConstraintLayout>-->
-<!--                </androidx.appcompat.widget.Toolbar>-->
+                <!--                    </androidx.constraintlayout.widget.ConstraintLayout>-->
+                <!--                </androidx.appcompat.widget.Toolbar>-->
             </com.google.android.material.appbar.CollapsingToolbarLayout>
         </com.google.android.material.appbar.AppBarLayout>
 
@@ -172,7 +196,6 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginTop="30dp"
             android:background="@drawable/bg_profile_content"
             app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior">
 
@@ -187,7 +210,9 @@
                     android:layout_height="0dp"
                     android:layout_marginTop="12dp"
                     android:clipToPadding="false"
-                    android:padding="12dp"
+                   android:paddingStart="12dp"
+                    android:paddingEnd="12dp"
+                    android:paddingTop="12dp"
                     android:paddingBottom="60dp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -211,7 +236,7 @@
                 app:layout_constraintVertical_bias="0.2" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
-        
+
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
 </layout>

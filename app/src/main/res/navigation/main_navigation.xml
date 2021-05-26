@@ -11,10 +11,12 @@
         tools:layout="@layout/fragment_first" >
         <action
             android:id="@+id/action_firstFragment_to_newsFeedFragment"
-            app:destination="@id/newsFeedFragment" />
+            app:destination="@id/newsFeedFragment"
+            app:popUpToInclusive="false" />
         <action
             android:id="@+id/action_firstFragment_to_loginFragment"
-            app:destination="@id/loginFragment" />
+            app:destination="@id/loginFragment"
+            app:popUpToInclusive="false" />
     </fragment>
     <fragment
         android:id="@+id/loginFragment"
@@ -28,7 +30,8 @@
             app:exitAnim="@anim/move_to_the_left" />
         <action
             android:id="@+id/action_loginFragment_to_newsFeedFragment"
-            app:destination="@id/newsFeedFragment" />
+            app:destination="@id/newsFeedFragment"
+            app:popUpToInclusive="false" />
     </fragment>
     <fragment
         android:id="@+id/registrationFragment"
@@ -42,7 +45,8 @@
             app:exitAnim="@anim/move_to_the_right" />
         <action
             android:id="@+id/action_registrationFragment_to_newsFeedFragment"
-            app:destination="@id/newsFeedFragment" />
+            app:destination="@id/newsFeedFragment"
+            app:popUpToInclusive="false" />
     </fragment>
     <fragment
         android:id="@+id/newsFeedFragment"
@@ -51,7 +55,8 @@
         tools:layout="@layout/fragment_news_feed" >
         <action
             android:id="@+id/action_newsFeedFragment_to_postFragment"
-            app:destination="@id/postFragment" />
+            app:destination="@id/postFragment"
+            app:popUpToInclusive="true" />
     </fragment>
     <fragment
         android:id="@+id/profileFragment"
@@ -73,7 +78,8 @@
         tools:layout="@layout/fragment_add_post" >
         <action
             android:id="@+id/action_addPostFragment_to_profileFragment"
-            app:destination="@id/profileFragment" />
+            app:destination="@id/profileFragment"
+            app:popUpToInclusive="false" />
     </fragment>
     <fragment
         android:id="@+id/postFragment"
@@ -108,7 +114,8 @@
         tools:layout="@layout/fragment_modal_bottom_sheet_for_profile" >
         <action
             android:id="@+id/action_modalBottomSheetFragment_to_loginFragment"
-            app:destination="@id/loginFragment" />
+            app:destination="@id/loginFragment"
+            app:popUpToInclusive="false" />
     </dialog>
     <dialog
         android:id="@+id/editPostModalBottomSheetFragment"

@@ -35,11 +35,12 @@ class LikeRepositoryFirestore(
             val uid = firebaseAuth.uid!!
 
             val likesSnap =
-                firestore.collection("users").document(uidProvider).collection("posts").document(postId)
+                firestore.collection("users").document(uidProvider).collection("posts")
+                    .document(postId)
                     .collection("likes").document(uid).get().await()
 
             !likesSnap.data.isNullOrEmpty()
-        } catch (e:Exception){
+        } catch (e: Exception) {
             Timber.e(e.message)
             null
         }
@@ -67,33 +68,36 @@ class LikeRepositoryFirestore(
 
                 firestore.runTransaction {
                     //получаем количетво лайков
-                    numberLikes = it.get(numberLikesRef).toObject<PostData>()?.numberOfLikes
-                    if (it.get(likeUserRef).data.isNullOrEmpty()) {
-                        val like = LikeData(uid)
-                        //добавляем лайк пользователю
-                        it.set(likeUserRef, like)
-                        // прибавляем к количеству лайков 1
-                        numberLikes = numberLikes?.plus(1)
-                        val viewed = if (uid != uidProvider) false else null
-                        val statistics = StatisticsData(
-                            statisticsId,
-                            "like",
-                            like.date,
-                            uid,
-                            uidProvider,
-                            viewed,
-                            postId
-                        )
-                        it.set(statisticsRef, statistics)
-                    } else {
-                        it.delete(likeUserRef)
-                        numberLikes = if (numberLikes == 0) 0 else numberLikes?.minus(1)
-                        it.delete(statisticsRef)
+                    val n = it.get(numberLikesRef)
+                    if (n != null) {
+                        numberLikes = n.toObject<PostData>()?.numberOfLikes
+                        if (it.get(likeUserRef).data.isNullOrEmpty()) {
+                            val like = LikeData(uid)
+                            //добавляем лайк пользователю
+                            it.set(likeUserRef, like)
+                            // прибавляем к количеству лайков 1
+                            numberLikes = numberLikes?.plus(1)
+                            val viewed = if (uid != uidProvider) false else null
+                            val statistics = StatisticsData(
+                                statisticsId,
+                                "like",
+                                like.date,
+                                uid,
+                                uidProvider,
+                                viewed,
+                                postId
+                            )
+                            it.set(statisticsRef, statistics)
+                        } else {
+                            it.delete(likeUserRef)
+                            numberLikes = if (numberLikes == 0) 0 else numberLikes?.minus(1)
+                            it.delete(statisticsRef)
+                        }
+                        //обновляем пост
+                        it.update(numberLikesRef, "numberOfLikes", numberLikes)
                     }
-                    //обновляем пост
-                    it.update(numberLikesRef, "numberOfLikes", numberLikes)
                 }.await()
-            }catch (e: Exception){
+            } catch (e: Exception) {
                 Timber.e(e.message)
             }
         }

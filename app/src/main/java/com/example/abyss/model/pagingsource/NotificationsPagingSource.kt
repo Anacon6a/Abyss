@@ -27,17 +27,17 @@ class NotificationsPagingSource(
         return try {
             val currentPageStatics =
                 params.key ?: query.limit(40).get().await()
+
             if (!currentPageStatics.isEmpty) {
                 val lastVisibleStatics = currentPageStatics.documents[currentPageStatics.size() - 1]
                 val nextPageStatics = query.startAfter(lastVisibleStatics).limit(40).get().await()
                 val statisticsData = currentPageStatics.toObjects(StatisticsData::class.java)
-
                 if (!viewed) {
                     notificationsViewed(statisticsData)
                 }
-
+                val d = getNotification(statisticsData)
                 LoadResult.Page(
-                    data = getNotification(statisticsData),
+                    data = d,
                     prevKey = null,
                     nextKey = nextPageStatics
                 )
@@ -60,58 +60,32 @@ class NotificationsPagingSource(
     private suspend fun getNotification(statisticsData: List<StatisticsData>): ArrayList<NotificationData> {
         var notificationData: ArrayList<NotificationData> = arrayListOf()
         externalScope.launch(ioDispatcher) {
-                for (s in statisticsData) {
-                    try {
-                        when (s.action) {
-                            "like" -> {
-                                var post: PostData? = null
-                                var user: UserData? = null
-                                val d = listOf(
-                                    async {
-                                        val postSnap =
-                                            firestore.collection("users").document(s.uid!!)
-                                                .collection("posts").document(s.postId!!).get()
-                                                .await()
-                                        post = if (postSnap == null) {
-                                            null
-                                        } else {
-                                            firestore.collection("users").document(s.uid!!)
-                                                .collection("posts").document(s.postId!!).get()
-                                                .await()
-                                                .toObject<PostData>()
-                                        }
+            for (s in statisticsData) {
+                try {
+                    when (s.action) {
+                        "like" -> {
+                            var post: PostData? = null
+                            var user: UserData? = null
 
-                                    },
-                                    async {
-                                        user =
-                                            firestore.collection("users").document(s.uidWhoActed!!)
-                                                .get().await()
-                                                .toObject<UserData>()!!
-                                    })
-                                d.awaitAll()
-                                if (post != null) {
-                                    val n = NotificationData(
-                                        s.id!!,
-                                        s.action,
-                                        s.date!!,
-                                        s.uid!!,
-                                        s.uidWhoActed!!,
-                                        user!!.userName!!,
-                                        user!!.profileImageUrl!!,
-                                        s.viewed!!,
-                                        post!!.id,
-                                        post!!.imageUrl,
-                                        post!!.text
-                                    )
-                                    notificationData.add(n)
-                                }
+                            val postSnap =
+                                firestore.collection("users").document(s.uid!!)
+                                    .collection("posts").document(s.postId!!).get()
+                                    .await()
+                            post = if (postSnap == null) {
+                                null
+                            } else {
+                                firestore.collection("users").document(s.uid!!)
+                                    .collection("posts").document(s.postId!!).get()
+                                    .await()
+                                    .toObject<PostData>()
                             }
-                            "subscribe", "unsubscribe" -> {
-                                var user: UserData? = null
-                                user =
-                                    firestore.collection("users").document(s.uidWhoActed!!).get()
-                                        .await()
-                                        .toObject<UserData>()!!
+
+                            user =
+                                firestore.collection("users").document(s.uidWhoActed!!)
+                                    .get().await()
+                                    .toObject<UserData>()!!
+
+                            if (post != null) {
                                 val n = NotificationData(
                                     s.id!!,
                                     s.action,
@@ -120,30 +94,52 @@ class NotificationsPagingSource(
                                     s.uidWhoActed!!,
                                     user!!.userName!!,
                                     user!!.profileImageUrl!!,
-                                    s.viewed!!
+                                    s.viewed!!,
+                                    post!!.id,
+                                    post!!.imageUrl,
+                                    post!!.text
                                 )
                                 notificationData.add(n)
                             }
-                            "comment" -> {
-
-                            }
                         }
-                    } catch (e: Exception){
+                        "subscribe", "unsubscribe" -> {
+                            var user: UserData? = null
+                            user =
+                                firestore.collection("users").document(s.uidWhoActed!!).get()
+                                    .await()
+                                    .toObject<UserData>()!!
+                            val n = NotificationData(
+                                s.id!!,
+                                s.action,
+                                s.date!!,
+                                s.uid!!,
+                                s.uidWhoActed!!,
+                                user!!.userName!!,
+                                user!!.profileImageUrl!!,
+                                s.viewed!!
+                            )
+                            notificationData.add(n)
+                        }
+                        "comment" -> {
 
+                        }
                     }
+                } catch (e: Exception) {
+
                 }
+            }
         }.join()
         return notificationData
     }
 
-    private fun notificationsViewed(statisticsData: List<StatisticsData>){
-        externalScope.launch(ioDispatcher){
+    private fun notificationsViewed(statisticsData: List<StatisticsData>) {
+        externalScope.launch(ioDispatcher) {
             for (s in statisticsData) {
                 try {
                     firestore.collection("users").document(s.uid!!).collection("statistics")
                         .document(s.id!!).update("viewed", true)
-                } catch (e: Exception){
-                   Timber.e("Ошибка добаления в статистику - просомтрено, ошибка: ${e.message}")
+                } catch (e: Exception) {
+                    Timber.e("Ошибка добаления в статистику - просомтрено, ошибка: ${e.message}")
                 }
             }
         }

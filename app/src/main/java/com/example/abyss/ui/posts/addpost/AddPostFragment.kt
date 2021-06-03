@@ -1,6 +1,7 @@
 package com.example.abyss.ui.posts.addpost
 
 import android.app.Activity
+import android.app.AlertDialog
 import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -8,7 +9,9 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
+import com.example.abyss.databinding.DialogTagsSearchBinding
 import com.example.abyss.databinding.FragmentAddPostBinding
+import com.example.abyss.databinding.PostNewsFeedDataBinding
 import com.example.abyss.extensions.onClick
 import com.example.abyss.utils.HidingNavigationBar
 import com.github.dhaval2404.imagepicker.ImagePicker
@@ -26,6 +29,8 @@ class AddPostFragment : Fragment(), KodeinAware {
 
     private lateinit var binding: FragmentAddPostBinding
 
+    private lateinit var dialogTagsSearchBinding: DialogTagsSearchBinding
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?,
@@ -35,6 +40,8 @@ class AddPostFragment : Fragment(), KodeinAware {
         binding.addPostViewModel = viewModel
         binding.lifecycleOwner = viewLifecycleOwner
         (activity as HidingNavigationBar).hideNavigationBar(true)
+
+        dialogTagsSearchBinding = DialogTagsSearchBinding.inflate(layoutInflater, container,false)
 
         subscription()
 
@@ -64,12 +71,14 @@ class AddPostFragment : Fragment(), KodeinAware {
         binding.close.onClick {
             findNavController().popBackStack()
         }
+        binding.buttonSearchTags.onClick {
+            tagsSearchDialog()
+        }
     }
 
     private fun photoSelection() {
         ImagePicker.with(this)
             .crop().compress(1024)
-//            .saveDir(File(Environment.getExternalStorageDirectory(), "Abyss"))
             .start()
     }
 
@@ -85,5 +94,12 @@ class AddPostFragment : Fragment(), KodeinAware {
 
             viewModel.onActivityResult(requestCode, fileUri)
         }
+    }
+
+    private fun tagsSearchDialog(){
+       val builder: AlertDialog.Builder = AlertDialog.Builder(activity)
+        builder.setView(dialogTagsSearchBinding.root)
+        builder.create()
+        builder.show()
     }
 }

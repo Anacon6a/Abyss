@@ -7,7 +7,7 @@ buildscript {
         nav_version = "2.3.5"
         lifecycle_version = "2.3.1"
         kodein_version = "6.2.1"
-
+        ktor_version = "1.5.4"
     }
     repositories {
         google()
@@ -31,6 +31,7 @@ allprojects {
         google()
         jcenter()
         maven { url "https://jitpack.io" }
+        mavenCentral()
     }
 }
 

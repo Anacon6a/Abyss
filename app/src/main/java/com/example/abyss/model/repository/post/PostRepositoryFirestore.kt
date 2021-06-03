@@ -6,8 +6,8 @@ import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
 import com.example.abyss.model.data.PostData
-import com.example.abyss.model.pagingsource.PostForNewsFeedPagingSource
-import com.example.abyss.model.pagingsource.PostForProfileFirestorePagingSource
+import com.example.abyss.model.pagingsource.PostsForNewsFeedPagingSource
+import com.example.abyss.model.pagingsource.PostsForProfileFirestorePagingSource
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
@@ -95,7 +95,7 @@ class PostRepositoryFirestore(
             val uid = firebaseAuth.uid.toString()
             val query = firestore.collection("users").document(uid).collection("posts")
                 .orderBy("date", Query.Direction.DESCENDING)
-            PostForProfileFirestorePagingSource(query)
+            PostsForProfileFirestorePagingSource(query)
         }.flow.cachedIn(externalScope)
 
     override suspend fun getPostsSubscriptionForNewsFeed(): Flow<PagingData<PostData>>? =
@@ -111,7 +111,7 @@ class PostRepositoryFirestore(
             val querySubscription =
                 firestore.collection("users").document(uid).collection("subscriptions")
             val queryPosts = firestore
-            PostForNewsFeedPagingSource(querySubscription, queryPosts, ioDispatcher, externalScope)
+            PostsForNewsFeedPagingSource(querySubscription, queryPosts, ioDispatcher, externalScope)
         }.flow.cachedIn(externalScope)
 
 
@@ -126,7 +126,7 @@ class PostRepositoryFirestore(
         ) {
             val query = firestore.collectionGroup("posts")
 
-            PostForProfileFirestorePagingSource(query)
+            PostsForProfileFirestorePagingSource(query)
         }.flow.cachedIn(externalScope)
 
 

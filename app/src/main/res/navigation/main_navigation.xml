@@ -50,12 +50,16 @@
     </fragment>
     <fragment
         android:id="@+id/newsFeedFragment"
-        android:name="com.example.abyss.ui.home.NewsFeedFragment"
+        android:name="com.example.abyss.ui.home.newsfeed.NewsFeedFragment"
         android:label="fragment_news_feed"
         tools:layout="@layout/fragment_news_feed" >
         <action
             android:id="@+id/action_newsFeedFragment_to_postFragment"
             app:destination="@id/postFragment"
+            app:popUpToInclusive="true" />
+        <action
+            android:id="@+id/action_newsFeedFragment_to_searchFragment"
+            app:destination="@id/searchFragment"
             app:popUpToInclusive="true" />
     </fragment>
     <fragment
@@ -147,6 +151,15 @@
             app:destination="@id/postFragment"
             app:popUpTo="@id/postFragment"
             app:popUpToInclusive="true" />
+    </fragment>
+    <fragment
+        android:id="@+id/searchFragment"
+        android:name="com.example.abyss.ui.home.search.SearchFragment"
+        android:label="fragment_search"
+        tools:layout="@layout/fragment_search" >
+        <argument
+            android:name="searchQuery"
+            app:argType="string" />
     </fragment>
 
 </navigation>

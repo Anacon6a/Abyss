@@ -6,15 +6,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.lifecycleScope
-import androidx.navigation.fragment.FragmentNavigator
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
-import com.example.abyss.R
-import com.example.abyss.databinding.FragmentNewsFeedBinding
 import com.example.abyss.databinding.FragmentNotificationsBinding
-import com.example.abyss.ui.home.NewsFeedViewModel
-import com.example.abyss.ui.profile.ProfileFragmentDirections
 import com.example.abyss.utils.HidingNavigationBar
 import kodeinViewModel
 import kotlinx.coroutines.CoroutineDispatcher

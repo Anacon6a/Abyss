@@ -102,7 +102,10 @@ dependencies {
     implementation 'com.github.ybq:Android-SpinKit:1.4.0'
     //ExpandableTextView
     implementation 'com.github.josinSbazin:android_ExpandableLayout:0.8'
-    // ViewPager2
+    // Algolia
+    implementation 'com.algolia:algoliasearch-android:3.27.0'
+//    implementation "com.algolia:algoliasearch-client-kotlin:$kotlin_version"
+    implementation "io.ktor:ktor-client-android:$ktor_version"
 
     implementation 'com.squareup.picasso:picasso:2.71828'
 

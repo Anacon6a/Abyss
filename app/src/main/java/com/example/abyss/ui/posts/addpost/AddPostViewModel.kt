@@ -1,13 +1,14 @@
 package com.example.abyss.ui.posts.addpost
 
+import android.content.DialogInterface
 import android.net.Uri
 import androidx.databinding.ObservableField
 import androidx.lifecycle.*
 import com.example.abyss.model.data.PostData
 import com.example.abyss.model.repository.post.PostRepository
 import kotlinx.coroutines.*
-import kotlinx.coroutines.flow.collect
 import timber.log.Timber
+
 
 class AddPostViewModel(
     private val ioDispatcher: CoroutineDispatcher,
@@ -37,8 +38,18 @@ class AddPostViewModel(
     val eventImageSelection: LiveData<Boolean>
         get() = _eventImageSelection
 
+    private val _loadingAdd = MutableLiveData<Boolean>()
+    val loadingAdd: LiveData<Boolean>
+        get() = _loadingAdd
+
+    private val _viewEnabled = MutableLiveData<Boolean>()
+    val viewEnabled: LiveData<Boolean>
+        get() = _viewEnabled
+
+
     init {
         _buttonEnabled.value = false
+        _viewEnabled.value = true
     }
 
     fun imageSelection() {
@@ -62,23 +73,29 @@ class AddPostViewModel(
     val heightImage = ObservableField<Int>()
 
     fun onAddPost() {
+        loading(true)
         _eventOnAddPost.value = true
     }
 
     fun addPost() {
         externalScope.launch(ioDispatcher) {
             postImageUrl.value?.let {
-//                val url = postRepository.addPostImageInStorage(it).collect { url ->
-//                    val post =
-//                        PostData(url, signature.value, widthImage.get(), heightImage.get())
-                val post = PostData(text = signature.value, widthImage =  widthImage.get(), heightImage =  heightImage.get())
-                    postRepository.createPost(post, it)
-                    Timber.i("пост создан")
+                val post = PostData(
+                    text = signature.value,
+                    widthImage = widthImage.get(),
+                    heightImage = heightImage.get()
+                )
+                postRepository.createPost(post, it)
+                Timber.i("пост создан")
                 _eventPostAdded.postValue(true)
-//                }
             }
         }
-//        _eventPostAdded.value = true
+    }
+
+    private fun loading(b: Boolean) {
+        _viewEnabled.value = !b
+        _buttonEnabled.value = !b
+        _loadingAdd.value = b
     }
 
 }

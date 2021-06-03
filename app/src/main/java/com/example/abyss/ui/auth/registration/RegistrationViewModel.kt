@@ -5,13 +5,10 @@ import androidx.lifecycle.*
 import com.example.abyss.model.data.UserData
 import com.example.abyss.model.repository.auth.AuthRepository
 import com.example.abyss.model.repository.user.UserRepository
-import io.reactivex.rxjava3.disposables.CompositeDisposable
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.launch
 import timber.log.Timber
-import java.util.*
 
 class RegistrationViewModel(
     private val authRepository: AuthRepository,
@@ -104,7 +101,7 @@ class RegistrationViewModel(
             } else {
 
                 if (userImageUrl.value != null) {
-                   userRepository.AddProfileImageInStorage(userImageUrl.value!!).collect {
+                   userRepository.addProfileImageInStorage(userImageUrl.value!!).collect {
                       AddUser(it)
                   }
                 } else {
@@ -118,7 +115,7 @@ class RegistrationViewModel(
     private fun AddUser(url: String){
         viewModelScope.launch(ioDispatcher) {
             val user = UserData(username!!, email!!, url)
-            userRepository.CreateUser(user)
+            userRepository.createUser(user)
             onSuccessRegistration()
             loading(false)
         }

@@ -12,8 +12,6 @@ import androidx.recyclerview.widget.GridLayoutManager
 import com.example.abyss.databinding.FragmentProfileBinding
 import com.example.abyss.extensions.onClick
 import com.example.abyss.utils.HidingNavigationBar
-import com.google.android.material.bottomsheet.BottomSheetDialogFragment
-import com.google.firebase.auth.FirebaseAuth
 import kodeinViewModel
 import kotlinx.coroutines.launch
 import org.kodein.di.KodeinAware
@@ -45,7 +43,7 @@ class ProfileFragment : Fragment(), KodeinAware {
     }
 
     private fun Subscription() {
-        viewModel.postProfilePagingAdapter.setOnItemClickListener { postData, imageView, postContainer ->
+        viewModel.profileMyPostsPagingAdapter.setOnItemClickListener { postData, imageView, postContainer ->
 
             val action = ProfileFragmentDirections.actionProfileFragmentToPostFragment(postData)
 
@@ -69,7 +67,7 @@ class ProfileFragment : Fragment(), KodeinAware {
                 layoutManager = GridLayoutManager(context, 3)
                 setHasFixedSize(false)
                 itemAnimator = null
-                adapter = viewModel.postProfilePagingAdapter
+                adapter = viewModel.profileMyPostsPagingAdapter
 //                    .withLoadStateFooter(
 //                    footer = PostLoadStateAdapter { postAdapter.retry()}
 //                )

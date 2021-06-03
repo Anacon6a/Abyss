@@ -80,9 +80,8 @@ class EditPostViewModel(
     val heightImage = ObservableField<Int>()
 
     fun onEditPost() {
-        _viewEnabled.value = false
+        loading(true)
         _eventOnEditPost.value = true
-        _loadingEdit.value = true
     }
 
     fun editPost() {
@@ -100,6 +99,10 @@ class EditPostViewModel(
             Timber.i("пост отредактирован")
             _eventPostEdited.postValue(true)
         }
+    }
 
+   private fun loading(b: Boolean){
+       _viewEnabled.value = !b
+       _loadingEdit.value = b
     }
 }

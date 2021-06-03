@@ -1,8 +1,8 @@
-package com.example.abyss.ui.home
+package com.example.abyss.ui.home.newsfeed
 
 import androidx.lifecycle.*
 import androidx.paging.LoadState
-import com.example.abyss.adapters.PostNewsFeedPagingAdapter
+import com.example.abyss.adapters.home.NewsFeedPostsPagingAdapter
 import com.example.abyss.model.repository.post.PostRepository
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.collect
@@ -24,8 +24,8 @@ class NewsFeedViewModel(
     //    private val пользовательские категории
 
     private val _listPostPagingAdapters =
-        MutableLiveData<ArrayList<PostNewsFeedPagingAdapter>>().apply { value = arrayListOf() }
-    val listPostPagingAdapters: LiveData<ArrayList<PostNewsFeedPagingAdapter>>
+        MutableLiveData<ArrayList<NewsFeedPostsPagingAdapter>>().apply { value = arrayListOf() }
+    val listPostsPagingAdapters: LiveData<ArrayList<NewsFeedPostsPagingAdapter>>
     get() = _listPostPagingAdapters
 
     private val pagingDataNotNull =
@@ -51,8 +51,8 @@ class NewsFeedViewModel(
 //        _listTitles.add("Маникюр")
     }
 
-    private fun getAdapter(): PostNewsFeedPagingAdapter {
-        return kodein.instance() as PostNewsFeedPagingAdapter
+    private fun getAdapter(): NewsFeedPostsPagingAdapter {
+        return kodein.instance() as NewsFeedPostsPagingAdapter
     }
 
     private suspend fun addAdapters() {
@@ -69,9 +69,9 @@ class NewsFeedViewModel(
         }.join()
     }
 
-    private fun statusLoading(pagingAdapter: PostNewsFeedPagingAdapter) {
+    private fun statusLoading(postsPagingAdapter: NewsFeedPostsPagingAdapter) {
         externalScope.launch {
-            pagingAdapter.loadStateFlow.collectLatest { loadState ->
+            postsPagingAdapter.loadStateFlow.collectLatest { loadState ->
                 loadingPosts(loadState.source.refresh is LoadState.Loading)
             }
         }

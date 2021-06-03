@@ -5,13 +5,8 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.LoadState
-import androidx.paging.PagingData
 import com.example.abyss.adapters.NotificationsPagingAdapter
-import com.example.abyss.adapters.PostNewsFeedPagingAdapter
-import com.example.abyss.model.repository.post.PostRepository
 import com.example.abyss.model.repository.statistics.StatisticsRepository
-import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch

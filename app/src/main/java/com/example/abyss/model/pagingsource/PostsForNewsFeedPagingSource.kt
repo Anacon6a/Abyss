@@ -14,7 +14,7 @@ import kotlinx.coroutines.tasks.await
 import java.util.*
 import kotlin.collections.ArrayList
 
-class PostForNewsFeedPagingSource(
+class PostsForNewsFeedPagingSource(
     private val querySubscription: Query,
     private val queryPosts: FirebaseFirestore,
     private val ioDispatcher: CoroutineDispatcher,

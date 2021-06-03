@@ -22,16 +22,16 @@
             android:layout_height="wrap_content"
             app:layout_constraintTop_toTopOf="parent">
 
-           <ImageView
-               android:id="@+id/close"
-               android:layout_width="40dp"
-               android:layout_height="40dp"
-               android:layout_marginStart="5dp"
-               app:layout_constraintEnd_toStartOf="@id/add_text"
-               app:layout_constraintTop_toTopOf="parent"
-               app:layout_constraintStart_toStartOf="parent"
-               app:layout_constraintBottom_toBottomOf="parent"
-               android:src="@drawable/ic_close"/>
+            <ImageView
+                android:id="@+id/close"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_marginStart="5dp"
+                android:src="@drawable/ic_close"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@id/add_text"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
                 android:id="@+id/add_text"
@@ -45,25 +45,26 @@
                 app:layout_constraintEnd_toStartOf="@id/add_btn"
                 app:layout_constraintStart_toEndOf="@id/close"
                 app:layout_constraintTop_toTopOf="parent" />
+
             <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/add_btn"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                app:layout_constraintStart_toEndOf="@id/add_text"
-                android:background="@drawable/bg_com_btn_with_enabled"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                android:layout_marginEnd="5dp"
+                android:layout_marginVertical="5dp"
                 android:layout_marginStart="5dp"
+                android:layout_marginEnd="5dp"
+                android:background="@drawable/bg_com_btn_with_enabled"
+                android:enabled="@{AddPostViewModel.buttonEnabled}"
+                android:onClick="@{() -> AddPostViewModel.onAddPost()}"
                 android:paddingStart="20dp"
                 android:paddingEnd="20dp"
-                android:layout_marginVertical="5dp"
                 android:text="Далее"
                 android:textAllCaps="false"
                 android:textColor="@color/white"
-                android:enabled="@{AddPostViewModel.buttonEnabled}"
-                android:onClick="@{() -> AddPostViewModel.onAddPost()}"/>
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@id/add_text"
+                app:layout_constraintTop_toTopOf="parent" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <androidx.core.widget.NestedScrollView
@@ -92,27 +93,118 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
+                <TextView
+                    android:id="@+id/title_text_post"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintStart_toStartOf="@+id/text_input_edit_text"
+                    app:layout_constraintTop_toBottomOf="@+id/button_select_img"
+                    android:layout_marginTop="40dp"
+                    android:text="Подпись"
+                    android:textColor="@color/grey"
+                    android:textSize="18dp"/>
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/text_input_edit_text"
                     android:layout_width="279dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="67dp"
-                    android:layout_marginTop="40dp"
                     android:layout_marginEnd="67dp"
+                    android:enabled="@{AddPostViewModel.viewEnabled}"
                     android:hint="Добавьте подпись"
-                    android:layout_marginBottom="20dp"
                     android:maxHeight="150dp"
                     android:text="@={AddPostViewModel.signature}"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/button_select_img" />
+                    app:layout_constraintTop_toBottomOf="@+id/title_text_post" />
 
+<!--                <com.google.android.material.textfield.TextInputLayout-->
+<!--                    android:id="@+id/text_input_edit_text"-->
+<!--                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"-->
+<!--                    android:layout_width="279dp"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:layout_marginStart="67dp"-->
+<!--                    android:layout_marginTop="40dp"-->
+<!--                    android:layout_marginEnd="67dp"-->
+<!--                    android:layout_marginBottom="20dp"-->
+<!--                    android:hint="Добавьте подпись"-->
+<!--                    app:layout_constraintEnd_toEndOf="parent"-->
+<!--                    app:layout_constraintStart_toStartOf="parent"-->
+<!--                    app:layout_constraintTop_toBottomOf="@+id/button_select_img" >-->
+
+<!--                    <com.google.android.material.textfield.TextInputEditText-->
+<!--                        android:id="@+id/title"-->
+<!--                        android:layout_width="match_parent"-->
+<!--                        android:layout_height="50dp"-->
+<!--                        android:enabled="@{AddPostViewModel.viewEnabled}"-->
+<!--                        android:text="@={AddPostViewModel.signature}" />-->
+<!--                </com.google.android.material.textfield.TextInputLayout>-->
+                <TextView
+                    android:id="@+id/title_tags_post"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintStart_toStartOf="@+id/tags_text"
+                    app:layout_constraintTop_toBottomOf="@+id/text_input_edit_text"
+                    android:layout_marginTop="20dp"
+                    android:text="Теги"
+                    android:textColor="@color/grey"
+                    android:textSize="18dp"/>
+                <TextView
+                    android:id="@+id/button_search_tags"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintEnd_toEndOf="@+id/tags_text"
+                    app:layout_constraintTop_toBottomOf="@+id/text_input_edit_text"
+                    android:layout_marginTop="20dp"
+                    android:layout_marginStart="20dp"
+                    android:text="  Поиск тегов  "
+                    android:textColor="@color/white"
+                    android:background="@drawable/bg_com_btn"
+                    android:textSize="18dp"/>
+<!--                <androidx.appcompat.widget.AppCompatButton-->
+<!--                    android:id="@+id/button_search_tags"-->
+<!--                    android:layout_width="wrap_content"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:layout_marginBottom="35dp"-->
+<!--                    android:background="@drawable/bg_com_btn"-->
+<!--                    android:enabled="@{AddPostViewModel.viewEnabled}"-->
+<!--                    android:onClick="@{() -> AddPostViewModel.imageSelection()}"-->
+<!--                    android:paddingStart="20dp"-->
+<!--                    android:paddingEnd="20dp"-->
+<!--                    android:text="Выбрать изображение"-->
+<!--                    android:textAllCaps="false"-->
+<!--                    android:textColor="@color/white"-->
+<!--                    app:layout_constraintStart_toEndOf="@+id/title_tags_post"-->
+<!--                    app:layout_constraintTop_toBottomOf="@+id/title_tags_post"/>-->
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/tags_text"
+                    android:layout_width="279dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="67dp"
+                    android:layout_marginEnd="67dp"
+                    android:layout_marginBottom="20dp"
+                    android:enabled="@{AddPostViewModel.viewEnabled}"
+                    android:hint="Укажите теги через запятую"
+                    android:maxHeight="150dp"
+                    android:text="@={AddPostViewModel.signature}"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/title_tags_post" />
+                <TextView
+                    android:id="@+id/text_clarification"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintStart_toStartOf="@+id/tags_text"
+                    app:layout_constraintEnd_toEndOf="@+id/tags_text"
+                    app:layout_constraintTop_toBottomOf="@+id/tags_text"
+                    android:text="Теги помогают пользователям находить ваши публикации." />
                 <androidx.appcompat.widget.AppCompatButton
                     android:id="@+id/button_select_img"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="35dp"
                     android:background="@drawable/bg_com_btn"
+                    android:enabled="@{AddPostViewModel.viewEnabled}"
                     android:onClick="@{() -> AddPostViewModel.imageSelection()}"
                     android:paddingStart="20dp"
                     android:paddingEnd="20dp"
@@ -124,26 +216,40 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/image_view_new_post" />
 
-<!--                <androidx.appcompat.widget.AppCompatButton-->
-<!--                    android:id="@+id/button_download"-->
-<!--                    android:layout_width="wrap_content"-->
-<!--                    android:layout_height="wrap_content"-->
-<!--                    android:layout_marginTop="40dp"-->
-<!--                    android:layout_marginBottom="30dp"-->
-<!--                    android:background="@drawable/bg_com_btn_with_enabled"-->
-<!--                    android:enabled="@{AddPostViewModel.buttonEnabled}"-->
-<!--                    android:onClick="@{() -> AddPostViewModel.onAddPost()}"-->
-<!--                    android:paddingStart="20dp"-->
-<!--                    android:paddingEnd="20dp"-->
-<!--                    android:text="Опубликовать"-->
-<!--                    android:textAllCaps="false"-->
-<!--                    android:textColor="@color/white"-->
-<!--                    app:layout_constraintBottom_toBottomOf="parent"-->
-<!--                    app:layout_constraintEnd_toEndOf="parent"-->
-<!--                    app:layout_constraintStart_toStartOf="parent"-->
-<!--                    app:layout_constraintTop_toBottomOf="@+id/text_input_edit_text" />-->
+                <!--                <androidx.appcompat.widget.AppCompatButton-->
+                <!--                    android:id="@+id/button_download"-->
+                <!--                    android:layout_width="wrap_content"-->
+                <!--                    android:layout_height="wrap_content"-->
+                <!--                    android:layout_marginTop="40dp"-->
+                <!--                    android:layout_marginBottom="30dp"-->
+                <!--                    android:background="@drawable/bg_com_btn_with_enabled"-->
+                <!--                    android:enabled="@{AddPostViewModel.buttonEnabled}"-->
+                <!--                    android:onClick="@{() -> AddPostViewModel.onAddPost()}"-->
+                <!--                    android:paddingStart="20dp"-->
+                <!--                    android:paddingEnd="20dp"-->
+                <!--                    android:text="Опубликовать"-->
+                <!--                    android:textAllCaps="false"-->
+                <!--                    android:textColor="@color/white"-->
+                <!--                    app:layout_constraintBottom_toBottomOf="parent"-->
+                <!--                    app:layout_constraintEnd_toEndOf="parent"-->
+                <!--                    app:layout_constraintStart_toStartOf="parent"-->
+                <!--                    app:layout_constraintTop_toBottomOf="@+id/text_input_edit_text" />-->
 
             </androidx.constraintlayout.widget.ConstraintLayout>
         </androidx.core.widget.NestedScrollView>
+
+        <com.github.ybq.android.spinkit.SpinKitView
+            android:id="@+id/progress_bar_loading_all_posts"
+            style="@style/SpinKitView.MultiplePulse"
+            hideIfFalse="@{AddPostViewModel.loadingAdd}"
+            android:layout_width="31dp"
+            android:layout_height="32dp"
+            android:layout_gravity="center"
+            app:SpinKit_Color="@color/purple_700"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.5" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

@@ -1,6 +1,8 @@
 package com.example.abyss.adapters
 
 import android.annotation.SuppressLint
+import android.app.AlertDialog
+import android.content.DialogInterface
 import android.graphics.drawable.Drawable
 import android.view.View
 import android.widget.Button
@@ -8,6 +10,8 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.databinding.BindingAdapter
+import androidx.databinding.InverseBindingAdapter
+import androidx.databinding.InverseBindingListener
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.DataSource
 import com.bumptech.glide.load.engine.GlideException
@@ -17,6 +21,7 @@ import com.example.abyss.R
 import ru.rhanza.constraintexpandablelayout.ExpandableLayout
 import ru.rhanza.constraintexpandablelayout.State
 import java.text.SimpleDateFormat
+
 
 @BindingAdapter("hideIfEmpty")
 fun hideIfEmpty(textView: TextView, text: String?) {
@@ -248,11 +253,29 @@ fun displayTextForExpandable(exp: ExpandableLayout, text: String?) {
     if (!text.isNullOrEmpty()) {
         exp.invalidateState(State.Collapsed)
         exp.visibility = View.VISIBLE
-    }
-    else {
+    } else {
         exp.visibility = View.GONE
     }
 }
 
+@BindingAdapter("getSearchQuery")
+fun getSearchQuery(searchView: androidx.appcompat.widget.SearchView, text: String?) {
+    text?.let {
+        searchView.setQuery(text, true)
+    }
+}
+
+//@BindingAdapter("showAlertDialog")
+//fun showAlertDialog(view: View, b: Boolean?) {
+//    if (b == true){
+//    val alertDialog: AlertDialog = AlertDialog.Builder(view.context).create()
+//    alertDialog.show()
+//    }
+//}
+//
+//@InverseBindingAdapter(attribute = "alertMessage")
+//fun getAlertMessage(view: View?): String? {
+//    return null // clear message
+//}
 
 

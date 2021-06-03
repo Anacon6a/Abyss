@@ -112,7 +112,7 @@ class PostViewModel(
     //пользователь, выложивший пост
     private fun getUserContentProvider() {
         viewModelScope.launch(ioDispatcher) {
-            userRepository.GetUserContentProviderByUid(postData.value!!.uid!!).collect {
+            userRepository.getUserContentProviderByUid(postData.value!!.uid!!).collect {
                 _userData.postValue(it)
                 _userName.postValue(it!!.userName!!)
                 _profileImage.postValue(it.profileImageUrl!!)

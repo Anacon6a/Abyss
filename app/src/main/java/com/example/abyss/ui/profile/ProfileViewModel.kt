@@ -3,7 +3,7 @@ package com.example.abyss.ui.profile
 import androidx.lifecycle.*
 import androidx.paging.LoadState
 import androidx.paging.PagingData
-import com.example.abyss.adapters.PostProfilePagingAdapter
+import com.example.abyss.adapters.profile.ProfileMyPostsPagingAdapter
 import com.example.abyss.model.State
 import com.example.abyss.model.data.PostData
 import com.example.abyss.model.repository.post.PostRepository
@@ -17,7 +17,7 @@ class ProfileViewModel(
     private val postRepository: PostRepository,
     private val userRepository: UserRepository,
     private val externalScope: CoroutineScope,
-    val postProfilePagingAdapter: PostProfilePagingAdapter,
+    val profileMyPostsPagingAdapter: ProfileMyPostsPagingAdapter,
 ) : ViewModel() {
 
     private val _userName = MutableLiveData<String>()
@@ -52,7 +52,7 @@ class ProfileViewModel(
     fun StatusLoading() {
         externalScope.launch()
         {
-            postProfilePagingAdapter.loadStateFlow.collectLatest { loadState ->
+            profileMyPostsPagingAdapter.loadStateFlow.collectLatest { loadState ->
                 LoadingPosts(loadState.source.refresh is LoadState.Loading)
             }
         }
@@ -66,7 +66,7 @@ class ProfileViewModel(
         externalScope.launch(ioDispatcher) {
             postRepository.getPostsForProfile()?.collect {
                 postsUser.postValue(it)
-                postProfilePagingAdapter.submitData(it)
+                profileMyPostsPagingAdapter.submitData(it)
             }
         }
     }
@@ -75,7 +75,7 @@ class ProfileViewModel(
 
         externalScope.launch(ioDispatcher) {
 
-            userRepository.GetUserByUid().collect { state ->
+            userRepository.getUserByUid().collect { state ->
 
                 when (state) {
                     is State.Loading -> {

@@ -3,10 +3,10 @@ package com.example.abyss
 import android.app.Application
 import androidx.lifecycle.ViewModelProvider
 import bindViewModel
+import com.algolia.search.saas.Client
 import com.example.abyss.adapters.NotificationsPagingAdapter
-import com.example.abyss.adapters.PostNewsFeedPagingAdapter
-import com.example.abyss.adapters.PostNewsFeedViewPagerAdapter
-import com.example.abyss.adapters.PostProfilePagingAdapter
+import com.example.abyss.adapters.home.*
+import com.example.abyss.adapters.profile.ProfileMyPostsPagingAdapter
 import com.example.abyss.model.repository.auth.AuthRepositoryFirebase
 import com.example.abyss.model.repository.auth.AuthRepository
 import com.example.abyss.model.repository.like.LikeRepository
@@ -25,7 +25,8 @@ import com.example.abyss.ui.MainViewModelFactory
 import com.example.abyss.ui.first.FirstViewModelFactory
 import com.example.abyss.ui.auth.login.LoginViewModelFactory
 import com.example.abyss.ui.auth.registration.RegistrationViewModelFactory
-import com.example.abyss.ui.home.NewsFeedViewModel
+import com.example.abyss.ui.home.newsfeed.NewsFeedViewModel
+import com.example.abyss.ui.home.search.SearchViewModel
 import com.example.abyss.ui.notifications.NotificationsViewModel
 import com.example.abyss.ui.posts.addpost.AddPostViewModel
 import com.example.abyss.ui.posts.editpost.EditPostViewModel
@@ -65,7 +66,14 @@ class AbyssApplication : Application(), KodeinAware {
             PostRepositoryFirestore(instance(), instance(), instance(), instance(), instance())
         }
         bind<UserRepository>() with provider {
-            UserRepositoryFirestore(instance(), instance(), instance(), instance(), instance())
+            UserRepositoryFirestore(
+                instance(),
+                instance(),
+                instance(),
+                instance(),
+                instance(),
+                instance()
+            )
         }
         bind<LikeRepository>() with provider {
             LikeRepositoryFirestore(instance(), instance(), instance(), instance())
@@ -100,7 +108,15 @@ class AbyssApplication : Application(), KodeinAware {
         }
         bindViewModel<PostViewModel>() with provider {
             PostViewModel(
-                instance(), instance(), instance(), instance(), instance(), instance(), instance(), instance())
+                instance(),
+                instance(),
+                instance(),
+                instance(),
+                instance(),
+                instance(),
+                instance(),
+                instance()
+            )
         }
         bindViewModel<NewsFeedViewModel>() with singleton {
             NewsFeedViewModel(instance(), instance(), instance(), kodein.direct)
@@ -117,11 +133,19 @@ class AbyssApplication : Application(), KodeinAware {
         bindViewModel<EditPostViewModel>() with provider {
             EditPostViewModel(instance(), instance(), instance())
         }
+        bindViewModel<SearchViewModel>() with provider {
+            SearchViewModel(instance(), instance(), instance(), instance(), instance(), instance())
+        }
 // Adapter
-        bind<PostProfilePagingAdapter>() with provider { PostProfilePagingAdapter() }
-        bind() from provider { PostNewsFeedViewPagerAdapter() }
-        bind() from provider { PostNewsFeedPagingAdapter(instance(), instance("main") )}
+        bind<ProfileMyPostsPagingAdapter>() with provider { ProfileMyPostsPagingAdapter() }
+        bind() from provider { NewsFeedViewPagerAdapter() }
+        bind() from provider { NewsFeedPostsPagingAdapter() }
         bind() from provider { NotificationsPagingAdapter(instance(), instance()) }
+        bind() from provider { SearchViewPagerAdapter() }
+        bind() from provider { SearchPostsPagingAdapter() }
+        bind() from provider { SearchUsersPagingAdapter() }
+// Algolia
+        bind() from provider { Client("QVZCNZ6CIH", "3b063d54cb9acc0fdc3cb5399fdec257") }
     }
 
     override fun onCreate() {

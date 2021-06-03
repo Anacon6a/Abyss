@@ -2,16 +2,28 @@ package com.example.abyss.model.repository.user
 
 import android.net.Uri
 import androidx.core.net.toUri
+import androidx.paging.Pager
+import androidx.paging.PagingConfig
+import androidx.paging.PagingData
+import androidx.paging.cachedIn
+import com.algolia.search.saas.Client
+import com.algolia.search.saas.RequestOptions
 import com.example.abyss.model.State
 import com.example.abyss.model.data.UserData
+import com.example.abyss.model.pagingsource.PostsForProfileFirestorePagingSource
+import com.example.abyss.model.pagingsource.UsersForSearchPagingSource
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.storage.FirebaseStorage
+import io.ktor.client.request.*
 import kotlinx.coroutines.*
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.tasks.await
+import org.json.JSONArray
+import org.json.JSONObject
 import timber.log.Timber
 import java.lang.Exception
 import java.util.*
@@ -22,18 +34,20 @@ class UserRepositoryFirestore(
     private val firebaseStorage: FirebaseStorage,
     private val ioDispatcher: CoroutineDispatcher,
     private val externalScope: CoroutineScope,
+    private val client: Client
 ) : UserRepository {
 
-    override suspend fun CreateUser(user: UserData) {
+    override suspend fun createUser(user: UserData) {
 
         externalScope.launch(ioDispatcher) {
             try {
                 val uid = firebaseAuth.uid!!
 
+                user.uid = uid
                 firestore.collection("users")
                     .document(uid)
                     .set(user)
-            } catch (e: Exception){
+            } catch (e: Exception) {
                 Timber.e(e.message)
             }
         }
@@ -41,7 +55,7 @@ class UserRepositoryFirestore(
     }
 
 
-    override suspend fun AddProfileImageInStorage(imageUri: Uri): Flow<String> = flow {
+    override suspend fun addProfileImageInStorage(imageUri: Uri): Flow<String> = flow {
 
         val uid = firebaseAuth.uid!!
 
@@ -59,7 +73,7 @@ class UserRepositoryFirestore(
 
     //в режиме реального времени
     @ExperimentalCoroutinesApi
-    override suspend fun GetUserByUid(): Flow<State<UserData?>> = callbackFlow {
+    override suspend fun getUserByUid(): Flow<State<UserData?>> = callbackFlow {
 
         val uid = firebaseAuth.uid!!
 
@@ -89,7 +103,7 @@ class UserRepositoryFirestore(
     )
 
     @ExperimentalCoroutinesApi
-    override suspend fun GetUserContentProviderByUid(uid: String): Flow<UserData?> = flow{
+    override suspend fun getUserContentProviderByUid(uid: String): Flow<UserData?> = flow {
 
         val userRef = firestore.collection("users").document(uid).get().await()
         val user = userRef.toObject<UserData>()
@@ -101,19 +115,29 @@ class UserRepositoryFirestore(
         externalScope,
         SharingStarted.WhileSubscribed(),
     )
-//    override suspend fun GetUserById(): Flow<State<UserData?>> = flow {
+
+    override suspend fun getFoundUsers(text: String?): Flow<PagingData<UserData>> =
+        Pager(
+            PagingConfig(
+                initialLoadSize = 30,
+                pageSize = 30,
+                prefetchDistance = 10
+            )
+        ) {
+//            if (!text.isNullOrEmpty()) {
+                val index = client.getIndex("users")
+                index.setSettings(
+                    JSONObject()
+                        .put("searchableAttributes", JSONArray().put("userName"))
+                        .put("hitsPerPage", 30)
+                )
+                val query = com.algolia.search.saas.Query(text)
+                val requestOptions = RequestOptions()
+                UsersForSearchPagingSource(query, requestOptions, index)
+//            } else {
 //
-//        emit(State.loading())
-//
-//        val uid = firebaseAuth.uid!!
-//        val snapshot = firestore.collection("users").document(uid).get().await()
-//        val user = snapshot.toObject<UserData>()
-//
-//        emit(State.success(user))
-//
-//    }.catch {
-//        emit(State.failed(it.message.toString()))
-//    }
+//            }
+        }.flow.cachedIn(externalScope)
 
 
 }

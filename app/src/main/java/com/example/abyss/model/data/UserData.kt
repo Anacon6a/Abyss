@@ -9,4 +9,5 @@ data class UserData(
     val registrationDate: Date? = Date(System.currentTimeMillis()),
     var numberOfSubscribers: Int? = 0,
     val numberOfSubscriptions: Int? = 0,
+    var uid:String? = null
 )

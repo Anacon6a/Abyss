@@ -14,4 +14,5 @@
     <color name="ucrop_color_toolbar">@color/purple_500</color>
     <color name="ucrop_color_statusbar">@color/white</color>
     <color name="ucrop_color_widget_active">@color/white</color>
+    <color name="colorTextPrimary">#333333</color>
 </resources>

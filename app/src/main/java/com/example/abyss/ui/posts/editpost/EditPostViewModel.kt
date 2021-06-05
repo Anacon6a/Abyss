@@ -6,17 +6,26 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.paging.LoadState
+import com.example.abyss.adapters.TagsPagingAdapter
 import com.example.abyss.model.data.PostData
 import com.example.abyss.model.repository.post.PostRepository
+import com.example.abyss.model.repository.tag.TagRepository
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import timber.log.Timber
+import java.util.*
+import kotlin.collections.ArrayList
 
 class EditPostViewModel(
     private val ioDispatcher: CoroutineDispatcher,
     private val postRepository: PostRepository,
+    private val tagRepository: TagRepository,
     private val externalScope: CoroutineScope,
+    val tagsPagingAdapter: TagsPagingAdapter
 ) : ViewModel() {
 
     private val _postImageUrl = MutableLiveData<Uri>()
@@ -24,6 +33,8 @@ class EditPostViewModel(
         get() = _postImageUrl
 
     val textPost = MutableLiveData<String>()
+
+    val tagsText = MutableLiveData<String>()
 
     private val _eventOnEditPost = MutableLiveData<Boolean>()
     val eventOnEditPost: LiveData<Boolean>
@@ -45,6 +56,10 @@ class EditPostViewModel(
     val viewEnabled: LiveData<Boolean>
         get() = _viewEnabled
 
+    private val _progressBarTags = MutableLiveData<Boolean>()
+    val progressBarTags: LiveData<Boolean>
+        get() = _progressBarTags
+
     val postData = MutableLiveData<PostData>()
 
     init {
@@ -52,10 +67,15 @@ class EditPostViewModel(
     }
 
     fun insertPost(post: PostData) {
-        if (postData.value == null) {
-            postData.value = post
-            post.text?.let {
-                textPost.postValue(it)
+        viewModelScope.launch {
+            if (postData.value == null) {
+                postData.value = post
+                post.text?.let {
+                    textPost.postValue(it)
+                }
+                if (!post.tags.isNullOrEmpty()) {
+                    tagsText.postValue(post.tags!!.joinToString(separator = ", "))
+                }
             }
         }
     }
@@ -91,7 +111,8 @@ class EditPostViewModel(
                 postImageUrl.value,
                 widthImage.get(),
                 heightImage.get(),
-                textPost.value
+                textPost.value,
+                tagTextToString()
             )
             if (!url.isNullOrEmpty()) {
                 postData.value!!.imageUrl = url
@@ -101,8 +122,52 @@ class EditPostViewModel(
         }
     }
 
+    private suspend fun tagTextToString(): ArrayList<String>{
+        return if (!tagsText.value.isNullOrEmpty()) {
+            val tL = tagsText.value!!.toLowerCase(Locale.ROOT).split(",")
+            val tagsList: ArrayList<String> = arrayListOf()
+            tL.forEach { tagsList.add(it.trim().capitalize(Locale.ROOT)) }
+            tagsList
+        } else {
+            arrayListOf()
+        }
+    }
+
    private fun loading(b: Boolean){
        _viewEnabled.value = !b
        _loadingEdit.value = b
+    }
+
+    fun getAllTags() {
+        statusLoading()
+        viewModelScope.launch {
+            tagRepository.getAllTags().collect {
+                tagsPagingAdapter.submitData(it)
+            }
+        }
+    }
+
+    private fun statusLoading() {
+        externalScope.launch {
+            tagsPagingAdapter.loadStateFlow.collectLatest { loadState ->
+                loadingTags(loadState.source.refresh is LoadState.Loading)
+            }
+        }
+    }
+
+    private fun loadingTags(boolean: Boolean) {
+        _progressBarTags.postValue(boolean)
+    }
+
+    fun getSearchResults(text: String?) {
+        viewModelScope.launch {
+            if (!text.isNullOrEmpty()) {
+                tagRepository.getFoundTags(text).collect {
+                    tagsPagingAdapter.submitData(it)
+                }
+            } else {
+                getAllTags()
+            }
+        }
     }
 }

@@ -2,24 +2,20 @@ package com.example.abyss.model.pagingsource
 
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
-import com.algolia.search.saas.Index
-import com.algolia.search.saas.Query
-import com.algolia.search.saas.RequestOptions
-import com.example.abyss.model.data.PostData
+import com.example.abyss.model.data.TagData
 import com.example.abyss.model.data.UserData
 import com.google.firebase.firestore.QuerySnapshot
-import com.google.gson.Gson
 import kotlinx.coroutines.tasks.await
 
-class UsersForSearchPagingSource(
+class TagsPagingSource(
     private val query: com.google.firebase.firestore.Query,
-) : PagingSource<QuerySnapshot, UserData>() {
+) : PagingSource<QuerySnapshot, TagData>() {
 
-    override fun getRefreshKey(state: PagingState<QuerySnapshot, UserData>): QuerySnapshot? {
+    override fun getRefreshKey(state: PagingState<QuerySnapshot, TagData>): QuerySnapshot? {
         return null
     }
 
-    override suspend fun load(params: LoadParams<QuerySnapshot>): LoadResult<QuerySnapshot, UserData> {
+    override suspend fun load(params: LoadParams<QuerySnapshot>): LoadResult<QuerySnapshot, TagData> {
         return try {
 
             //ссылка на первые 10 элементов
@@ -31,7 +27,7 @@ class UsersForSearchPagingSource(
                 val nextPage = query.startAfter(lastVisiblePost).limit(30).get().await()
 
                 LoadResult.Page(
-                    data = currentPage.toObjects(UserData::class.java),
+                    data = currentPage.toObjects(TagData::class.java),
                     prevKey = null,
                     nextKey = nextPage
                 )
@@ -48,5 +44,4 @@ class UsersForSearchPagingSource(
             LoadResult.Error(e)
         }
     }
-
 }

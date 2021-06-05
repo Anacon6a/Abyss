@@ -12,6 +12,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.ktx.toObject
+import com.google.firebase.functions.FirebaseFunctions
 import com.google.firebase.storage.FirebaseStorage
 import kotlinx.coroutines.*
 import kotlinx.coroutines.channels.awaitClose
@@ -25,6 +26,7 @@ class PostRepositoryFirestore(
     private val firebaseAuth: FirebaseAuth,
     private val firestore: FirebaseFirestore,
     private val firebaseStorage: FirebaseStorage,
+    private val firebaseFunctions: FirebaseFunctions,
     private val ioDispatcher: CoroutineDispatcher,
     private val externalScope: CoroutineScope,
 ) : PostRepository {
@@ -196,7 +198,8 @@ class PostRepositoryFirestore(
         imageUri: Uri?,
         width: Int?,
         height: Int?,
-        text: String?
+        text: String?,
+        tags: ArrayList<String>
     ): String? {
         var urlPostImage = ""
         externalScope.launch(ioDispatcher) {
@@ -221,33 +224,48 @@ class PostRepositoryFirestore(
                         val u = postRef.update("imageUrl", urlPostImage).await()
                     })
                     d.add(async {
-                        val f = postRef.update("imageFileName", snapPost!!.imageFileName!!).await()
+                        val f = postRef.update("imageFileName", snapPost.imageFileName!!).await()
                     })
                     try {
-                    d.add(async {
-                        val imageRef =
-                            firebaseStorage.getReference("postImages").child(uid)
-                                .child(snapPost!!.imageFileName!!).delete().await()
-                    })
-                    } catch (e: Exception){
+                        d.add(async {
+                            val imageRef =
+                                firebaseStorage.getReference("postImages").child(uid)
+                                    .child(snapPost.imageFileName!!).delete().await()
+                        })
+                    } catch (e: Exception) {
                         Timber.e("Ошибка удаления из FirebaseStorage: ${e.message}")
                     }
                     d.add(async {
-                        if (width != snapPost!!.widthImage) {
+                        if (width != snapPost.widthImage) {
                             postRef.update("widthImage", width).await()
                         }
                     })
                     d.add(async {
-                        if (height != snapPost!!.heightImage) {
+                        if (height != snapPost.heightImage) {
                             postRef.update("heightImage", height).await()
                         }
                     })
                 }
-                d.add(async {
-                    if (text != snapPost!!.text) {
+                async {
+                    if (text != snapPost.text) {
                         postRef.update("text", text).await()
                     }
-                })
+                }
+                async {
+                    if (tags.isNotEmpty() && tags != snapPost.tags) {
+                        postRef.update("tags", tags)
+                        try {
+                            val data = hashMapOf("tagsList" to tags)
+                            firebaseFunctions
+                                .getHttpsCallable("createTags")
+                                .call(data)
+                        } catch (e: Exception) {
+                            Timber.e("Ошибка создания тегов: ${e.message}")
+                        }
+                    }
+                }
+
+                d.awaitAll()
             } catch (e: Exception) {
                 Timber.e("Ошибка: ${e.message}")
             }
@@ -262,12 +280,13 @@ class PostRepositoryFirestore(
                     .document(post.id!!).delete().await()
                 try {
 
-                    firebaseStorage.getReference("postImages").child(post.uid!!).child(post.imageFileName!!)
+                    firebaseStorage.getReference("postImages").child(post.uid!!)
+                        .child(post.imageFileName!!)
                         .delete().await()
-                } catch (e:Exception){
+                } catch (e: Exception) {
                     Timber.e("Ошмбка удаления изображения поста из FirebaseStorage: ${e.message}")
                 }
-            } catch (e: Exception){
+            } catch (e: Exception) {
                 Timber.e("Ошибка удаления поста: ${e.message}")
             }
 

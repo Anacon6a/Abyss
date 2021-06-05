@@ -8,7 +8,8 @@ import com.google.firebase.firestore.QuerySnapshot
 import kotlinx.coroutines.tasks.await
 
 
-class PostsForProfileFirestorePagingSource(
+class
+PostsForProfileFirestorePagingSource(
     private val query: Query,
 ) : PagingSource<QuerySnapshot, PostData>() {
 

@@ -17,6 +17,7 @@ data class PostData(
     var numberOfViews: Int? = 0,
     var id: String? = null,
     var uid: String? = null,
-    var imageFileName: String? = null
-    ) : Parcelable
+    var imageFileName: String? = null,
+    var tags: List<String>? = emptyList()
+) : Parcelable
 

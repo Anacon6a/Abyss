@@ -15,6 +15,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
+import java.util.*
 
 class SearchViewModel(
     private val postRepository: PostRepository,
@@ -29,9 +30,7 @@ class SearchViewModel(
     val progressBarLoading: LiveData<Boolean>
         get() = _progressBarLoading
 
-    private val _searchText = MutableLiveData<String>()
-    val searchText: LiveData<String>
-    get() = _searchText
+    private val searchText = MutableLiveData<String>()
 
     private val _firstSearch = MutableLiveData<String>()
     val firstSearch: LiveData<String>
@@ -42,7 +41,7 @@ class SearchViewModel(
         statusLoading()
     }
 
-    fun  initial(fs: String) {
+    fun initial(fs: String) {
         _firstSearch.value = fs
         viewModelScope.launch {
             userRepository.getFoundUsers(firstSearch.value).collect {
@@ -66,8 +65,10 @@ class SearchViewModel(
         _progressBarLoading.postValue(boolean)
     }
 
-    fun getSearchResults(st: String?) {
-        _searchText.value = if (st != null) st else null
+    fun getSearchResults(text: String?) {
+        if (text != null) {
+            searchText.value = text.toLowerCase(Locale.ROOT)
+        }
         getPost()
         getUsers()
     }

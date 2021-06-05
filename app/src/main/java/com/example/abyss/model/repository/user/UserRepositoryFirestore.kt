@@ -34,7 +34,7 @@ class UserRepositoryFirestore(
     private val firebaseStorage: FirebaseStorage,
     private val ioDispatcher: CoroutineDispatcher,
     private val externalScope: CoroutineScope,
-    private val client: Client
+//    private val client: Client
 ) : UserRepository {
 
     override suspend fun createUser(user: UserData) {
@@ -124,19 +124,12 @@ class UserRepositoryFirestore(
                 prefetchDistance = 10
             )
         ) {
-//            if (!text.isNullOrEmpty()) {
-                val index = client.getIndex("users")
-                index.setSettings(
-                    JSONObject()
-                        .put("searchableAttributes", JSONArray().put("userName"))
-                        .put("hitsPerPage", 30)
-                )
-                val query = com.algolia.search.saas.Query(text)
-                val requestOptions = RequestOptions()
-                UsersForSearchPagingSource(query, requestOptions, index)
-//            } else {
-//
-//            }
+
+            val query = firestore.collection("users").orderBy("userNameInsensitive").startAt(text)
+                .endAt("$text\uf8ff")
+
+            UsersForSearchPagingSource(query)
+
         }.flow.cachedIn(externalScope)
 
 

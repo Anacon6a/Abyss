@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModelProvider
 import bindViewModel
 import com.algolia.search.saas.Client
 import com.example.abyss.adapters.NotificationsPagingAdapter
+import com.example.abyss.adapters.TagsPagingAdapter
 import com.example.abyss.adapters.home.*
 import com.example.abyss.adapters.profile.ProfileMyPostsPagingAdapter
 import com.example.abyss.model.repository.auth.AuthRepositoryFirebase
@@ -17,6 +18,8 @@ import com.example.abyss.model.repository.statistics.StatisticsRepository
 import com.example.abyss.model.repository.statistics.StatisticsRepositoryFirebase
 import com.example.abyss.model.repository.subscription.SubscriptionRepository
 import com.example.abyss.model.repository.subscription.SubscriptionRepositoryFirestore
+import com.example.abyss.model.repository.tag.TagRepository
+import com.example.abyss.model.repository.tag.TagRepositoryFirestore
 import com.example.abyss.model.repository.user.UserRepository
 import com.example.abyss.model.repository.user.UserRepositoryFirestore
 import com.example.abyss.model.repository.views.ViewsRepository
@@ -63,7 +66,7 @@ class AbyssApplication : Application(), KodeinAware {
             AuthRepositoryFirebase(instance(), instance(), instance())
         }
         bind<PostRepository>() with singleton {
-            PostRepositoryFirestore(instance(), instance(), instance(), instance(), instance())
+            PostRepositoryFirestore(instance(), instance(), instance(), instance(), instance(), instance())
         }
         bind<UserRepository>() with provider {
             UserRepositoryFirestore(
@@ -72,7 +75,6 @@ class AbyssApplication : Application(), KodeinAware {
                 instance(),
                 instance(),
                 instance(),
-                instance()
             )
         }
         bind<LikeRepository>() with provider {
@@ -86,6 +88,9 @@ class AbyssApplication : Application(), KodeinAware {
         }
         bind<StatisticsRepository>() with provider {
             StatisticsRepositoryFirebase(instance(), instance(), instance(), instance())
+        }
+        bind<TagRepository>() with provider {
+            TagRepositoryFirestore(instance(), instance(), instance(), instance())
         }
 // ViewModelFactory
         bind() from provider { FirstViewModelFactory(instance(), instance()) }
@@ -104,7 +109,7 @@ class AbyssApplication : Application(), KodeinAware {
             ProfileViewModel(instance(), instance(), instance(), instance(), instance())
         }
         bindViewModel<AddPostViewModel>() with provider {
-            AddPostViewModel(instance(), instance(), instance())
+            AddPostViewModel(instance(), instance(), instance(), instance(), instance())
         }
         bindViewModel<PostViewModel>() with provider {
             PostViewModel(
@@ -131,7 +136,7 @@ class AbyssApplication : Application(), KodeinAware {
             ModalBottomSheetForPostViewModel(instance())
         }
         bindViewModel<EditPostViewModel>() with provider {
-            EditPostViewModel(instance(), instance(), instance())
+            EditPostViewModel(instance(), instance(), instance(), instance(), instance())
         }
         bindViewModel<SearchViewModel>() with provider {
             SearchViewModel(instance(), instance(), instance(), instance(), instance(), instance())
@@ -144,8 +149,7 @@ class AbyssApplication : Application(), KodeinAware {
         bind() from provider { SearchViewPagerAdapter() }
         bind() from provider { SearchPostsPagingAdapter() }
         bind() from provider { SearchUsersPagingAdapter() }
-// Algolia
-        bind() from provider { Client("QVZCNZ6CIH", "3b063d54cb9acc0fdc3cb5399fdec257") }
+        bind() from provider { TagsPagingAdapter() }
     }
 
     override fun onCreate() {

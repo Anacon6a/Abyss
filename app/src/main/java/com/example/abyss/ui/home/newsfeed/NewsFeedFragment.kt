@@ -4,6 +4,7 @@ import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
+import android.view.View.NOT_FOCUSABLE
 import android.view.ViewGroup
 import androidx.appcompat.widget.SearchView
 import androidx.lifecycle.lifecycleScope
@@ -111,6 +112,8 @@ class NewsFeedFragment() : Fragment(), KodeinAware {
                     val action = NewsFeedFragmentDirections.actionNewsFeedFragmentToSearchFragment(query.trim())
                     findNavController().navigate(action)
                     hideKeyboard()
+                    binding.searchView.setQuery("", false)
+                    binding.searchView.clearFocus()
                 }
                 return true
             }

@@ -20,6 +20,7 @@ import com.example.abyss.databinding.FragmentSearchBinding
 import com.example.abyss.databinding.SearchRecyclerDataBinding
 import com.example.abyss.extensions.hideKeyboard
 import com.example.abyss.extensions.ignorePullToRefresh
+import com.example.abyss.extensions.onClick
 import com.example.abyss.ui.home.newsfeed.NewsFeedFragmentDirections
 import com.example.abyss.utils.HidingNavigationBar
 import com.google.android.material.tabs.TabLayoutMediator
@@ -29,6 +30,7 @@ import kotlinx.coroutines.launch
 import org.kodein.di.KodeinAware
 import org.kodein.di.android.x.kodein
 import org.kodein.di.generic.instance
+import java.util.*
 
 
 class SearchFragment : Fragment(), KodeinAware {
@@ -53,7 +55,7 @@ class SearchFragment : Fragment(), KodeinAware {
         binding.searchViewPager.ignorePullToRefresh(binding.swipeRefreshLayout)
 
         if (viewModel.firstSearch.value == null){
-            viewModel.initial(args.searchQuery)
+            viewModel.initial(args.searchQuery.toLowerCase(Locale.ROOT))
         }
         setTabLayout()
         subscription()
@@ -101,6 +103,9 @@ class SearchFragment : Fragment(), KodeinAware {
                 return true
             }
         })
+        binding.backBtn.onClick {
+            findNavController().popBackStack()
+        }
     }
 
     private fun setAdaptersForViewPager() {

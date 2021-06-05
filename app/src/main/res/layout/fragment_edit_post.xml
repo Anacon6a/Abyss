@@ -90,13 +90,22 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
+                <TextView
+                    android:id="@+id/title_text_post"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintStart_toStartOf="@+id/text_input_edit_text"
+                    app:layout_constraintTop_toBottomOf="@+id/button_select_img"
+                    android:layout_marginTop="40dp"
+                    android:text="Подпись"
+                    android:textColor="@color/grey"
+                    android:textSize="18dp"/>
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/text_input_edit_text"
                     android:layout_width="279dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="67dp"
-                    android:layout_marginTop="40dp"
                     android:layout_marginBottom="20dp"
                     android:layout_marginEnd="67dp"
                     android:hint="Добавьте подпись"
@@ -105,7 +114,54 @@
                     android:text="@={EditPostViewModel.textPost}"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/button_select_img" />
+                    app:layout_constraintTop_toBottomOf="@+id/title_text_post" />
+
+                <TextView
+                    android:id="@+id/title_tags_post"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintStart_toStartOf="@+id/tags_text"
+                    app:layout_constraintTop_toBottomOf="@+id/text_input_edit_text"
+                    android:layout_marginTop="20dp"
+                    android:text="Теги"
+                    android:textColor="@color/grey"
+                    android:textSize="18dp"/>
+                <TextView
+                    android:id="@+id/button_search_tags"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintEnd_toEndOf="@+id/tags_text"
+                    app:layout_constraintTop_toBottomOf="@+id/text_input_edit_text"
+                    android:layout_marginTop="20dp"
+                    android:layout_marginStart="20dp"
+                    android:text="  Поиск тегов  "
+                    android:textColor="@color/white"
+                    android:background="@drawable/bg_com_btn"
+                    android:textSize="18dp"/>
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/tags_text"
+                    android:layout_width="279dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="67dp"
+                    android:layout_marginEnd="67dp"
+                    android:layout_marginBottom="20dp"
+                    android:enabled="@{EditPostViewModel.viewEnabled}"
+                    android:hint="Укажите теги через запятую"
+                    android:maxHeight="150dp"
+                    android:text="@={EditPostViewModel.tagsText}"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/title_tags_post" />
+
+                <TextView
+                    android:id="@+id/text_clarification"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintStart_toStartOf="@+id/tags_text"
+                    app:layout_constraintEnd_toEndOf="@+id/tags_text"
+                    app:layout_constraintTop_toBottomOf="@+id/tags_text"
+                    android:text="Теги помогают пользователям находить ваши публикации. Укажите теги через запятую" />
 
                 <androidx.appcompat.widget.AppCompatButton
                     android:id="@+id/button_select_img"

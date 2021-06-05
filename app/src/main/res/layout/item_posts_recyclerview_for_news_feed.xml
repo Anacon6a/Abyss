@@ -23,7 +23,8 @@
             android:layout_height="match_parent"
             android:background="#FFFFFF"
             android:paddingBottom="60dp"
-            android:clipToPadding="false" />
+            android:clipToPadding="false"
+            tools:listitem="@layout/item_post_for_news_feed"/>
     </com.example.abyss.NestedScrollableHost>
 
 </LinearLayout>

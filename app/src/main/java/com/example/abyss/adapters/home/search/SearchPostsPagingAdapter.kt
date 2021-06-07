@@ -1,4 +1,4 @@
-package com.example.abyss.adapters.home
+package com.example.abyss.adapters.home.search
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -13,7 +13,9 @@ import com.example.abyss.databinding.PostNewsFeedDataBinding
 import com.example.abyss.extensions.onClick
 import com.example.abyss.model.data.PostData
 
-class SearchPostsPagingAdapter: PagingDataAdapter<PostData, SearchPostsPagingAdapter.PostViewHolder>(Companion) {
+class SearchPostsPagingAdapter: PagingDataAdapter<PostData, SearchPostsPagingAdapter.PostViewHolder>(
+    Companion
+) {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PostViewHolder {
         val layoutInflater = LayoutInflater.from(parent.context)
 

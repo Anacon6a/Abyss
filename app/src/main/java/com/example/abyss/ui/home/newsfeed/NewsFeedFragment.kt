@@ -4,22 +4,22 @@ import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
-import android.view.View.NOT_FOCUSABLE
 import android.view.ViewGroup
 import androidx.appcompat.widget.SearchView
 import androidx.lifecycle.lifecycleScope
-import androidx.navigation.Navigation
 import androidx.navigation.fragment.FragmentNavigator
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import androidx.viewpager2.widget.ViewPager2
-import com.example.abyss.adapters.home.NewsFeedPostsPagingAdapter
-import com.example.abyss.adapters.home.NewsFeedViewPagerAdapter
+import com.example.abyss.adapters.home.newsfeed.NewsFeedPostsPagingAdapter
+import com.example.abyss.adapters.home.newsfeed.NewsFeedViewPagerAdapter
 import com.example.abyss.databinding.FragmentNewsFeedBinding
 import com.example.abyss.databinding.PostNewsFeedRecyclerDataBinding
 import com.example.abyss.extensions.hideKeyboard
 import com.example.abyss.extensions.ignorePullToRefresh
+import com.example.abyss.extensions.onClick
+import com.example.abyss.ui.posts.post.PostFragmentDirections
 import com.example.abyss.utils.HidingNavigationBar
 import com.google.android.material.tabs.TabLayoutMediator
 import kodeinViewModel
@@ -83,7 +83,6 @@ class NewsFeedFragment() : Fragment(), KodeinAware {
                 viewModel.getPosts(position)
             }
         })
-
         newsFeedViewPagerAdapter.setOnCreatePostViewHolder { bind, pos ->
             bindingRecycler = bind
             viewModel.listPostsPagingAdapters.value?.get(pos)?.let {
@@ -102,14 +101,19 @@ class NewsFeedFragment() : Fragment(), KodeinAware {
                 setAdaptersForRecycler(it)
             }
         }
+        viewModel.eventTagChange.observe(viewLifecycleOwner, { event ->
+            if (event > 1) {
+                binding.viewPagerPosts.currentItem = 0
+            }
+        })
         binding.swipeRefreshLayout.setOnRefreshListener {
             refresh()
         }
-        //search
         binding.searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
                 if (query != null && query.isNotEmpty()) {
-                    val action = NewsFeedFragmentDirections.actionNewsFeedFragmentToSearchFragment(query.trim())
+                    val action =
+                        NewsFeedFragmentDirections.actionNewsFeedFragmentToSearchFragment(query.trim())
                     findNavController().navigate(action)
                     hideKeyboard()
                     binding.searchView.setQuery("", false)
@@ -122,6 +126,9 @@ class NewsFeedFragment() : Fragment(), KodeinAware {
                 return true
             }
         })
+        binding.addTagBtn.onClick {
+            findNavController().navigate(NewsFeedFragmentDirections.actionNewsFeedFragmentToDialogForTagsFragment())
+        }
     }
 
 

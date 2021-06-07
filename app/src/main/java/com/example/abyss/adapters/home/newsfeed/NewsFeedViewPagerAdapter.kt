@@ -1,4 +1,4 @@
-package com.example.abyss.adapters.home
+package com.example.abyss.adapters.home.newsfeed
 
 import android.annotation.SuppressLint
 import android.view.LayoutInflater

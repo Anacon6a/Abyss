@@ -58,7 +58,7 @@ class PostsForNewsFeedPagingSource(
         return null
     }
 
-    suspend fun GetPosts() {
+   private suspend fun GetPosts() {
 
         val subSnap = querySubscription.get().await()
 

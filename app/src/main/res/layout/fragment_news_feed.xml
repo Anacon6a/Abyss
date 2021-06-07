@@ -33,9 +33,15 @@
                     android:layout_height="match_parent"
                     android:orientation="horizontal"
                     android:layout_marginEnd="15dp"
-                    android:layout_marginTop="5dp"
                     android:gravity="center">
 
+                    <ImageView
+                        android:id="@+id/add_tag_btn"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:layout_marginEnd="5dp"
+                        android:src="@drawable/ic_edit"
+                        android:layout_gravity="start|center_vertical"/>
                     <androidx.appcompat.widget.SearchView
                         android:id="@+id/search_view"
                         android:layout_width="wrap_content"
@@ -48,6 +54,7 @@
                         app:queryHint="Поиск"
                         app:searchIcon="@drawable/ic_search" />
                 </LinearLayout>
+
             </androidx.appcompat.widget.Toolbar>
         </com.google.android.material.appbar.AppBarLayout>
 
@@ -76,11 +83,14 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="4dp"
                         android:layout_marginBottom="7dp"
+                        android:clipToPadding="false"
+                        android:paddingEnd="30dp"
                         android:background="@drawable/bg_profile_content"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/search_post"
                         app:tabMode="scrollable" />
+
 
                     <androidx.constraintlayout.widget.ConstraintLayout
                         android:id="@+id/constraint_layout_for_posts"

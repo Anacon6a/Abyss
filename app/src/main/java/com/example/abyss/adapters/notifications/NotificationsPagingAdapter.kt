@@ -1,17 +1,17 @@
-package com.example.abyss.adapters
+package com.example.abyss.adapters.notifications
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
+import com.example.abyss.adapters.textForNotification
 import com.example.abyss.databinding.NotificationsDataBinding
 import com.example.abyss.extensions.onClick
 import com.example.abyss.model.data.NotificationData
 import com.example.abyss.model.data.PostData
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.launch
 
 class NotificationsPagingAdapter(
     private val externalScope: CoroutineScope,

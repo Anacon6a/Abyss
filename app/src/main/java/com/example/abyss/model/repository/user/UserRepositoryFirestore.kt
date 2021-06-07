@@ -82,7 +82,7 @@ class UserRepositoryFirestore(
         val subscription = userRef.addSnapshotListener { snapshot, exception ->
 
             exception?.let {
-                offer(State.Failed(it.message.toString()))
+                offer(State.failed(it.message.toString()))
                 cancel(it.message.toString())
             }
             if (snapshot!!.exists()) {

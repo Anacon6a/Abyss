@@ -1,12 +1,10 @@
 package com.example.abyss.ui.posts.addpost
 
-import android.content.DialogInterface
 import android.net.Uri
 import androidx.databinding.ObservableField
 import androidx.lifecycle.*
 import androidx.paging.LoadState
-import androidx.paging.PagingData
-import com.example.abyss.adapters.TagsPagingAdapter
+import com.example.abyss.adapters.addtag.TagsPagingAdapter
 import com.example.abyss.model.data.PostData
 import com.example.abyss.model.repository.post.PostRepository
 import com.example.abyss.model.repository.tag.TagRepository

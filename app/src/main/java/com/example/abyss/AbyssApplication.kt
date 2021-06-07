@@ -3,10 +3,15 @@ package com.example.abyss
 import android.app.Application
 import androidx.lifecycle.ViewModelProvider
 import bindViewModel
-import com.algolia.search.saas.Client
-import com.example.abyss.adapters.NotificationsPagingAdapter
-import com.example.abyss.adapters.TagsPagingAdapter
+import com.example.abyss.adapters.notifications.NotificationsPagingAdapter
+import com.example.abyss.adapters.addtag.TagsPagingAdapter
 import com.example.abyss.adapters.home.*
+import com.example.abyss.adapters.home.newsfeed.NewsFeedAllTagsPagingAdapter
+import com.example.abyss.adapters.home.newsfeed.NewsFeedPostsPagingAdapter
+import com.example.abyss.adapters.home.newsfeed.NewsFeedViewPagerAdapter
+import com.example.abyss.adapters.home.search.SearchPostsPagingAdapter
+import com.example.abyss.adapters.home.search.SearchUsersPagingAdapter
+import com.example.abyss.adapters.home.search.SearchViewPagerAdapter
 import com.example.abyss.adapters.profile.ProfileMyPostsPagingAdapter
 import com.example.abyss.model.repository.auth.AuthRepositoryFirebase
 import com.example.abyss.model.repository.auth.AuthRepository
@@ -28,6 +33,7 @@ import com.example.abyss.ui.MainViewModelFactory
 import com.example.abyss.ui.first.FirstViewModelFactory
 import com.example.abyss.ui.auth.login.LoginViewModelFactory
 import com.example.abyss.ui.auth.registration.RegistrationViewModelFactory
+import com.example.abyss.ui.home.newsfeed.DialogForTagsViewModel
 import com.example.abyss.ui.home.newsfeed.NewsFeedViewModel
 import com.example.abyss.ui.home.search.SearchViewModel
 import com.example.abyss.ui.notifications.NotificationsViewModel
@@ -90,7 +96,7 @@ class AbyssApplication : Application(), KodeinAware {
             StatisticsRepositoryFirebase(instance(), instance(), instance(), instance())
         }
         bind<TagRepository>() with provider {
-            TagRepositoryFirestore(instance(), instance(), instance(), instance())
+            TagRepositoryFirestore(instance(), instance(), instance(), instance(), instance())
         }
 // ViewModelFactory
         bind() from provider { FirstViewModelFactory(instance(), instance()) }
@@ -124,7 +130,7 @@ class AbyssApplication : Application(), KodeinAware {
             )
         }
         bindViewModel<NewsFeedViewModel>() with singleton {
-            NewsFeedViewModel(instance(), instance(), instance(), kodein.direct)
+            NewsFeedViewModel(instance(), instance(), instance(), instance(), kodein.direct)
         }
         bindViewModel<NotificationsViewModel>() with provider {
             NotificationsViewModel(instance(), instance(), instance())
@@ -141,6 +147,9 @@ class AbyssApplication : Application(), KodeinAware {
         bindViewModel<SearchViewModel>() with provider {
             SearchViewModel(instance(), instance(), instance(), instance(), instance(), instance())
         }
+        bindViewModel<DialogForTagsViewModel>() with provider {
+            DialogForTagsViewModel(instance(), instance(), instance())
+        }
 // Adapter
         bind<ProfileMyPostsPagingAdapter>() with provider { ProfileMyPostsPagingAdapter() }
         bind() from provider { NewsFeedViewPagerAdapter() }
@@ -150,6 +159,7 @@ class AbyssApplication : Application(), KodeinAware {
         bind() from provider { SearchPostsPagingAdapter() }
         bind() from provider { SearchUsersPagingAdapter() }
         bind() from provider { TagsPagingAdapter() }
+        bind() from provider { NewsFeedAllTagsPagingAdapter() }
     }
 
     override fun onCreate() {

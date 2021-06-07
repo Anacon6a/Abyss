@@ -12,6 +12,7 @@ interface PostRepository {
     suspend fun getPostById(postId: String, uidProvider: String): Flow<PostData?>
     suspend fun getPostsSubscriptionForNewsFeed(): Flow<PagingData<PostData>>?
     suspend fun getPostsTrendsForNewsFeed(): Flow<PagingData<PostData>>?
+    suspend fun getPostByTag(tag: String): Flow<PagingData<PostData>>?
     suspend fun listeningForChangesPosts(): Flow<Boolean>
     suspend fun listeningForChangesPost(postId: String): Flow<PostData?>
     suspend fun editPost(post: PostData, imageUri: Uri?, width: Int?, height: Int?, text: String?, tags: ArrayList<String>): String?

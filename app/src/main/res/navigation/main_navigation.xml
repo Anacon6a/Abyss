@@ -61,6 +61,9 @@
             android:id="@+id/action_newsFeedFragment_to_searchFragment"
             app:destination="@id/searchFragment"
             app:popUpToInclusive="true" />
+        <action
+            android:id="@+id/action_newsFeedFragment_to_dialogForTagsFragment"
+            app:destination="@id/dialogForTagsFragment" />
     </fragment>
     <fragment
         android:id="@+id/profileFragment"
@@ -161,5 +164,10 @@
             android:name="searchQuery"
             app:argType="string" />
     </fragment>
+    <dialog
+        android:id="@+id/dialogForTagsFragment"
+        android:name="com.example.abyss.ui.home.newsfeed.DialogForTagsFragment"
+        android:label="DialogForTagsFragment"
+        tools:layout="@layout/fragment_dialog_for_tags"/>
 
 </navigation>

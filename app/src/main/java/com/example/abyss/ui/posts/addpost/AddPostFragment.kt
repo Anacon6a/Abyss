@@ -38,6 +38,7 @@ class AddPostFragment : Fragment(), KodeinAware {
     private lateinit var binding: FragmentAddPostBinding
     private val mainDispatcher: CoroutineDispatcher by instance("main")
     private lateinit var dialogTagsSearchBinding: DialogTagsSearchAddPostBinding
+    private var dialog: AlertDialog? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -49,7 +50,8 @@ class AddPostFragment : Fragment(), KodeinAware {
         binding.lifecycleOwner = viewLifecycleOwner
         (activity as HidingNavigationBar).hideNavigationBar(true)
 
-        dialogTagsSearchBinding = DialogTagsSearchAddPostBinding.inflate(layoutInflater, container, false)
+        dialogTagsSearchBinding =
+            DialogTagsSearchAddPostBinding.inflate(layoutInflater, container, false)
 
         subscription()
 
@@ -82,6 +84,9 @@ class AddPostFragment : Fragment(), KodeinAware {
         binding.buttonSearchTags.onClick {
             tagsSearchDialog()
         }
+        dialogTagsSearchBinding.backBtn.onClick {
+            dialog?.let { dialog!!.dismiss() }
+        }
     }
 
     private fun photoSelection() {
@@ -106,13 +111,13 @@ class AddPostFragment : Fragment(), KodeinAware {
 
     private fun tagsSearchDialog() {
 
-        if (dialogTagsSearchBinding.root.parent !=null){
+        if (dialogTagsSearchBinding.root.parent != null) {
             (dialogTagsSearchBinding.root.parent as? ViewGroup)?.removeView(dialogTagsSearchBinding.root)
         }
         val builder: AlertDialog.Builder = AlertDialog.Builder(activity)
         builder.setView(dialogTagsSearchBinding.root)
-        builder.create()
-        builder.show()
+        dialog = builder.create()
+        dialog!!.show()
 
         getAllTags()
         searchTags()
@@ -143,19 +148,20 @@ class AddPostFragment : Fragment(), KodeinAware {
 
     private fun setAdaptersForTagsRecyclerView() {
         lifecycleScope.launch {
-            dialogTagsSearchBinding.tagsRecyclerView .apply {
+            dialogTagsSearchBinding.tagsRecyclerView.apply {
                 layoutManager = StaggeredGridLayoutManager(1, RecyclerView.VERTICAL)
                 setHasFixedSize(false)
                 itemAnimator = null
                 adapter = viewModel.tagsPagingAdapter
             }
             viewModel.tagsPagingAdapter.setOnItemClickListener { tag ->
-                if (binding.tagsText.text.isNullOrEmpty()){
+                if (binding.tagsText.text.isNullOrEmpty()) {
                     binding.tagsText.setText(tag.tagName)
                 } else {
                     binding.tagsText.setText("${binding.tagsText.text}, ${tag.tagName}")
                 }
-                Toast.makeText(context, "Тег \"${tag.tagName}\" добавлен", Toast.LENGTH_SHORT).show()
+                Toast.makeText(context, "Тег \"${tag.tagName}\" добавлен", Toast.LENGTH_SHORT)
+                    .show()
             }
         }
     }

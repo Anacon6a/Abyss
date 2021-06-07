@@ -1,21 +1,17 @@
-package com.example.abyss.adapters.home
+package com.example.abyss.adapters.home.search
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import android.widget.ImageView
-import androidx.constraintlayout.widget.ConstraintLayout
-import androidx.constraintlayout.widget.ConstraintSet
 import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
-import com.example.abyss.adapters.loadImage2
-import com.example.abyss.databinding.PostNewsFeedDataBinding
 import com.example.abyss.databinding.UserSearchDataBinding
 import com.example.abyss.extensions.onClick
-import com.example.abyss.model.data.PostData
 import com.example.abyss.model.data.UserData
 
-class SearchUsersPagingAdapter: PagingDataAdapter<UserData, SearchUsersPagingAdapter.UserViewHolder>(Companion){
+class SearchUsersPagingAdapter: PagingDataAdapter<UserData, SearchUsersPagingAdapter.UserViewHolder>(
+    Companion
+){
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): UserViewHolder {
         val layoutInflater = LayoutInflater.from(parent.context)
 

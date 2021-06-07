@@ -1,16 +1,12 @@
-package com.example.abyss.adapters
+package com.example.abyss.adapters.addtag
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import android.widget.ImageView
-import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
-import com.example.abyss.databinding.PostProfileDataBinding
 import com.example.abyss.databinding.TagsSearchDataBinding
 import com.example.abyss.extensions.onClick
-import com.example.abyss.model.data.PostData
 import com.example.abyss.model.data.TagData
 
 class TagsPagingAdapter: PagingDataAdapter<TagData, TagsPagingAdapter.TagViewHolder>(

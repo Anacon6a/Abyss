@@ -78,9 +78,6 @@ class ProfileViewModel(
             userRepository.getUserByUid().collect { state ->
 
                 when (state) {
-                    is State.Loading -> {
-
-                    }
                     is State.Success -> {
                         if (userName.value != state.data?.userName!!) {
                             _userName.postValue(state.data.userName!!)
@@ -94,9 +91,6 @@ class ProfileViewModel(
                         if (numbersOfSubscriptions.value != state.data.numberOfSubscriptions!!){
                             _numbersOfSubscriptions.postValue(state.data.numberOfSubscriptions!!)
                         }
-                    }
-                    is State.Failed -> {
-                        Timber.e("Ошибка получения пользователя: ${state.message}")
                     }
                 }
             }

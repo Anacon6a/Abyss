@@ -40,6 +40,7 @@ class EditPostFragment : Fragment(), KodeinAware {
     private val args: ModalBottomSheetForPostFragmentArgs by navArgs()
     private lateinit var dialogTagsSearchBinding: DialogTagsSearchEditPostBinding
     private val mainDispatcher: CoroutineDispatcher by instance("main")
+    private var dialog: AlertDialog? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -90,6 +91,9 @@ class EditPostFragment : Fragment(), KodeinAware {
         binding.buttonSearchTags.onClick {
             tagsSearchDialog()
         }
+        dialogTagsSearchBinding.backBtn.onClick {
+            dialog?.let { dialog!!.dismiss() }
+        }
     }
 
     private fun photoSelection() {
@@ -115,8 +119,8 @@ class EditPostFragment : Fragment(), KodeinAware {
         }
         val builder: AlertDialog.Builder = AlertDialog.Builder(activity)
         builder.setView(dialogTagsSearchBinding.root)
-        builder.create()
-        builder.show()
+        dialog = builder.create()
+        dialog!!.show()
 
         getAllTags()
         searchTags()

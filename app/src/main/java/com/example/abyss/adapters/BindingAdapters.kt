@@ -265,17 +265,16 @@ fun getSearchQuery(searchView: androidx.appcompat.widget.SearchView, text: Strin
     }
 }
 
-//@BindingAdapter("showAlertDialog")
-//fun showAlertDialog(view: View, b: Boolean?) {
-//    if (b == true){
-//    val alertDialog: AlertDialog = AlertDialog.Builder(view.context).create()
-//    alertDialog.show()
-//    }
-//}
-//
-//@InverseBindingAdapter(attribute = "alertMessage")
-//fun getAlertMessage(view: View?): String? {
-//    return null // clear message
-//}
+@BindingAdapter("addedIsTrue")
+fun addedIsTrue(button: Button, boolean: Boolean?) {
+    if (boolean == true) {
+        button.background = ContextCompat.getDrawable(button.context, R.drawable.bg_unsubscribe)
+        button.text = "Убрать"
+    } else {
+        button.background = ContextCompat.getDrawable(button.context, R.drawable.bg_com_btn)
+        button.text = "Добавить"
+    }
+}
+
 
 

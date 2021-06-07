@@ -7,7 +7,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.LoadState
-import com.example.abyss.adapters.TagsPagingAdapter
+import com.example.abyss.adapters.addtag.TagsPagingAdapter
 import com.example.abyss.model.data.PostData
 import com.example.abyss.model.repository.post.PostRepository
 import com.example.abyss.model.repository.tag.TagRepository

@@ -6,8 +6,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.LoadState
 import androidx.paging.PagingData
-import com.example.abyss.adapters.home.SearchPostsPagingAdapter
-import com.example.abyss.adapters.home.SearchUsersPagingAdapter
+import com.example.abyss.adapters.home.search.SearchPostsPagingAdapter
+import com.example.abyss.adapters.home.search.SearchUsersPagingAdapter
 import com.example.abyss.model.repository.post.PostRepository
 import com.example.abyss.model.repository.user.UserRepository
 import kotlinx.coroutines.CoroutineDispatcher

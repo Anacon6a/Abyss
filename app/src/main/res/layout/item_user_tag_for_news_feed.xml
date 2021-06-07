@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <data class="TagsSearchDataBinding">
+    <data class="UserTagsForNewsFeedDataBinding">
         <variable
             name="tag"
             type="com.example.abyss.model.data.TagData" />
@@ -44,10 +44,10 @@
                 android:id="@+id/button_add_tag"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:background="@drawable/bg_com_btn"
+                android:background="@drawable/bg_unsubscribe"
+                android:text="Убрать"
                 android:paddingStart="20dp"
                 android:paddingEnd="20dp"
-                android:text="Добавить тег"
                 android:textAllCaps="false"
                 android:textColor="@color/white"
                 app:layout_constraintBottom_toBottomOf="parent"

@@ -118,7 +118,19 @@ class PostRepositoryFirestore(
 
 
     override suspend fun getPostsTrendsForNewsFeed(): Flow<PagingData<PostData>>? =
-        ////за все время изначально
+        Pager(
+            PagingConfig(
+                initialLoadSize = 20,
+                pageSize = 30,
+                prefetchDistance = 10
+            )
+        ) {
+            val query = firestore.collectionGroup("posts")
+
+            PostsForProfileFirestorePagingSource(query)
+        }.flow.cachedIn(externalScope)
+
+    override suspend fun getPostByTag(tag: String): Flow<PagingData<PostData>>? =
         Pager(
             PagingConfig(
                 initialLoadSize = 20,
@@ -248,7 +260,7 @@ class PostRepositoryFirestore(
                 }
                 async {
                     if (text != snapPost.text) {
-                        postRef.update("text", text).await()
+                        postRef.update("text", text)
                     }
                 }
                 async {
@@ -259,6 +271,7 @@ class PostRepositoryFirestore(
                             firebaseFunctions
                                 .getHttpsCallable("createTags")
                                 .call(data)
+
                         } catch (e: Exception) {
                             Timber.e("Ошибка создания тегов: ${e.message}")
                         }

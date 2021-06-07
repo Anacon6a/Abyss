@@ -12,13 +12,9 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
-import androidx.viewpager2.widget.ViewPager2
-import com.example.abyss.R
-import com.example.abyss.adapters.home.SearchViewPagerAdapter
-import com.example.abyss.databinding.FragmentNewsFeedBinding
+import com.example.abyss.adapters.home.search.SearchViewPagerAdapter
 import com.example.abyss.databinding.FragmentSearchBinding
 import com.example.abyss.databinding.SearchRecyclerDataBinding
-import com.example.abyss.extensions.hideKeyboard
 import com.example.abyss.extensions.ignorePullToRefresh
 import com.example.abyss.extensions.onClick
 import com.example.abyss.ui.home.newsfeed.NewsFeedFragmentDirections

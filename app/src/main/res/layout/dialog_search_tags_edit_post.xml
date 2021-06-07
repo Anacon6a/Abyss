@@ -12,21 +12,40 @@
         android:layout_height="wrap_content"
         android:padding="10dp"
         android:background="@drawable/bg_post_content">
-        <androidx.constraintlayout.widget.ConstraintLayout
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:orientation="vertical">
 
-            <TextView
-                android:id="@+id/title_tags_search"
-                android:layout_width="wrap_content"
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:text="Поиск тегов"
-                android:textColor="@color/grey"
-                android:textSize="20dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                android:layout_marginTop="10dp">
+
+                <ImageView
+                    android:id="@+id/back_btn"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:src="@drawable/ic_back"
+                    android:layout_marginStart="40dp"
+                    android:layout_marginEnd="40dp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toStartOf="@id/title_tags_search"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:tint="@color/grey" />
+                <TextView
+                    android:id="@+id/title_tags_search"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Поиск тегов"
+                    android:textColor="@color/grey"
+                    android:textSize="20dp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"/>
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
 
             <androidx.appcompat.widget.SearchView
@@ -39,11 +58,9 @@
                 app:iconifiedByDefault="false"
                 app:queryBackground="@android:color/transparent"
                 app:queryHint="Поиск"
+                android:layout_gravity="center_horizontal"
                 app:searchIcon="@drawable/ic_search"
                 android:layout_marginHorizontal="10dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/title_tags_search"
                 android:layout_marginTop="10dp" />
 
             <TextView
@@ -51,35 +68,34 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
-                android:text="Поиск поможет найти теги, которые уже используют пользователи"
-                app:layout_constraintEnd_toEndOf="@+id/search_view"
-                app:layout_constraintStart_toStartOf="@+id/search_view"
-                app:layout_constraintTop_toBottomOf="@+id/search_view" />
+                android:layout_marginHorizontal="10dp"
+                android:text="Поиск поможет найти теги, которые уже используют пользователи" />
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/tags_recycler_view"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:maxHeight="400dp"
-                android:clipToPadding="false"
                 android:paddingStart="12dp"
                 android:paddingEnd="12dp"
+                android:layout_marginTop="10dp"
+                android:clipToPadding="false"
+                tools:listitem="@layout/item_tags_for_search_in_add_post"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/text_clarification_search_tags" />
-            <com.github.ybq.android.spinkit.SpinKitView
-                android:id="@+id/progress_bar_loading"
-                style="@style/SpinKitView.MultiplePulse"
-                hideIfFalse="@{EditPostViewModel.progressBarTags}"
-                android:layout_width="32dp"
-                android:layout_height="32dp"
-                app:SpinKit_Color="@color/purple_700"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.4" />
-        </androidx.constraintlayout.widget.ConstraintLayout>
+        </LinearLayout>
+        <com.github.ybq.android.spinkit.SpinKitView
+            android:id="@+id/progress_bar_loading"
+            style="@style/SpinKitView.MultiplePulse"
+            hideIfFalse="@{EditPostViewModel.progressBarTags}"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            app:SpinKit_Color="@color/purple_700"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.4" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

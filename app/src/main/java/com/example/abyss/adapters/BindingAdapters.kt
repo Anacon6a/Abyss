@@ -5,9 +5,7 @@ import android.app.AlertDialog
 import android.content.DialogInterface
 import android.graphics.drawable.Drawable
 import android.view.View
-import android.widget.Button
-import android.widget.ImageView
-import android.widget.TextView
+import android.widget.*
 import androidx.core.content.ContextCompat
 import androidx.databinding.BindingAdapter
 import androidx.databinding.InverseBindingAdapter
@@ -260,7 +258,7 @@ fun displayTextForExpandable(exp: ExpandableLayout, text: String?) {
 
 @BindingAdapter("getSearchQuery")
 fun getSearchQuery(searchView: androidx.appcompat.widget.SearchView, text: String?) {
-    text?.let {
+    if (text != null && text != searchView.query){
         searchView.setQuery(text, true)
     }
 }
@@ -275,6 +273,23 @@ fun addedIsTrue(button: Button, boolean: Boolean?) {
         button.text = "Добавить"
     }
 }
+
+@BindingAdapter("setCheck")
+fun setCheck(radioGroup: RadioGroup, newRadioButtonId: Int?) {
+    if (newRadioButtonId != null && radioGroup.checkedRadioButtonId != newRadioButtonId) {
+        radioGroup.check(newRadioButtonId)
+    }
+}
+
+@BindingAdapter("checkRadioButton")
+fun checkRadioButton(radioButton: RadioButton, newRadioButtonId: Int?) {
+    if (newRadioButtonId == null) {
+        radioButton.isChecked = true
+    }
+}
+
+
+
 
 
 

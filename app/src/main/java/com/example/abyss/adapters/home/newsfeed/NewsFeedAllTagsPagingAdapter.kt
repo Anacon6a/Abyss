@@ -51,9 +51,10 @@ class NewsFeedAllTagsPagingAdapter : PagingDataAdapter<UsedTagData, NewsFeedAllT
             binding.tag = tag
 
             binding.buttonAddTag.onClick {
-                tag.used = !tag.used!!
-                onItemClickListener?.let {
-                    it(tag)
+                    tag.used = !tag.used!!
+                    binding.tag = tag
+                    onItemClickListener?.let {
+                        it(tag)
                 }
             }
         }

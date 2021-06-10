@@ -1,36 +1,32 @@
 package com.example.abyss.model.repository.user
 
 import android.net.Uri
-import androidx.core.net.toUri
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
-import com.algolia.search.saas.Client
-import com.algolia.search.saas.RequestOptions
 import com.example.abyss.model.State
 import com.example.abyss.model.data.UserData
-import com.example.abyss.model.pagingsource.PostsForProfileFirestorePagingSource
 import com.example.abyss.model.pagingsource.UsersForSearchPagingSource
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.ktx.toObject
+import com.google.firebase.functions.FirebaseFunctions
 import com.google.firebase.storage.FirebaseStorage
-import io.ktor.client.request.*
 import kotlinx.coroutines.*
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.tasks.await
-import org.json.JSONArray
-import org.json.JSONObject
 import timber.log.Timber
-import java.lang.Exception
+import java.time.LocalDate
+import java.time.ZoneId
 import java.util.*
 
 class UserRepositoryFirestore(
     private val firebaseAuth: FirebaseAuth,
     private val firestore: FirebaseFirestore,
+    private val firebaseFunctions: FirebaseFunctions,
     private val firebaseStorage: FirebaseStorage,
     private val ioDispatcher: CoroutineDispatcher,
     private val externalScope: CoroutineScope,
@@ -42,16 +38,31 @@ class UserRepositoryFirestore(
         externalScope.launch(ioDispatcher) {
             try {
                 val uid = firebaseAuth.uid!!
-
                 user.uid = uid
+
                 firestore.collection("users")
                     .document(uid)
                     .set(user)
+
+                addUserKeywords(user)
             } catch (e: Exception) {
                 Timber.e(e.message)
             }
         }
 
+    }
+
+    override fun addUserKeywords(user: UserData) {
+        externalScope.launch(ioDispatcher) {
+            try {
+                val data = hashMapOf("userName" to user.userName, "uid" to user.uid)
+                firebaseFunctions
+                    .getHttpsCallable("addUserKeywords")
+                    .call(data)
+            } catch (e: Exception) {
+                Timber.e("Ошибка создания тегов: ${e.message}")
+            }
+        }
     }
 
 
@@ -116,7 +127,10 @@ class UserRepositoryFirestore(
         SharingStarted.WhileSubscribed(),
     )
 
-    override suspend fun getFoundUsers(text: String?): Flow<PagingData<UserData>> =
+    override suspend fun getFoundUsers(
+        text: String,
+        orderBySelection: Int
+    ): Flow<PagingData<UserData>> =
         Pager(
             PagingConfig(
                 initialLoadSize = 30,
@@ -124,13 +138,19 @@ class UserRepositoryFirestore(
                 prefetchDistance = 10
             )
         ) {
+            var query: Query = firestore.collection("users")
+            if (text.isNotEmpty()){
+                query = query.whereArrayContains("keywords", text)
+            }
 
-            val query = firestore.collection("users").orderBy("userNameInsensitive").startAt(text)
-                .endAt("$text\uf8ff")
+            when (orderBySelection) {
+                0 -> query = query.orderBy("numberOfSubscribers", Query.Direction.DESCENDING)
+                1 -> query = query.orderBy("registrationDate", Query.Direction.DESCENDING)
+                2 -> query = query.orderBy("registrationDate", Query.Direction.ASCENDING)
+            }
 
             UsersForSearchPagingSource(query)
 
         }.flow.cachedIn(externalScope)
-
 
 }

@@ -13,6 +13,7 @@ import com.example.abyss.adapters.home.search.SearchPostsPagingAdapter
 import com.example.abyss.adapters.home.search.SearchUsersPagingAdapter
 import com.example.abyss.adapters.home.search.SearchViewPagerAdapter
 import com.example.abyss.adapters.profile.ProfileMyPostsPagingAdapter
+import com.example.abyss.model.pagingsource.PostsForSearchPagingSource
 import com.example.abyss.model.repository.auth.AuthRepositoryFirebase
 import com.example.abyss.model.repository.auth.AuthRepository
 import com.example.abyss.model.repository.like.LikeRepository
@@ -72,7 +73,15 @@ class AbyssApplication : Application(), KodeinAware {
             AuthRepositoryFirebase(instance(), instance(), instance())
         }
         bind<PostRepository>() with singleton {
-            PostRepositoryFirestore(instance(), instance(), instance(), instance(), instance(), instance())
+            PostRepositoryFirestore(
+                instance(),
+                instance(),
+                instance(),
+                instance(),
+                instance(),
+                instance(),
+                instance()
+            )
         }
         bind<UserRepository>() with provider {
             UserRepositoryFirestore(
@@ -81,6 +90,7 @@ class AbyssApplication : Application(), KodeinAware {
                 instance(),
                 instance(),
                 instance(),
+                instance()
             )
         }
         bind<LikeRepository>() with provider {

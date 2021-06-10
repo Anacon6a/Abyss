@@ -1,5 +1,6 @@
 package com.example.abyss.ui.posts.addpost
 
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.app.AlertDialog
 import android.content.Context
@@ -52,6 +53,7 @@ class AddPostFragment : Fragment(), KodeinAware {
 
         dialogTagsSearchBinding =
             DialogTagsSearchAddPostBinding.inflate(layoutInflater, container, false)
+        dialogTagsSearchBinding.addPostViewModel = viewModel
 
         subscription()
 
@@ -110,7 +112,6 @@ class AddPostFragment : Fragment(), KodeinAware {
     }
 
     private fun tagsSearchDialog() {
-
         if (dialogTagsSearchBinding.root.parent != null) {
             (dialogTagsSearchBinding.root.parent as? ViewGroup)?.removeView(dialogTagsSearchBinding.root)
         }
@@ -146,6 +147,7 @@ class AddPostFragment : Fragment(), KodeinAware {
         }
     }
 
+    @SuppressLint("SetTextI18n")
     private fun setAdaptersForTagsRecyclerView() {
         lifecycleScope.launch {
             dialogTagsSearchBinding.tagsRecyclerView.apply {

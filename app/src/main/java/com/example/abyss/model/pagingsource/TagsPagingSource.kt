@@ -6,6 +6,7 @@ import com.example.abyss.model.data.TagData
 import com.example.abyss.model.data.UserData
 import com.google.firebase.firestore.QuerySnapshot
 import kotlinx.coroutines.tasks.await
+import timber.log.Timber
 
 class TagsPagingSource(
     private val query: com.google.firebase.firestore.Query,
@@ -41,6 +42,7 @@ class TagsPagingSource(
 
 
         } catch (e: Exception) {
+            Timber.e(e)
             LoadResult.Error(e)
         }
     }

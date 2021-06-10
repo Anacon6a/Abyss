@@ -104,7 +104,7 @@ class AddPostViewModel(
                     val tagsList: ArrayList<String> = arrayListOf()
                     tL.forEach { tagsList.add(it.trim().capitalize(Locale.ROOT)) }
                     post.tags = tagsList
-                    tagRepository.createTag(tagsList)
+//                    tagRepository.createTag(tagsList)
                 }
 
                 postRepository.createPost(post, imgUri)

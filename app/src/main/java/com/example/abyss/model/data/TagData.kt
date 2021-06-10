@@ -5,5 +5,6 @@ data class TagData(
     val tagName: String? = null,
     val tagTextInsensitive: String? = null,
 //    val tagWords: List<String>? = emptyList(),
-    val numberOfUses: Int? = 0
+    val numberOfUses: Int? = 0,
+    val keywords: List<String>? = emptyList()
 )

@@ -14,13 +14,12 @@ import kotlinx.coroutines.tasks.await
 import java.util.*
 import kotlin.collections.ArrayList
 
-class PostsForNewsFeedPagingSource(
+class SubscriptionPostsForNewsFeedPagingSource(
     private val querySubscription: Query,
     private val queryPosts: FirebaseFirestore,
     private val ioDispatcher: CoroutineDispatcher,
     private val externalScope: CoroutineScope,
 ) : PagingSource<Int, PostData>() {
-
 
     private var posts: MutableList<PostData> = ArrayList<PostData>()
     private val sizePage = 10

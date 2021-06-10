@@ -1,5 +1,6 @@
 package com.example.abyss.ui.home.search
 
+import android.app.AlertDialog
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -13,6 +14,8 @@ import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.example.abyss.adapters.home.search.SearchViewPagerAdapter
+import com.example.abyss.databinding.DialogSearchFiltersBinding
+import com.example.abyss.databinding.DialogTagsSearchAddPostBinding
 import com.example.abyss.databinding.FragmentSearchBinding
 import com.example.abyss.databinding.SearchRecyclerDataBinding
 import com.example.abyss.extensions.ignorePullToRefresh
@@ -38,6 +41,8 @@ class SearchFragment : Fragment(), KodeinAware {
     private lateinit var bindingRecycler: SearchRecyclerDataBinding
     private val searchViewPagerAdapter: SearchViewPagerAdapter by instance()
     private val args: SearchFragmentArgs by navArgs()
+    private lateinit var dialogSearchFiltersBinding: DialogSearchFiltersBinding
+    private var dialog: AlertDialog? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -50,9 +55,12 @@ class SearchFragment : Fragment(), KodeinAware {
         (activity as HidingNavigationBar).hideNavigationBar(false)
         binding.searchViewPager.ignorePullToRefresh(binding.swipeRefreshLayout)
 
-        if (viewModel.firstSearch.value == null){
-            viewModel.initial(args.searchQuery.toLowerCase(Locale.ROOT))
-        }
+        dialogSearchFiltersBinding =
+            DialogSearchFiltersBinding.inflate(layoutInflater, container, false)
+        dialogSearchFiltersBinding.searchViewModel = viewModel
+
+        viewModel.initial(args.searchQuery)
+
         setTabLayout()
         subscription()
         setAdaptersForViewPager()
@@ -94,13 +102,20 @@ class SearchFragment : Fragment(), KodeinAware {
                 return true
             }
 
-            override fun onQueryTextChange(newText: String?): Boolean {
+            override fun onQueryTextChange(newText: String): Boolean {
                 viewModel.getSearchResults(newText)
                 return true
             }
         })
         binding.backBtn.onClick {
             findNavController().popBackStack()
+        }
+        binding.filterBtn.onClick {
+            searchFiltersDialog()
+        }
+        dialogSearchFiltersBinding.backBtn.onClick {
+            dialog?.let { dialog!!.dismiss() }
+            viewModel.onRefresh()
         }
     }
 
@@ -158,6 +173,16 @@ class SearchFragment : Fragment(), KodeinAware {
             viewModel.onRefresh()
             binding.swipeRefreshLayout.isRefreshing = false
         }
+    }
+
+    private fun searchFiltersDialog() {
+        if (dialogSearchFiltersBinding.root.parent != null) {
+            (dialogSearchFiltersBinding.root.parent as? ViewGroup)?.removeView(dialogSearchFiltersBinding.root)
+        }
+        val builder: AlertDialog.Builder = AlertDialog.Builder(activity)
+        builder.setView(dialogSearchFiltersBinding.root)
+        dialog = builder.create()
+        dialog!!.show()
     }
 
 }

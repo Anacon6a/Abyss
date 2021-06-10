@@ -57,12 +57,12 @@ class UsedTagsPagingSource(
         externalScope.launch(ioDispatcher) {
             val d = arrayListOf<Deferred<Unit?>>()
             tagList.forEach {
-                d.add(async {
+//                d.add(async {
                     val t = firestore.collection("users").document(uid!!).collection("tags").document(it.id!!).get().await()
                     it.used = !t.data.isNullOrEmpty()
-                })
+//                })
             }
-            d.awaitAll()
+//            d.awaitAll()
         }.join()
         return tagList
     }

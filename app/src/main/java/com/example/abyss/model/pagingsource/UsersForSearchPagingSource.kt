@@ -10,6 +10,7 @@ import com.example.abyss.model.data.UserData
 import com.google.firebase.firestore.QuerySnapshot
 import com.google.gson.Gson
 import kotlinx.coroutines.tasks.await
+import timber.log.Timber
 
 class UsersForSearchPagingSource(
     private val query: com.google.firebase.firestore.Query,
@@ -45,6 +46,7 @@ class UsersForSearchPagingSource(
 
 
         } catch (e: Exception) {
+            Timber.e(e)
             LoadResult.Error(e)
         }
     }

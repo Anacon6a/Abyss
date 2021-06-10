@@ -4,14 +4,15 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data class="UserTagsForNewsFeedDataBinding">
+
         <variable
             name="tag"
-            type="com.example.abyss.model.data.TagData" />
+            type="com.example.abyss.model.data.UserTagData" />
     </data>
 
     <androidx.cardview.widget.CardView
         android:id="@+id/user_card"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
         app:cardCornerRadius="20dp"
@@ -19,25 +20,22 @@
         app:cardPreventCornerOverlap="true"
         app:cardUseCompatPadding="true">
 
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/user_constraint_layout"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="10dp">
+            android:layout_margin="10dp"
+            android:orientation="vertical">
 
             <TextView
                 android:id="@+id/textView"
-                android:layout_width="0dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:ellipsize="end"
-                android:maxLines="2"
+                android:maxWidth="160dp"
+                android:maxLines="3"
+                android:text="@{tag.tagName}"
                 android:textColor="@color/grey"
                 android:textSize="18dp"
-                android:text="@{tag.tagName}"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@+id/button_add_tag"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
                 tools:text="Эстетика" />
 
             <androidx.appcompat.widget.AppCompatButton
@@ -45,14 +43,48 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:background="@drawable/bg_unsubscribe"
-                android:text="Убрать"
                 android:paddingStart="20dp"
                 android:paddingEnd="20dp"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="5dp"
+                android:text="Убрать"
                 android:textAllCaps="false"
-                android:textColor="@color/white"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-        </androidx.constraintlayout.widget.ConstraintLayout>
+                android:textColor="@color/white" />
+        </LinearLayout>
+        <!--        <androidx.constraintlayout.widget.ConstraintLayout-->
+        <!--            android:id="@+id/user_constraint_layout"-->
+        <!--            android:layout_width="match_parent"-->
+        <!--            android:layout_height="wrap_content"-->
+        <!--            android:layout_margin="10dp">-->
+
+        <!--            <TextView-->
+        <!--                android:id="@+id/textView"-->
+        <!--                android:layout_width="0dp"-->
+        <!--                android:layout_height="wrap_content"-->
+        <!--                android:ellipsize="end"-->
+        <!--                android:maxLines="2"-->
+        <!--                android:textColor="@color/grey"-->
+        <!--                android:textSize="18dp"-->
+        <!--                android:text="@{tag.tagName}"-->
+        <!--                app:layout_constraintBottom_toBottomOf="parent"-->
+        <!--                app:layout_constraintEnd_toStartOf="@+id/button_add_tag"-->
+        <!--                app:layout_constraintStart_toStartOf="parent"-->
+        <!--                app:layout_constraintTop_toTopOf="parent"-->
+        <!--                tools:text="Эстетика" />-->
+
+        <!--            <androidx.appcompat.widget.AppCompatButton-->
+        <!--                android:id="@+id/button_add_tag"-->
+        <!--                android:layout_width="wrap_content"-->
+        <!--                android:layout_height="wrap_content"-->
+        <!--                android:background="@drawable/bg_unsubscribe"-->
+        <!--                android:text="Убрать"-->
+        <!--                android:paddingStart="20dp"-->
+        <!--                android:paddingEnd="20dp"-->
+        <!--                android:textAllCaps="false"-->
+        <!--                android:textColor="@color/white"-->
+        <!--                app:layout_constraintBottom_toBottomOf="parent"-->
+        <!--                app:layout_constraintEnd_toEndOf="parent"-->
+        <!--                app:layout_constraintTop_toTopOf="parent" />-->
+        <!--        </androidx.constraintlayout.widget.ConstraintLayout>-->
     </androidx.cardview.widget.CardView>
 </layout>

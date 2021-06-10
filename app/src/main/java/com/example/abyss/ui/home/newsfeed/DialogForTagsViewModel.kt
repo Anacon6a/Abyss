@@ -6,7 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.LoadState
 import com.example.abyss.adapters.home.newsfeed.NewsFeedAllTagsPagingAdapter
-import com.example.abyss.model.data.TagData
+import com.example.abyss.model.data.UserTagData
 import com.example.abyss.model.repository.tag.TagRepository
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.collect
@@ -26,9 +26,14 @@ class DialogForTagsViewModel(
     val progressBarAllTags: LiveData<Boolean>
         get() = _progressBarAllTags
 
-    private val _userTagsList = MutableLiveData<List<TagData>>().apply { value = emptyList() }
-    val userTagsList: LiveData<List<TagData>>
-    get() = _userTagsList
+    private val _userTagsList =
+        MutableLiveData<ArrayList<UserTagData>>().apply { value = arrayListOf() }
+    val userTagsList: LiveData<ArrayList<UserTagData>>
+        get() = _userTagsList
+
+    private val _eventUserTagsListUpdate = MutableLiveData<Boolean>()
+    val eventUserTagsListUpdate: LiveData<Boolean>
+        get() = _eventUserTagsListUpdate
 
     private val _userTagsRecyclerVisible = MutableLiveData<Boolean>()
     val userTagsRecyclerVisible: LiveData<Boolean>
@@ -37,6 +42,7 @@ class DialogForTagsViewModel(
     private val _userTagsTextListEmptyVisible = MutableLiveData<Boolean>()
     val userTagsTextListEmptyVisible: LiveData<Boolean>
         get() = _userTagsTextListEmptyVisible
+
     init {
         statusLoading()
         getUserTags()
@@ -47,25 +53,28 @@ class DialogForTagsViewModel(
     private fun getUserTags() {
         viewModelScope.launch {
             _progressBarUserTags.postValue(true)
-            tagRepository.getUserTags().collect {
-                _userTagsList.value = it
+            tagRepository.getUserTags().collect { tags ->
+                getAllTags()
+                _userTagsList.value?.clear()
+                tags.forEach { _userTagsList.value?.add(it) }
                 checkForEmptyUserTagsList()
+                _eventUserTagsListUpdate.postValue(true)
                 _progressBarUserTags.postValue(false)
             }
         }
     }
 
-     fun removeUserTag(tagId: String){
+    fun removeUserTag(tagId: String) {
         viewModelScope.launch {
             tagRepository.removeUserTag(tagId)
         }
     }
 
-    private fun checkForEmptyUserTagsList(){
+    private fun checkForEmptyUserTagsList() {
         viewModelScope.launch {
             if (userTagsList.value.isNullOrEmpty()) {
                 _userTagsRecyclerVisible.postValue(false)
-                _userTagsTextListEmptyVisible.postValue( true)
+                _userTagsTextListEmptyVisible.postValue(true)
             } else {
                 _userTagsRecyclerVisible.postValue(true)
                 _userTagsTextListEmptyVisible.postValue(false)
@@ -85,11 +94,26 @@ class DialogForTagsViewModel(
         allTagsPagingAdapter.setOnItemClickListener {
             externalScope.launch {
                 if (it.used!!) {
-                    val tag = TagData(id = it.id, tagName = it.tagName, tagTextInsensitive = it.tagTextInsensitive, numberOfUses = it.numberOfUses)
+                    val tag = UserTagData(
+                        id = it.id,
+                        tagName = it.tagName,
+                    )
                     tagRepository.addTagForUser(tag)
                 } else {
                     removeUserTag(it.id!!)
                 }
+            }
+        }
+    }
+
+    fun getFoundTags(text: String?) {
+        viewModelScope.launch {
+            if (!text.isNullOrEmpty()) {
+                tagRepository.getFoundUsedTags(text).collect {
+                    allTagsPagingAdapter.submitData(it)
+                }
+            } else {
+                getAllTags()
             }
         }
     }

@@ -18,6 +18,7 @@ data class PostData(
     var id: String? = null,
     var uid: String? = null,
     var imageFileName: String? = null,
-    var tags: List<String>? = emptyList()
+    var tags: List<String>? = emptyList(),
+    val keywords: List<String>? = emptyList()
 ) : Parcelable
 

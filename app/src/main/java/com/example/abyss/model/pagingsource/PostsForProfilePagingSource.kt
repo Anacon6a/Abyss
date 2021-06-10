@@ -6,10 +6,11 @@ import com.example.abyss.model.data.PostData
 import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.QuerySnapshot
 import kotlinx.coroutines.tasks.await
+import timber.log.Timber
 
 
 class
-PostsForProfileFirestorePagingSource(
+PostsForProfilePagingSource(
     private val query: Query,
 ) : PagingSource<QuerySnapshot, PostData>() {
 
@@ -39,6 +40,7 @@ PostsForProfileFirestorePagingSource(
 
 
         } catch (e: Exception) {
+            Timber.e(e)
             LoadResult.Error(e)
         }
     }

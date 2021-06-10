@@ -9,9 +9,10 @@ import com.example.abyss.databinding.UserTagsForNewsFeedDataBinding
 import com.example.abyss.extensions.onClick
 import com.example.abyss.model.data.TagData
 import com.example.abyss.model.data.UsedTagData
+import com.example.abyss.model.data.UserTagData
 
 class NewsFeedUserTagsRecyclerAdapter(
-    private val tags: List<TagData>
+    private val tags: List<UserTagData>
 ) : RecyclerView.Adapter<NewsFeedUserTagsRecyclerAdapter.UserTagViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): NewsFeedUserTagsRecyclerAdapter.UserTagViewHolder {
@@ -35,9 +36,9 @@ class NewsFeedUserTagsRecyclerAdapter(
         return tags.size
     }
 
-    private var onItemClickListener: ((TagData) -> Unit)? = null
+    private var onItemClickListener: ((UserTagData) -> Unit)? = null
 
-    fun setOnItemClickListener(listener: (TagData) -> Unit) {
+    fun setOnItemClickListener(listener: (UserTagData) -> Unit) {
         onItemClickListener = listener
     }
 
@@ -45,7 +46,7 @@ class NewsFeedUserTagsRecyclerAdapter(
         private val binding: UserTagsForNewsFeedDataBinding
     ) : RecyclerView.ViewHolder(binding.root) {
 
-        fun bindTag(tag: TagData) {
+        fun bindTag(tag: UserTagData) {
             binding.tag = tag
 
             binding.buttonAddTag.onClick {

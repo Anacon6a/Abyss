@@ -10,5 +10,5 @@ data class UserData(
     var numberOfSubscribers: Int? = 0,
     val numberOfSubscriptions: Int? = 0,
     var uid: String? = null,
-    val userNameInsensitive: String? = userName?.toLowerCase(Locale.ROOT)
+    val keywords: List<String>? = emptyList()
 )

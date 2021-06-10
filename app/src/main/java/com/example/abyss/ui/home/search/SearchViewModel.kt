@@ -1,11 +1,14 @@
 package com.example.abyss.ui.home.search
 
+import android.view.View
+import android.widget.RadioButton
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.LoadState
 import androidx.paging.PagingData
+import com.example.abyss.R
 import com.example.abyss.adapters.home.search.SearchPostsPagingAdapter
 import com.example.abyss.adapters.home.search.SearchUsersPagingAdapter
 import com.example.abyss.model.repository.post.PostRepository
@@ -16,6 +19,7 @@ import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import java.util.*
+
 
 class SearchViewModel(
     private val postRepository: PostRepository,
@@ -30,22 +34,25 @@ class SearchViewModel(
     val progressBarLoading: LiveData<Boolean>
         get() = _progressBarLoading
 
-    private val searchText = MutableLiveData<String>()
+    private val _searchText = MutableLiveData<String>()
+    val searchText: LiveData<String>
+        get() = _searchText
 
-    private val _firstSearch = MutableLiveData<String>()
-    val firstSearch: LiveData<String>
-        get() = _firstSearch
+    private val addFirstSearch = MutableLiveData<Boolean>()
 
+    private val orderBySelection = MutableLiveData<Int>().apply { value = 0 }
+
+//    private val periodSelection = MutableLiveData<Int>().apply { value = 0 }
 
     init {
         statusLoading()
     }
 
-    fun initial(fs: String) {
-        _firstSearch.value = fs
+    fun initial(t: String) {
         viewModelScope.launch {
-            userRepository.getFoundUsers(firstSearch.value).collect {
-                searchUsersPagingAdapter.submitData(it)
+            if (addFirstSearch.value == null) {
+                addFirstSearch.postValue(true)
+                _searchText.postValue(t)
             }
         }
     }
@@ -65,32 +72,72 @@ class SearchViewModel(
         _progressBarLoading.postValue(boolean)
     }
 
-    fun getSearchResults(text: String?) {
-        if (text != null) {
-            searchText.value = text.toLowerCase(Locale.ROOT)
-        }
-        getPost()
+    fun getSearchResults(text: String) {
+        _searchText.value = text
+        getPosts()
         getUsers()
     }
 
     private fun getUsers() {
         viewModelScope.launch {
-            if (!searchText.value.isNullOrEmpty()) {
-                userRepository.getFoundUsers(searchText.value).collect {
+                userRepository.getFoundUsers(
+                    _searchText.value!!.toLowerCase(Locale.ROOT),
+                    orderBySelection.value!!,
+                ).collect {
                     searchUsersPagingAdapter.submitData(it)
                 }
-            } else {
-                searchUsersPagingAdapter.submitData(PagingData.empty())
-            }
         }
     }
 
-    private fun getPost() {
-
+    private fun getPosts() {
+        viewModelScope.launch {
+                postRepository.getFoundPosts(
+                    _searchText.value!!.toLowerCase(Locale.ROOT),
+                    orderBySelection.value!!,
+                )?.collect {
+                    searchPostsPagingAdapter.submitData(it)
+                }
+        }
     }
 
     fun onRefresh() {
-        getPost()
+        getPosts()
         getUsers()
+    }
+
+    fun onRadioButtonClicked(view: View) {
+        if (view is RadioButton) {
+            val checked = view.isChecked
+            when (view.getId()) {
+                R.id.by_popularity_radio ->
+                    if (checked) {
+                        orderBySelection.value = 0
+                    }
+                R.id.by_date_desc_radio ->
+                    if (checked) {
+                        orderBySelection.value = 1
+                    }
+                R.id.by_date_asc_radio ->
+                    if (checked) {
+                        orderBySelection.value = 2
+                    }
+//                R.id.all_time_radio ->
+//                    if (checked) {
+//                        periodSelection.value = 0
+//                    }
+//                R.id.today_radio ->
+//                    if (checked) {
+//                        periodSelection.value = 1
+//                    }
+//                R.id.last_month_radio ->
+//                    if (checked) {
+//                        periodSelection.value = 2
+//                    }
+//                R.id.last_year_radio ->
+//                    if (checked) {
+//                        periodSelection.value = 3
+//                    }
+            }
+        }
     }
 }

@@ -6,8 +6,11 @@ import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
 import com.example.abyss.model.data.PostData
-import com.example.abyss.model.pagingsource.PostsForNewsFeedPagingSource
-import com.example.abyss.model.pagingsource.PostsForProfileFirestorePagingSource
+import com.example.abyss.model.pagingsource.SubscriptionPostsForNewsFeedPagingSource
+import com.example.abyss.model.pagingsource.PostsForProfilePagingSource
+import com.example.abyss.model.pagingsource.PostsForSearchPagingSource
+import com.example.abyss.model.pagingsource.UsersForSearchPagingSource
+import com.example.abyss.model.repository.tag.TagRepository
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
@@ -29,6 +32,7 @@ class PostRepositoryFirestore(
     private val firebaseFunctions: FirebaseFunctions,
     private val ioDispatcher: CoroutineDispatcher,
     private val externalScope: CoroutineScope,
+    private val tagRepository: TagRepository
 ) : PostRepository {
 
     override suspend fun createPost(post: PostData, imageUri: Uri) {
@@ -50,28 +54,16 @@ class PostRepositoryFirestore(
 
                 doc.set(post)
                 Timber.i("пост добавлен")
+
+                if (!post.tags.isNullOrEmpty()) {
+                    tagRepository.createTag(post.tags!!, post.id!!, uid)
+                }
             } catch (e: Exception) {
                 Timber.e("Ошибка: ${e.message}")
             }
 
         }
     }
-
-//    override suspend fun addPostImageInStorage(imageUri: Uri): Flow<String> = flow {
-//
-//        val uid = firebaseAuth.uid!!
-//
-//        val fileName = UUID.randomUUID().toString()
-//
-//        val imageRef = firebaseStorage.getReference("postImages").child(uid).child(fileName)
-//        imageRef.putFile(imageUri).await()
-//        val url = imageRef.downloadUrl.await()
-//        emit(url.toString())
-//    }
-//        .shareIn(
-//        externalScope,
-//        SharingStarted.WhileSubscribed(),
-//    )
 
     override suspend fun getPostById(postId: String, uidProvider: String): Flow<PostData?> = flow {
         var post: PostData? = null
@@ -97,7 +89,7 @@ class PostRepositoryFirestore(
             val uid = firebaseAuth.uid.toString()
             val query = firestore.collection("users").document(uid).collection("posts")
                 .orderBy("date", Query.Direction.DESCENDING)
-            PostsForProfileFirestorePagingSource(query)
+            PostsForProfilePagingSource(query)
         }.flow.cachedIn(externalScope)
 
     override suspend fun getPostsSubscriptionForNewsFeed(): Flow<PagingData<PostData>>? =
@@ -113,7 +105,12 @@ class PostRepositoryFirestore(
             val querySubscription =
                 firestore.collection("users").document(uid).collection("subscriptions")
             val queryPosts = firestore
-            PostsForNewsFeedPagingSource(querySubscription, queryPosts, ioDispatcher, externalScope)
+            SubscriptionPostsForNewsFeedPagingSource(
+                querySubscription,
+                queryPosts,
+                ioDispatcher,
+                externalScope
+            )
         }.flow.cachedIn(externalScope)
 
 
@@ -125,22 +122,49 @@ class PostRepositoryFirestore(
                 prefetchDistance = 10
             )
         ) {
-            val query = firestore.collectionGroup("posts")
+            val query = firestore.collectionGroup("posts").orderBy("numberOfViews", Query.Direction.DESCENDING)
+                .orderBy("numberOfLikes", Query.Direction.DESCENDING).orderBy("date", Query.Direction.DESCENDING)
 
-            PostsForProfileFirestorePagingSource(query)
+            PostsForProfilePagingSource(query)
         }.flow.cachedIn(externalScope)
 
     override suspend fun getPostByTag(tag: String): Flow<PagingData<PostData>>? =
         Pager(
             PagingConfig(
-                initialLoadSize = 20,
-                pageSize = 30,
+                initialLoadSize = 40,
+                pageSize = 40,
                 prefetchDistance = 10
             )
         ) {
-            val query = firestore.collectionGroup("posts")
 
-            PostsForProfileFirestorePagingSource(query)
+            val query = firestore.collectionGroup("posts").whereArrayContains("tags", tag)
+
+            PostsForProfilePagingSource(query)
+        }.flow.cachedIn(externalScope)
+
+    override suspend fun getFoundPosts(
+        text: String,
+        orderBySelection: Int
+    ): Flow<PagingData<PostData>>? =
+        Pager(
+            PagingConfig(
+                initialLoadSize = 40,
+                pageSize = 40,
+                prefetchDistance = 10
+            )
+        ) {
+            var query = firestore.collectionGroup("posts")
+            if (text.isNotEmpty()){
+                query = query.whereArrayContains("keywords", text)
+            }
+            when (orderBySelection) {
+                0 -> query = query.orderBy("numberOfViews", Query.Direction.DESCENDING)
+                    .orderBy("numberOfLikes", Query.Direction.DESCENDING).orderBy("date", Query.Direction.DESCENDING)
+                1 -> query = query.orderBy("date", Query.Direction.DESCENDING)
+                2 -> query = query.orderBy("date", Query.Direction.ASCENDING)
+            }
+
+            PostsForProfilePagingSource(query)
         }.flow.cachedIn(externalScope)
 
 
@@ -217,11 +241,9 @@ class PostRepositoryFirestore(
         externalScope.launch(ioDispatcher) {
             try {
                 val uid = post.uid!!
-                val snapPost = firestore.collection("users").document(uid).collection("posts")
-                    .document(post.id!!).get().await().toObject<PostData>()
-
                 val postRef = firestore.collection("users").document(uid).collection("posts")
-                    .document(snapPost!!.id!!)
+                    .document(post.id!!)
+                val snapPost = postRef.get().await().toObject<PostData>()!!
 
                 val d = ArrayList<Deferred<Unit?>>()
 
@@ -267,14 +289,12 @@ class PostRepositoryFirestore(
                     if (tags.isNotEmpty() && tags != snapPost.tags) {
                         postRef.update("tags", tags)
                         try {
-                            val data = hashMapOf("tagsList" to tags)
-                            firebaseFunctions
-                                .getHttpsCallable("createTags")
-                                .call(data)
-
+                            tagRepository.createTag(tags, post.id!!, uid)
                         } catch (e: Exception) {
                             Timber.e("Ошибка создания тегов: ${e.message}")
                         }
+                    } else if (tags.isEmpty() && tags != snapPost.tags) {
+                        postRef.update("tags", tags)
                     }
                 }
 

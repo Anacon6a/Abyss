@@ -6,6 +6,8 @@ import android.content.DialogInterface
 import android.graphics.drawable.Drawable
 import android.view.View
 import android.widget.*
+import androidx.appcompat.widget.AppCompatButton
+import androidx.appcompat.widget.AppCompatImageButton
 import androidx.core.content.ContextCompat
 import androidx.databinding.BindingAdapter
 import androidx.databinding.InverseBindingAdapter
@@ -16,6 +18,7 @@ import com.bumptech.glide.load.engine.GlideException
 import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.target.Target
 import com.example.abyss.R
+import com.google.android.material.textfield.TextInputEditText
 import ru.rhanza.constraintexpandablelayout.ExpandableLayout
 import ru.rhanza.constraintexpandablelayout.State
 import java.text.SimpleDateFormat
@@ -274,19 +277,11 @@ fun addedIsTrue(button: Button, boolean: Boolean?) {
     }
 }
 
-@BindingAdapter("setCheck")
-fun setCheck(radioGroup: RadioGroup, newRadioButtonId: Int?) {
-    if (newRadioButtonId != null && radioGroup.checkedRadioButtonId != newRadioButtonId) {
-        radioGroup.check(newRadioButtonId)
-    }
+@BindingAdapter("notEnabledIfEmpty")
+fun notEnabledIfEmpty(button: AppCompatImageButton, text: String?){
+    button.isEnabled = !text.isNullOrEmpty()
 }
 
-@BindingAdapter("checkRadioButton")
-fun checkRadioButton(radioButton: RadioButton, newRadioButtonId: Int?) {
-    if (newRadioButtonId == null) {
-        radioButton.isChecked = true
-    }
-}
 
 
 

@@ -7,7 +7,7 @@ import androidx.paging.PagingData
 import androidx.paging.cachedIn
 import com.example.abyss.model.State
 import com.example.abyss.model.data.UserData
-import com.example.abyss.model.pagingsource.UsersForSearchPagingSource
+import com.example.abyss.model.pagingsource.user.UsersForSearchPagingSource
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
@@ -19,9 +19,6 @@ import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.tasks.await
 import timber.log.Timber
-import java.time.LocalDate
-import java.time.ZoneId
-import java.util.*
 
 class UserRepositoryFirestore(
     private val firebaseAuth: FirebaseAuth,

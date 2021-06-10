@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModelProvider
 import bindViewModel
 import com.example.abyss.adapters.notifications.NotificationsPagingAdapter
 import com.example.abyss.adapters.addtag.TagsPagingAdapter
+import com.example.abyss.adapters.comment.CommentPagingAdapter
 import com.example.abyss.adapters.home.*
 import com.example.abyss.adapters.home.newsfeed.NewsFeedAllTagsPagingAdapter
 import com.example.abyss.adapters.home.newsfeed.NewsFeedPostsPagingAdapter
@@ -13,9 +14,10 @@ import com.example.abyss.adapters.home.search.SearchPostsPagingAdapter
 import com.example.abyss.adapters.home.search.SearchUsersPagingAdapter
 import com.example.abyss.adapters.home.search.SearchViewPagerAdapter
 import com.example.abyss.adapters.profile.ProfileMyPostsPagingAdapter
-import com.example.abyss.model.pagingsource.PostsForSearchPagingSource
 import com.example.abyss.model.repository.auth.AuthRepositoryFirebase
 import com.example.abyss.model.repository.auth.AuthRepository
+import com.example.abyss.model.repository.comment.CommentRepository
+import com.example.abyss.model.repository.comment.CommentRepositoryFirestore
 import com.example.abyss.model.repository.like.LikeRepository
 import com.example.abyss.model.repository.like.LikeRepositoryFirestore
 import com.example.abyss.model.repository.post.PostRepository
@@ -42,6 +44,9 @@ import com.example.abyss.ui.posts.addpost.AddPostViewModel
 import com.example.abyss.ui.posts.editpost.EditPostViewModel
 import com.example.abyss.ui.posts.post.ModalBottomSheetForPostViewModel
 import com.example.abyss.ui.posts.post.PostViewModel
+import com.example.abyss.ui.posts.comments.CommentsViewModel
+import com.example.abyss.ui.posts.comments.ModalBottomSheetForCommentViewModel
+import com.example.abyss.ui.posts.comments.edit.DialogForEditCommentViewModel
 import com.example.abyss.ui.profile.ModalBottomSheetForProfileViewModel
 import com.example.abyss.ui.profile.ProfileViewModel
 import com.google.firebase.auth.FirebaseAuth
@@ -108,6 +113,7 @@ class AbyssApplication : Application(), KodeinAware {
         bind<TagRepository>() with provider {
             TagRepositoryFirestore(instance(), instance(), instance(), instance(), instance())
         }
+        bind<CommentRepository>() with provider { CommentRepositoryFirestore(instance(), instance(), instance(), instance()) }
 // ViewModelFactory
         bind() from provider { FirstViewModelFactory(instance(), instance()) }
         bind() from provider { LoginViewModelFactory(instance(), instance()) }
@@ -136,7 +142,8 @@ class AbyssApplication : Application(), KodeinAware {
                 instance(),
                 instance(),
                 instance(),
-                instance()
+                instance(),
+                instance(),
             )
         }
         bindViewModel<NewsFeedViewModel>() with singleton {
@@ -160,6 +167,15 @@ class AbyssApplication : Application(), KodeinAware {
         bindViewModel<DialogForTagsViewModel>() with provider {
             DialogForTagsViewModel(instance(), instance(), instance())
         }
+        bindViewModel<CommentsViewModel>() with provider {
+            CommentsViewModel(instance(), instance(), instance(), instance())
+        }
+        bindViewModel<DialogForEditCommentViewModel>() with provider {
+            DialogForEditCommentViewModel(instance(), instance(), instance())
+        }
+        bindViewModel<ModalBottomSheetForCommentViewModel>() with provider {
+            ModalBottomSheetForCommentViewModel(instance(), instance(), instance())
+        }
 // Adapter
         bind<ProfileMyPostsPagingAdapter>() with provider { ProfileMyPostsPagingAdapter() }
         bind() from provider { NewsFeedViewPagerAdapter() }
@@ -170,6 +186,7 @@ class AbyssApplication : Application(), KodeinAware {
         bind() from provider { SearchUsersPagingAdapter() }
         bind() from provider { TagsPagingAdapter() }
         bind() from provider { NewsFeedAllTagsPagingAdapter() }
+        bind() from provider { CommentPagingAdapter() }
     }
 
     override fun onCreate() {

@@ -4,9 +4,14 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.paging.LoadState
+import com.example.abyss.adapters.comment.CommentPagingAdapter
 import com.example.abyss.model.data.PostData
 import com.example.abyss.model.data.UserData
+import com.example.abyss.model.data.UserTagData
+import com.example.abyss.model.pagingsource.comment.CommentsPagingSource
 import com.example.abyss.model.repository.auth.AuthRepository
+import com.example.abyss.model.repository.comment.CommentRepository
 import com.example.abyss.model.repository.like.LikeRepository
 import com.example.abyss.model.repository.post.PostRepository
 import com.example.abyss.model.repository.subscription.SubscriptionRepository
@@ -14,6 +19,7 @@ import com.example.abyss.model.repository.user.UserRepository
 import com.example.abyss.model.repository.views.ViewsRepository
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.collectLatest
 
 class PostViewModel(
     private val externalScope: CoroutineScope,
@@ -23,7 +29,8 @@ class PostViewModel(
     private val authRepository: AuthRepository,
     private val likeRepository: LikeRepository,
     private val viewsRepository: ViewsRepository,
-    private val subscriptionRepository: SubscriptionRepository
+    private val subscriptionRepository: SubscriptionRepository,
+    private val commentRepository: CommentRepository,
 ) : ViewModel() {
 
     private val _profileImage = MutableLiveData<String>()
@@ -45,6 +52,10 @@ class PostViewModel(
     private val _postText = MutableLiveData<String?>()
     val postText: LiveData<String?>
         get() = _postText
+
+    private val _tagsText = MutableLiveData<String>()
+    val tagsText: LiveData<String>
+    get() = _tagsText
 
     private val _numberOfViews = MutableLiveData<Int>()
     val numberOfViews: LiveData<Int>
@@ -71,10 +82,12 @@ class PostViewModel(
         get() = _stateLike
 
     private val _userData = MutableLiveData<UserData>()
-    val userData: LiveData<UserData>
+    private val userData: LiveData<UserData>
         get() = _userData
 
     val postData = MutableLiveData<PostData>()
+
+    val textComment = MutableLiveData<String>()
 
     private var myUid: String? = null
 
@@ -89,13 +102,14 @@ class PostViewModel(
     private suspend fun getPost() {
         postRepository.getPostById(postData.value!!.id!!, postData.value!!.uid!!).collect {
             if (it != null) {
-                postData.postValue(it)
+                postData.value = it
                 if (postImage.value != it.imageUrl) {
-                    _postImage.postValue(it.imageUrl!!)
+                    _postImage.value = it.imageUrl!!
                 }
-                _postText.value = it.text
+                _postText.postValue(it.text)
                 _numberOfLikes.value = it.numberOfLikes!!
-                _numberOfViews.value = it.numberOfViews!!
+                _numberOfViews.value =  it.numberOfViews!!
+                _tagsText.value = it.tags!!.joinToString(separator = ", ")
             }
         }
     }
@@ -165,7 +179,6 @@ class PostViewModel(
     // добавление просмотра, если пользователь не просматривал
     private fun addAndGetViews() {
         externalScope.launch(ioDispatcher) {
-
             viewsRepository.AddViewsAndGetNumber(
                 postData.value!!.id!!,
                 postData.value!!.uid!!
@@ -208,13 +221,18 @@ class PostViewModel(
 
     }
 
-//    fun clear() {
-//        getActivity().getViewModelStore().clear();
-//        for (vm in mMap.values()) {
-//            vm.clear()
-//        }
-//
-//        viewmodelstoreowner.clear ()
-//        mMap.clear()
-//    }
+    fun addComment() {
+        viewModelScope.launch {
+            postData.value?.let {
+                val text = textComment.value
+                textComment.postValue("")
+                commentRepository.createComment(
+                    text!!,
+                    postData.value!!.id!!,
+                    postData.value!!.uid!!
+                )
+            }
+        }
+    }
+
 }

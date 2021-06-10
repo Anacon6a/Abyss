@@ -1,4 +1,4 @@
-package com.example.abyss.model.pagingsource
+package com.example.abyss.model.pagingsource.notification
 
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
@@ -10,7 +10,6 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.QuerySnapshot
 import com.google.firebase.firestore.ktx.toObject
-import com.google.firebase.firestore.ktx.toObjects
 import kotlinx.coroutines.*
 import kotlinx.coroutines.tasks.await
 import timber.log.Timber

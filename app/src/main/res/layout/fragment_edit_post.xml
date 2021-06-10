@@ -103,11 +103,11 @@
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/text_input_edit_text"
-                    android:layout_width="279dp"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="67dp"
+                    android:layout_marginStart="50dp"
+                    android:layout_marginEnd="50dp"
                     android:layout_marginBottom="20dp"
-                    android:layout_marginEnd="67dp"
                     android:hint="Добавьте подпись"
                     android:maxHeight="150dp"
                     android:enabled="@{EditPostViewModel.viewEnabled}"
@@ -141,10 +141,10 @@
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/tags_text"
-                    android:layout_width="279dp"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="67dp"
-                    android:layout_marginEnd="67dp"
+                    android:layout_marginStart="50dp"
+                    android:layout_marginEnd="50dp"
                     android:layout_marginBottom="20dp"
                     android:enabled="@{EditPostViewModel.viewEnabled}"
                     android:hint="Укажите теги через запятую"

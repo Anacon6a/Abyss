@@ -3,14 +3,14 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
-    <data class="NotificationsDataBinding">
+    <data class="UserCommentDataDataBinding">
         <variable
-            name="notifications"
-            type="com.example.abyss.model.data.NotificationData" />
+            name="comment"
+            type="com.example.abyss.model.data.UserCommentData" />
     </data>
 
     <androidx.cardview.widget.CardView
-        android:id="@+id/notifications_card"
+        android:id="@+id/comment_card"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
@@ -20,49 +20,69 @@
         app:cardPreventCornerOverlap="true"
         app:cardUseCompatPadding="true">
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/sub_constraint_layout"
+            android:id="@+id/com_constraint_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="10dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/post_image">
+            <ImageView
+                hideIfFalse="@{comment.commentFromThisUser}"
+                android:id="@+id/more_btn"
+                android:layout_width="40dp"
+                android:layout_height="30dp"
+                android:src="@drawable/ic_more"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:tint="@color/grey" />
             <com.google.android.material.imageview.ShapeableImageView
                 android:id="@+id/profile_image"
                 android:layout_width="52dp"
                 android:layout_height="52dp"
                 android:scaleType="centerCrop"
                 app:srcCompat="@drawable/ic_user_image_profile"
-                loadImage="@{notifications.userImageUrl}"
-                app:layout_constraintBottom_toBottomOf="parent"
+                loadImage="@{comment.profileImageUrl}"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.App.CornerSize50Percent" />
             <TextView
-                android:id="@+id/notifications_text"
+                android:id="@+id/user_name"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 app:layout_constraintTop_toTopOf="@+id/profile_image"
                 app:layout_constraintStart_toEndOf="@+id/profile_image"
                 android:layout_marginStart="10dp"
-                android:layout_marginEnd="10dp"
-                app:layout_constraintEnd_toStartOf="@+id/post_image"
+                android:text="@{comment.userName}"
+                app:layout_constraintEnd_toStartOf="@+id/more_btn"
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:textColor="@color/grey"
+                tools:text="theMad_Sam"/>
+
+            <TextView
+                android:id="@+id/comment_text"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="@{comment.commentText}"
+                app:layout_constraintTop_toBottomOf="@+id/user_name"
+                app:layout_constraintStart_toEndOf="@+id/profile_image"
+                android:layout_marginStart="10dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:layout_marginVertical="5dp"
                 android:ellipsize="end"
                 android:textColor="@color/grey"
-                android:maxLines="3"
-                tools:text="theMad_Sam нравится ваша публикация."/>
-            <com.google.android.material.imageview.ShapeableImageView
-                android:id="@+id/post_image"
-                android:layout_width="52dp"
-                android:layout_height="52dp"
-                android:scaleType="centerCrop"
-                loadImageOrGone ="@{notifications.postImageUrl}"
+                android:textSize="16dp"
+                tools:text="Лучшее, что я видел!"/>
+            <TextView
+                DateConverter="@{comment.date}"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:maxLength="10"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.DifferentCornerSize.CornerSize20Percent"
-                tools:src="@drawable/synth"/>
-
+               app:layout_constraintTop_toBottomOf="@id/comment_text"
+                tools:text="10.11.2021" />
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.cardview.widget.CardView>
 </layout>

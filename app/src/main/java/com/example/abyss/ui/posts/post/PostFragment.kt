@@ -1,18 +1,22 @@
 package com.example.abyss.ui.posts.post
 
+import android.app.AlertDialog
 import android.os.Bundle
 import android.transition.*
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
+import androidx.core.widget.addTextChangedListener
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
+import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.example.abyss.adapters.loadImageStatusTracking
 import com.example.abyss.databinding.FragmentPostBinding
 import com.example.abyss.extensions.onClick
-import com.example.abyss.ui.profile.ProfileFragmentDirections
 import com.example.abyss.utils.HidingNavigationBar
 import kodeinViewModel
 import kotlinx.coroutines.CoroutineDispatcher
@@ -81,6 +85,11 @@ class PostFragment : Fragment(), KodeinAware {
             binding.swipeRefreshLayout.setOnRefreshListener {
                 refresh()
             }
+            binding.buttonComments.onClick {
+                findNavController().navigate(PostFragmentDirections.actionPostFragmentToCommentsModalBottomSheetFragment(args.post, binding.textCommentInputText.text.toString()))
+                binding.textCommentInputText.setText("")
+            }
+
         }
     }
 

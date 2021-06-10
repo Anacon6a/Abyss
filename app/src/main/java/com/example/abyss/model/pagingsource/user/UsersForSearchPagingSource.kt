@@ -1,22 +1,21 @@
-package com.example.abyss.model.pagingsource
+package com.example.abyss.model.pagingsource.user
 
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
-import com.example.abyss.model.data.TagData
 import com.example.abyss.model.data.UserData
 import com.google.firebase.firestore.QuerySnapshot
 import kotlinx.coroutines.tasks.await
 import timber.log.Timber
 
-class TagsPagingSource(
+class UsersForSearchPagingSource(
     private val query: com.google.firebase.firestore.Query,
-) : PagingSource<QuerySnapshot, TagData>() {
+) : PagingSource<QuerySnapshot, UserData>() {
 
-    override fun getRefreshKey(state: PagingState<QuerySnapshot, TagData>): QuerySnapshot? {
+    override fun getRefreshKey(state: PagingState<QuerySnapshot, UserData>): QuerySnapshot? {
         return null
     }
 
-    override suspend fun load(params: LoadParams<QuerySnapshot>): LoadResult<QuerySnapshot, TagData> {
+    override suspend fun load(params: LoadParams<QuerySnapshot>): LoadResult<QuerySnapshot, UserData> {
         return try {
 
             //ссылка на первые 10 элементов
@@ -28,7 +27,7 @@ class TagsPagingSource(
                 val nextPage = query.startAfter(lastVisiblePost).limit(30).get().await()
 
                 LoadResult.Page(
-                    data = currentPage.toObjects(TagData::class.java),
+                    data = currentPage.toObjects(UserData::class.java),
                     prevKey = null,
                     nextKey = nextPage
                 )
@@ -46,4 +45,5 @@ class TagsPagingSource(
             LoadResult.Error(e)
         }
     }
+
 }

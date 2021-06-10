@@ -1,17 +1,14 @@
-package com.example.abyss.model.pagingsource
+package com.example.abyss.model.pagingsource.post
 
-import android.renderscript.Sampler
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
 import com.example.abyss.model.data.PostData
 import com.example.abyss.model.data.SubscriptionData
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
-import com.google.firebase.firestore.QuerySnapshot
 import com.google.firebase.firestore.ktx.toObject
 import kotlinx.coroutines.*
 import kotlinx.coroutines.tasks.await
-import java.util.*
 import kotlin.collections.ArrayList
 
 class SubscriptionPostsForNewsFeedPagingSource(

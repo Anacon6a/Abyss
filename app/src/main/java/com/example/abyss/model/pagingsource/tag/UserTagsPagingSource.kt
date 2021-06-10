@@ -1,19 +1,14 @@
-package com.example.abyss.model.pagingsource
+package com.example.abyss.model.pagingsource.tag
 
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
-import com.example.abyss.model.data.TagData
 import com.example.abyss.model.data.UsedTagData
-import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.QuerySnapshot
 import kotlinx.coroutines.*
 import kotlinx.coroutines.tasks.await
 
-class UsedTagsPagingSource(
+class UserTagsPagingSource(
     private val query: com.google.firebase.firestore.Query,
-    private val uid: String?,
-    private val firestore: FirebaseFirestore,
-    private val ioDispatcher: CoroutineDispatcher,
     private val externalScope: CoroutineScope,
 ) : PagingSource<QuerySnapshot, UsedTagData>() {
 
@@ -28,7 +23,15 @@ class UsedTagsPagingSource(
             val currentPage = params.key ?: query.limit(30).get().await()
             if (!currentPage.isEmpty) {
 
-                val usedTags = usabilityCheckUser(currentPage.toObjects(UsedTagData::class.java))
+                val usedTags = currentPage.toObjects(UsedTagData::class.java)
+                externalScope.launch {
+                    val d = arrayListOf<Deferred<Unit?>>()
+                    usedTags.forEach {
+                        d.add(async {
+                        it.used = true
+                        })
+                    }
+                }.join()
 
                 val lastVisiblePost = currentPage.documents[currentPage.size() - 1]
 
@@ -52,20 +55,5 @@ class UsedTagsPagingSource(
             LoadResult.Error(e)
         }
     }
-
-    private suspend fun usabilityCheckUser(tagList: List<UsedTagData>): List<UsedTagData> {
-        externalScope.launch(ioDispatcher) {
-            val d = arrayListOf<Deferred<Unit?>>()
-            tagList.forEach {
-//                d.add(async {
-                    val t = firestore.collection("users").document(uid!!).collection("tags").document(it.id!!).get().await()
-                    it.used = !t.data.isNullOrEmpty()
-//                })
-            }
-//            d.awaitAll()
-        }.join()
-        return tagList
-    }
-
 
 }

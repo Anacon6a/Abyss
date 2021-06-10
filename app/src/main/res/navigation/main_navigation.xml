@@ -100,6 +100,10 @@
             android:id="@+id/action_postFragment_to_editPostModalBottomSheetFragment"
             app:destination="@id/editPostModalBottomSheetFragment"
             app:popUpToInclusive="true" />
+        <action
+            android:id="@+id/action_postFragment_to_commentsModalBottomSheetFragment"
+            app:destination="@id/commentsModalBottomSheetFragment"
+            app:popUpToInclusive="false" />
     </fragment>
     <action
         android:id="@+id/action_global_addPostFragment"
@@ -139,7 +143,8 @@
             app:popUpToInclusive="true" />
         <action
             android:id="@+id/action_editPostModalBottomSheetFragment_to_profileFragment"
-            app:destination="@id/profileFragment" />
+            app:destination="@id/profileFragment"
+            app:popUpTo="@id/profileFragment" />
     </dialog>
     <fragment
         android:id="@+id/editPostFragment"
@@ -153,7 +158,7 @@
             android:id="@+id/action_editPostFragment_to_postFragment"
             app:destination="@id/postFragment"
             app:popUpTo="@id/postFragment"
-            app:popUpToInclusive="true" />
+            app:popUpToInclusive="false" />
     </fragment>
     <fragment
         android:id="@+id/searchFragment"
@@ -169,5 +174,53 @@
         android:name="com.example.abyss.ui.home.newsfeed.DialogForTagsFragment"
         android:label="DialogForTagsFragment"
         tools:layout="@layout/fragment_dialog_for_tags"/>
+    <fragment
+        android:id="@+id/commentsModalBottomSheetFragment"
+        android:name="com.example.abyss.ui.posts.comments.CommentsFragment"
+        android:label="CommentsFragment"
+        tools:layout="@layout/fragment_comments">
+        <argument
+            android:name="post"
+            app:argType="com.example.abyss.model.data.PostData" />
+        <argument
+            android:name="text"
+            app:argType="string"
+            app:nullable="true" />
+        <action
+            android:id="@+id/action_commentsModalBottomSheetFragment_to_modalBottomSheetForCommentFragment"
+            app:destination="@id/modalBottomSheetForCommentFragment"
+            app:popUpTo="@id/commentsModalBottomSheetFragment"
+            app:popUpToInclusive="false" />
+    </fragment>
+    <dialog
+        android:id="@+id/dialogForEditCommentFragment"
+        android:name="com.example.abyss.ui.posts.comments.edit.DialogForEditCommentFragment"
+        android:label="fragment_dialog_for_edit_comment"
+        tools:layout="@layout/fragment_dialog_for_edit_comment" >
+        <argument
+            android:name="comment"
+            app:argType="com.example.abyss.model.data.UserCommentData" />
+        <argument
+            android:name="contentMakerId"
+            app:argType="string" />
+    </dialog>
+    <dialog
+        android:id="@+id/modalBottomSheetForCommentFragment"
+        android:name="com.example.abyss.ui.posts.comments.ModalBottomSheetForCommentFragment"
+        android:label="ModalBottomSheetForCommentFragment"
+        tools:layout="@layout/fragment_modal_bottom_sheet_for_comment">
+        <argument
+            android:name="comment"
+            app:argType="com.example.abyss.model.data.UserCommentData" />
 
+        <action
+            android:id="@+id/action_modalBottomSheetForCommentFragment_to_dialogForEditCommentFragment"
+            app:destination="@id/dialogForEditCommentFragment"
+            app:popUpTo="@id/commentsModalBottomSheetFragment"
+            app:popUpToInclusive="false" />
+        <argument
+            android:name="contentMakerId"
+            app:argType="string" />
+
+    </dialog>
 </navigation>

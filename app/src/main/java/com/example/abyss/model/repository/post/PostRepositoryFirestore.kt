@@ -6,10 +6,8 @@ import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
 import com.example.abyss.model.data.PostData
-import com.example.abyss.model.pagingsource.SubscriptionPostsForNewsFeedPagingSource
-import com.example.abyss.model.pagingsource.PostsForProfilePagingSource
-import com.example.abyss.model.pagingsource.PostsForSearchPagingSource
-import com.example.abyss.model.pagingsource.UsersForSearchPagingSource
+import com.example.abyss.model.pagingsource.post.SubscriptionPostsForNewsFeedPagingSource
+import com.example.abyss.model.pagingsource.post.PostsPagingSource
 import com.example.abyss.model.repository.tag.TagRepository
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
@@ -89,7 +87,7 @@ class PostRepositoryFirestore(
             val uid = firebaseAuth.uid.toString()
             val query = firestore.collection("users").document(uid).collection("posts")
                 .orderBy("date", Query.Direction.DESCENDING)
-            PostsForProfilePagingSource(query)
+            PostsPagingSource(query)
         }.flow.cachedIn(externalScope)
 
     override suspend fun getPostsSubscriptionForNewsFeed(): Flow<PagingData<PostData>>? =
@@ -125,7 +123,7 @@ class PostRepositoryFirestore(
             val query = firestore.collectionGroup("posts").orderBy("numberOfViews", Query.Direction.DESCENDING)
                 .orderBy("numberOfLikes", Query.Direction.DESCENDING).orderBy("date", Query.Direction.DESCENDING)
 
-            PostsForProfilePagingSource(query)
+            PostsPagingSource(query)
         }.flow.cachedIn(externalScope)
 
     override suspend fun getPostByTag(tag: String): Flow<PagingData<PostData>>? =
@@ -139,7 +137,7 @@ class PostRepositoryFirestore(
 
             val query = firestore.collectionGroup("posts").whereArrayContains("tags", tag)
 
-            PostsForProfilePagingSource(query)
+            PostsPagingSource(query)
         }.flow.cachedIn(externalScope)
 
     override suspend fun getFoundPosts(
@@ -164,7 +162,7 @@ class PostRepositoryFirestore(
                 2 -> query = query.orderBy("date", Query.Direction.ASCENDING)
             }
 
-            PostsForProfilePagingSource(query)
+            PostsPagingSource(query)
         }.flow.cachedIn(externalScope)
 
 
@@ -187,14 +185,6 @@ class PostRepositoryFirestore(
 
             for (dc in snapshots!!.documentChanges) {
                 offer(true)
-//                when (dc.type) {
-//                    DocumentChange.Type.ADDED -> {
-//                        val post = dc.document.toObject<PostData>()
-//                        offer(Pair(post, "added"))
-//                    }
-//                    DocumentChange.Type.MODIFIED -> Timber.d("Modified")
-//                    DocumentChange.Type.REMOVED -> Timber.d("Removed")
-//                }
             }
         }
         offer(false)
@@ -317,7 +307,7 @@ class PostRepositoryFirestore(
                         .child(post.imageFileName!!)
                         .delete().await()
                 } catch (e: Exception) {
-                    Timber.e("Ошмбка удаления изображения поста из FirebaseStorage: ${e.message}")
+                    Timber.e("Ошибка удаления изображения поста из FirebaseStorage: ${e.message}")
                 }
             } catch (e: Exception) {
                 Timber.e("Ошибка удаления поста: ${e.message}")

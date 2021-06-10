@@ -7,8 +7,8 @@ import androidx.paging.cachedIn
 import com.example.abyss.model.data.TagData
 import com.example.abyss.model.data.UsedTagData
 import com.example.abyss.model.data.UserTagData
-import com.example.abyss.model.pagingsource.TagsPagingSource
-import com.example.abyss.model.pagingsource.UsedTagsPagingSource
+import com.example.abyss.model.pagingsource.tag.TagsPagingSource
+import com.example.abyss.model.pagingsource.tag.UsedTagsPagingSource
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query

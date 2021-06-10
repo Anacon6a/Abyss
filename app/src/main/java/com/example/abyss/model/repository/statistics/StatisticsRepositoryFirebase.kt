@@ -5,7 +5,7 @@ import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
 import com.example.abyss.model.data.NotificationData
-import com.example.abyss.model.pagingsource.NotificationsPagingSource
+import com.example.abyss.model.pagingsource.notification.NotificationsPagingSource
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query

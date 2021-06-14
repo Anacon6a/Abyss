@@ -5,6 +5,8 @@ import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
 import com.example.abyss.model.data.CommentData
+import com.example.abyss.model.data.PostData
+import com.example.abyss.model.data.StatisticsData
 import com.example.abyss.model.data.UserCommentData
 import com.example.abyss.model.pagingsource.comment.CommentsPagingSource
 import com.example.abyss.model.pagingsource.post.PostsPagingSource
@@ -13,6 +15,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.DocumentChange
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
+import com.google.firebase.firestore.ktx.toObject
 import kotlinx.coroutines.*
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
@@ -36,8 +39,33 @@ class CommentRepositoryFirestore(
                 val commentRef =
                     firestore.collection("users").document(contentMakerId).collection("posts")
                         .document(postId).collection("comments").document()
+                val statisticsId = postId + commentRef.id
+                val statisticsRef =
+                    firestore.collection("users").document(contentMakerId).collection("statistics")
+                        .document(statisticsId)
+                val numberCommentsRef =
+                    firestore.collection("users").document(contentMakerId).collection("posts")
+                        .document(postId)
                 val commentData = CommentData(text, commentRef.id, uid, postId, contentMakerId)
-                commentRef.set(commentData)
+                val viewed = if (uid != contentMakerId) false else null
+                val statistics = StatisticsData(
+                    statisticsId,
+                    "comment",
+                    commentData.date,
+                    uid,
+                    contentMakerId,
+                    viewed,
+                    postId,
+                    commentData.id
+                )
+                firestore.runTransaction {
+                  val  numberCommentsSnap =  it.get(numberCommentsRef)
+                  val nC = numberCommentsSnap.toObject<PostData>()?.numberOfComments
+                   val numberComments = nC?.plus(1) ?: 1
+                    it.set(commentRef, commentData)
+                    it.set(statisticsRef, statistics)
+                    it.update(numberCommentsRef, "numberOfComments", numberComments)
+                }.await()
             } catch (e: Exception) {
                 Timber.e(e)
             }
@@ -66,8 +94,21 @@ class CommentRepositoryFirestore(
             val commentRef = firestore.collection("users").document(contentMakerId)
                 .collection("posts").document(comment.postId).collection("comments")
                 .document(comment.id)
-            firestore.runBatch { batch ->
-                batch.delete(commentRef)
+            val statisticsId = comment.postId + comment.id
+            val statisticsRef =
+                firestore.collection("users").document(contentMakerId).collection("statistics")
+                    .document(statisticsId)
+            val numberCommentsRef =
+                firestore.collection("users").document(contentMakerId).collection("posts")
+                    .document(comment.postId )
+
+            firestore.runTransaction {
+                val  numberCommentsSnap =  it.get(numberCommentsRef)
+                val nC = numberCommentsSnap.toObject<PostData>()?.numberOfComments
+                val numberComments = nC?.minus(1) ?: 0
+                it.delete(commentRef)
+                it.delete(statisticsRef)
+                it.update(numberCommentsRef, "numberOfComments", numberComments)
             }.await()
         }.join()
     }

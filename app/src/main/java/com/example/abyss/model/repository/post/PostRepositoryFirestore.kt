@@ -6,8 +6,10 @@ import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
 import com.example.abyss.model.data.PostData
+import com.example.abyss.model.data.SavedPostData
 import com.example.abyss.model.pagingsource.post.SubscriptionPostsForNewsFeedPagingSource
 import com.example.abyss.model.pagingsource.post.PostsPagingSource
+import com.example.abyss.model.pagingsource.post.SavedPostsPagingSource
 import com.example.abyss.model.repository.tag.TagRepository
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
@@ -76,10 +78,10 @@ class PostRepositoryFirestore(
         Timber.e(it)
     }
 
-    override fun getPostsForProfile() =
+    override suspend fun getUsersPosts() =
         Pager(
             PagingConfig(
-                initialLoadSize = 20,
+                initialLoadSize = 30,
                 pageSize = 30,
                 prefetchDistance = 10
             )
@@ -90,7 +92,21 @@ class PostRepositoryFirestore(
             PostsPagingSource(query)
         }.flow.cachedIn(externalScope)
 
-    override suspend fun getPostsSubscriptionForNewsFeed(): Flow<PagingData<PostData>>? =
+    override suspend fun getSavedPosts() =
+        Pager(
+            PagingConfig(
+                initialLoadSize = 30,
+                pageSize = 30,
+                prefetchDistance = 10
+            )
+        ) {
+            val uid = firebaseAuth.uid.toString()
+            val query = firestore.collection("users").document(uid).collection("savedPosts")
+                .orderBy("date", Query.Direction.DESCENDING)
+            SavedPostsPagingSource(query, ioDispatcher, externalScope, firestore)
+        }.flow.cachedIn(externalScope)
+
+    override suspend fun getPostsSubscription(): Flow<PagingData<PostData>>? =
         Pager(
             PagingConfig(
                 initialLoadSize = 20,
@@ -112,16 +128,18 @@ class PostRepositoryFirestore(
         }.flow.cachedIn(externalScope)
 
 
-    override suspend fun getPostsTrendsForNewsFeed(): Flow<PagingData<PostData>>? =
+    override suspend fun getPostsTrends(): Flow<PagingData<PostData>>? =
         Pager(
             PagingConfig(
-                initialLoadSize = 20,
+                initialLoadSize = 30,
                 pageSize = 30,
                 prefetchDistance = 10
             )
         ) {
-            val query = firestore.collectionGroup("posts").orderBy("numberOfViews", Query.Direction.DESCENDING)
-                .orderBy("numberOfLikes", Query.Direction.DESCENDING).orderBy("date", Query.Direction.DESCENDING)
+            val query = firestore.collectionGroup("posts")
+                .orderBy("numberOfViews", Query.Direction.DESCENDING)
+                .orderBy("numberOfLikes", Query.Direction.DESCENDING)
+                .orderBy("date", Query.Direction.DESCENDING)
 
             PostsPagingSource(query)
         }.flow.cachedIn(externalScope)
@@ -152,12 +170,13 @@ class PostRepositoryFirestore(
             )
         ) {
             var query = firestore.collectionGroup("posts")
-            if (text.isNotEmpty()){
+            if (text.isNotEmpty()) {
                 query = query.whereArrayContains("keywords", text)
             }
             when (orderBySelection) {
                 0 -> query = query.orderBy("numberOfViews", Query.Direction.DESCENDING)
-                    .orderBy("numberOfLikes", Query.Direction.DESCENDING).orderBy("date", Query.Direction.DESCENDING)
+                    .orderBy("numberOfLikes", Query.Direction.DESCENDING)
+                    .orderBy("date", Query.Direction.DESCENDING)
                 1 -> query = query.orderBy("date", Query.Direction.DESCENDING)
                 2 -> query = query.orderBy("date", Query.Direction.ASCENDING)
             }
@@ -302,7 +321,6 @@ class PostRepositoryFirestore(
                 firestore.collection("users").document(post.uid!!).collection("posts")
                     .document(post.id!!).delete().await()
                 try {
-
                     firebaseStorage.getReference("postImages").child(post.uid!!)
                         .child(post.imageFileName!!)
                         .delete().await()
@@ -315,4 +333,82 @@ class PostRepositoryFirestore(
 
         }
     }
+
+    override suspend fun getStateSavePost(post: PostData): Boolean? {
+        var state: Boolean? = null
+        externalScope.launch(ioDispatcher) {
+            try {
+                val uid = firebaseAuth.uid!!
+                if (uid != post.uid) {
+                    val savePostSnap =
+                        firestore.collection("users").document(uid).collection("savedPosts")
+                            .document(post.uid + post.id).get().await()
+                    state = !savePostSnap.data.isNullOrEmpty()
+                }
+            } catch (e: Exception) {
+                Timber.e(e.message)
+            }
+        }.join()
+        return state
+    }
+
+    override suspend fun saveOrDeletePost(post: PostData) {
+        externalScope.launch(ioDispatcher) {
+            try {
+                val uid = firebaseAuth.uid.toString()
+                val savedPostRef =
+                    firestore.collection("users").document(uid).collection("savedPosts")
+                        .document(post.uid + post.id)
+                val savedPost = SavedPostData(savedPostRef.id, post.id, post.uid)
+                val numberSavesRef =
+                    firestore.collection("users").document(post.uid!!).collection("posts")
+                        .document(post.id!!)
+                firestore.runTransaction {
+                    val numberSavesSnap = it.get(numberSavesRef)
+                    val nS = numberSavesSnap.toObject<PostData>()?.numberOfComments
+                    if (it.get(savedPostRef).data.isNullOrEmpty()) {
+                        val numberSaves = nS?.plus(1) ?: 1
+                        it.update(numberSavesRef, "numberOfSaves", numberSaves)
+                        it.set(savedPostRef, savedPost)
+                    } else {
+                        val numberSaves = nS?.minus(1) ?: 0
+                        it.update(numberSavesRef, "numberOfSaves", numberSaves)
+                        it.delete(savedPostRef)
+                    }
+                }.await()
+            } catch (e: Exception) {
+                Timber.e(e)
+            }
+        }
+    }
+
+    @ExperimentalCoroutinesApi
+    override suspend fun listeningForChangesSavedPosts(): Flow<Boolean> = callbackFlow {
+        val uid = firebaseAuth.uid.toString()
+        val eventPostsListener =
+            firestore.collection("users").document(uid).collection("savedPosts")
+        var isFirstListener = true
+
+        val subscription = eventPostsListener.addSnapshotListener { snapshots, exception ->
+            exception?.let {
+                Timber.e("Ошибка: ${it.message.toString()}")
+                cancel(it?.message.toString())
+            }
+
+            if (isFirstListener) {
+                isFirstListener = false
+                return@addSnapshotListener
+            }
+
+            for (dc in snapshots!!.documentChanges) {
+                offer(true)
+            }
+        }
+        offer(false)
+        awaitClose { subscription.remove() }
+    }.shareIn(
+        externalScope,
+        SharingStarted.WhileSubscribed(),
+    )
+
 }

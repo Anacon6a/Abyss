@@ -127,6 +127,9 @@
             android:id="@+id/action_modalBottomSheetFragment_to_loginFragment"
             app:destination="@id/loginFragment"
             app:popUpToInclusive="false" />
+        <action
+            android:id="@+id/action_modalBottomSheetFragment_to_statisticsFragment"
+            app:destination="@id/statisticsFragment" />
     </dialog>
     <dialog
         android:id="@+id/editPostModalBottomSheetFragment"
@@ -168,6 +171,9 @@
         <argument
             android:name="searchQuery"
             app:argType="string" />
+        <action
+            android:id="@+id/action_searchFragment_to_postFragment"
+            app:destination="@id/postFragment" />
     </fragment>
     <dialog
         android:id="@+id/dialogForTagsFragment"
@@ -223,4 +229,9 @@
             app:argType="string" />
 
     </dialog>
+    <fragment
+        android:id="@+id/statisticsFragment"
+        android:name="com.example.abyss.ui.statistics.StatisticsFragment"
+        android:label="fragment_statistics"
+        tools:layout="@layout/fragment_statistics" />
 </navigation>

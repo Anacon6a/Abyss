@@ -21,7 +21,6 @@ class CommentsPagingSource(
 
     override suspend fun load(params: LoadParams<QuerySnapshot>): LoadResult<QuerySnapshot, UserCommentData> {
         return try {
-
             var userCommentDataList = emptyList<UserCommentData>()
             var nextPage: QuerySnapshot? = null
 
@@ -53,7 +52,6 @@ class CommentsPagingSource(
         externalScope.launch(ioDispatcher) {
             for (comm in comments) {
                 try {
-
                     val user =
                         firestore.collection("users").document(comm.contentMakerUid!!).get().await()
                             .toObject(UserData::class.java)!!

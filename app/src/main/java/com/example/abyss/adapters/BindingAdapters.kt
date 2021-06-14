@@ -71,6 +71,46 @@ fun LikeIfTrue(imageView: ImageView, boolean: Boolean) {
     }
 }
 
+@BindingAdapter("savedIsTrue")
+fun savedIsTrue(button: AppCompatButton, boolean: Boolean?) {
+    if (boolean == null) {
+        button.visibility = View.INVISIBLE
+    } else if (boolean) {
+        button.background = ContextCompat.getDrawable(button.context, R.drawable.bg_unsubscribe)
+        button.text = "Убрать из избранного"
+        button.visibility = View.VISIBLE
+    } else {
+        button.background = ContextCompat.getDrawable(button.context, R.drawable.bg_com_btn)
+        button.text = "Сохранить"
+        button.visibility = View.VISIBLE
+    }
+}
+
+@BindingAdapter("savesPost")
+fun savesPost(textView: TextView, numbers: Int?) {
+    if (numbers != null) {
+        textView.visibility = View.VISIBLE
+        if (numbers == 0) {
+            textView.text = " Нет сохранений"
+        } else if (numbers < 1000 && (numbers % 100) > 10 && (numbers % 100) < 15) {
+            textView.text = " $numbers сохранений"
+        } else if (numbers < 1000 && (numbers % 10) > 0 && (numbers % 10) < 5) {
+            when (numbers % 10) {
+                1 -> textView.text = " $numbers сохранение"
+                2, 3, 4 -> textView.text = " $numbers сохранения"
+            }
+        } else if (numbers in 10000..999999) {
+            textView.text = " ${numbers / 1000} Тыс. сохранений"
+        } else if (numbers >= 1000000) {
+            textView.text = " ${numbers / 1000000} Млн. сохранений"
+        } else {
+            textView.text = " $numbers сохранений"
+        }
+    }else{
+        textView.visibility = View.GONE
+    }
+}
+
 @BindingAdapter("loadImage")
 fun loadImage(imageView: ImageView, url: String?) {
     if (!url.isNullOrEmpty()) {
@@ -195,6 +235,28 @@ fun textForNumberSubscribers(textView: TextView, numbers: Int?) {
 }
 
 @SuppressLint("SetTextI18n")
+@BindingAdapter("textForNumberComments")
+fun textForNumberComments(textView: TextView, numbers: Int?) {
+
+    if (numbers == 0 || numbers == null) {
+        textView.text = "Пока нет комментариев"
+    } else if (numbers < 1000 && (numbers % 100) > 10 && (numbers % 100) < 15) {
+        textView.text = " $numbers комментариев"
+    } else if (numbers < 1000 && (numbers % 10) > 0 && (numbers % 10) < 5) {
+        when (numbers % 10) {
+            1 -> textView.text = " $numbers комментарий"
+            2, 3, 4 -> textView.text = " $numbers комментария"
+        }
+    } else if (numbers in 10000..999999) {
+        textView.text = " ${numbers / 1000} Тыс. комментариев"
+    } else if (numbers >= 1000000) {
+        textView.text = " ${numbers / 1000000} Млн. комментариев"
+    } else {
+        textView.text = " $numbers комментариев"
+    }
+}
+
+@SuppressLint("SetTextI18n")
 @BindingAdapter("textForNumberSubscriptions")
 fun textForNumberSubscriptions(textView: TextView, numbers: Int?) {
 
@@ -215,6 +277,7 @@ fun textForNumberSubscriptions(textView: TextView, numbers: Int?) {
         textView.text = " $numbers подписок"
     }
 }
+
 
 
 @SuppressLint("SetTextI18n")
@@ -261,7 +324,7 @@ fun displayTextForExpandable(exp: ExpandableLayout, text: String?) {
 
 @BindingAdapter("getSearchQuery")
 fun getSearchQuery(searchView: androidx.appcompat.widget.SearchView, text: String?) {
-    if (text != null && text != searchView.query){
+    if (text != null && text != searchView.query) {
         searchView.setQuery(text, true)
     }
 }
@@ -278,9 +341,13 @@ fun addedIsTrue(button: Button, boolean: Boolean?) {
 }
 
 @BindingAdapter("notEnabledIfEmpty")
-fun notEnabledIfEmpty(button: AppCompatImageButton, text: String?){
+fun notEnabledIfEmpty(button: AppCompatImageButton, text: String?) {
     button.isEnabled = !text.isNullOrEmpty()
 }
+
+
+
+
 
 
 

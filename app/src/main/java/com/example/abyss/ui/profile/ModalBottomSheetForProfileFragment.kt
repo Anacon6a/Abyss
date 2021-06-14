@@ -37,8 +37,12 @@ class ModalBottomSheetForProfileFragment : BottomSheetDialogFragment(), KodeinAw
     }
 
     private fun subscription() {
-        binding.statisticsBtn.onClick { }
-        binding.editProfileBtn.onClick { }
+        binding.statisticsBtn.onClick {
+            findNavController().navigate(ModalBottomSheetForProfileFragmentDirections.actionModalBottomSheetFragmentToStatisticsFragment())
+        }
+        binding.editProfileBtn.onClick {
+
+        }
         binding.logoutBtn.onClick {
             viewModel.logout()
         }

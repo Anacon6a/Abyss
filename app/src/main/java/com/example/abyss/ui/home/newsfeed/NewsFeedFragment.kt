@@ -60,7 +60,6 @@ class NewsFeedFragment() : Fragment(), KodeinAware {
             Subscription()
             setTabLayout()
             setAdaptersForViewPager()
-
         }
 
         return binding.root

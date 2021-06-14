@@ -235,14 +235,30 @@
 
                         <androidx.appcompat.widget.AppCompatButton
                             android:id="@+id/save_post"
-                            android:layout_width="100dp"
+                            android:layout_width="130dp"
                             android:layout_height="wrap_content"
                             android:layout_marginBottom="20dp"
                             android:background="@drawable/bg_com_btn"
                             android:onClick="@{() -> PostViewModel.savePost()}"
+                            savedIsTrue="@{PostViewModel.stateSavePost}"
                             android:text="Сохранить"
                             android:textAllCaps="false"
                             android:textColor="@color/white"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                             android:visibility="invisible"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@+id/like_post_constraint_layout" />
+
+                        <TextView
+                            android:id="@+id/saves_post"
+                            android:layout_width="130dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="20dp"
+                            savesPost="@{PostViewModel.numberOfSaves}"
+                            tools:text="200 сохранений"
+                            android:ellipsize="end"
+                            android:maxLines="1"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
@@ -316,11 +332,7 @@
                             android:layout_marginTop="20dp"
                             android:text="Оставьте комментарий"
                             android:textColor="@color/grey"
-                            android:textSize="18sp"
-                            app:layout_constraintBottom_toBottomOf="parent"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toTopOf="parent" />
+                            android:textSize="18sp" />
 
                         <androidx.constraintlayout.widget.ConstraintLayout
                             android:layout_width="match_parent"
@@ -355,13 +367,23 @@
                                 app:layout_constraintTop_toTopOf="parent" />
 
                         </androidx.constraintlayout.widget.ConstraintLayout>
+                        <TextView
+                            android:id="@+id/number_comments"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="20dp"
+                            textForNumberComments="@{PostViewModel.numberOfComments}"
+                            tools:text="200 комментариев"
+                            android:layout_marginTop="10dp"
+                            android:layout_gravity="center"
+                            android:ellipsize="end"
+                            android:maxLines="1" />
 
                         <androidx.appcompat.widget.AppCompatButton
                             android:id="@+id/button_comments"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center_horizontal"
-                            android:layout_marginTop="15dp"
                             android:layout_marginBottom="20dp"
                             android:background="@drawable/bg_com_btn"
                             android:paddingStart="20dp"

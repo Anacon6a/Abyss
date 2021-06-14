@@ -47,10 +47,9 @@ class LikeRepositoryFirestore(
     }
 
 
-    override suspend fun AddLikeAndGetNumberOfLikesAndStatus(postId: String, uidProvider: String) {
+    override suspend fun addOrDeleteLike(postId: String, uidProvider: String) {
         externalScope.launch(ioDispatcher) {
             try {
-
                 val uid = firebaseAuth.uid!!
                 var numberLikes: Int? = 0
                 val statisticsId = postId + uid

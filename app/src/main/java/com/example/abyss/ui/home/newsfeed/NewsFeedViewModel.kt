@@ -123,7 +123,7 @@ class NewsFeedViewModel(
 //            pagingDataNotNull.value!!.elementAtOrNull(0).let { data ->
 //                if (_listPostPagingAdapters.value?.get(0)?.itemCount!! < 1)
 //                if (data == null) {
-            postRepository.getPostsSubscriptionForNewsFeed()?.collect {
+            postRepository.getPostsSubscription()?.collect {
 //                pagingDataNotNull.value!!.add(true)
                 _listPostPagingAdapters.value?.get(0)?.submitData(it)
 //                    }
@@ -141,7 +141,7 @@ class NewsFeedViewModel(
         externalScope.launch(ioDispatcher) {
 //            pagingDataNotNull.value!!.elementAtOrNull(1).let { data ->
 //                if (data == null) {
-            postRepository.getPostsTrendsForNewsFeed()?.collect {
+            postRepository.getPostsTrends()?.collect {
 //                pagingDataNotNull.value!!.add(true)
                 _listPostPagingAdapters.value?.get(1)?.submitData(it)
             }

@@ -42,11 +42,9 @@ class SubscriptionRepositoryFirestore(
         TODO("Not yet implemented")
     }
 
-    override suspend fun AddSubscriptionAndGetNumberOfSubscribersAndStatus(uidSubscription: String) {
+    override suspend fun addOrDeleteSubscription(uidSubscription: String) {
         externalScope.launch(ioDispatcher) {
             try {
-
-
                 val uid = firebaseAuth.uid!!
                 var numberSubscribers: Int? = 0
                 var numberSubscriptions: Int? = 0

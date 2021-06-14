@@ -2,22 +2,20 @@ package com.example.abyss.ui.profile
 
 import androidx.lifecycle.*
 import androidx.paging.LoadState
-import androidx.paging.PagingData
 import com.example.abyss.adapters.profile.ProfileMyPostsPagingAdapter
 import com.example.abyss.model.State
-import com.example.abyss.model.data.PostData
 import com.example.abyss.model.repository.post.PostRepository
 import com.example.abyss.model.repository.user.UserRepository
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
-import timber.log.Timber
 
 class ProfileViewModel(
     private val ioDispatcher: CoroutineDispatcher,
     private val postRepository: PostRepository,
     private val userRepository: UserRepository,
     private val externalScope: CoroutineScope,
-    val profileMyPostsPagingAdapter: ProfileMyPostsPagingAdapter,
+    val postsPagingAdapter: ProfileMyPostsPagingAdapter,
+    val savedPostsPagingAdapter: ProfileMyPostsPagingAdapter,
 ) : ViewModel() {
 
     private val _userName = MutableLiveData<String>()
@@ -40,38 +38,48 @@ class ProfileViewModel(
     val progressBarloadingAllPosts: LiveData<Boolean>
         get() = _progressBarloadingAllPosts
 
-    private val postsUser = MutableLiveData<PagingData<PostData>>()
-
     init {
-        StatusLoading()
-        GetPostsUser()
+        statusLoading()
+        getPostsUser()
+        getSavedPosts()
         listeningForChangesPosts()
-        GetUser()
+        listeningForChangesSavedPosts()
+        getUser()
     }
 
-    fun StatusLoading() {
+    private fun statusLoading() {
         externalScope.launch()
         {
-            profileMyPostsPagingAdapter.loadStateFlow.collectLatest { loadState ->
-                LoadingPosts(loadState.source.refresh is LoadState.Loading)
+            postsPagingAdapter.loadStateFlow.collectLatest { loadState ->
+                loadingPosts(loadState.source.refresh is LoadState.Loading)
+            }
+            savedPostsPagingAdapter.loadStateFlow.collectLatest { loadState ->
+                loadingPosts(loadState.source.refresh is LoadState.Loading)
             }
         }
     }
 
-    fun LoadingPosts(boolean: Boolean) {
+    private fun loadingPosts(boolean: Boolean) {
         _progressBarloadingAllPosts.postValue(boolean)
     }
 
-    private fun GetPostsUser() {
+    private fun getPostsUser() {
         externalScope.launch(ioDispatcher) {
-            postRepository.getPostsForProfile()?.collect {
-                postsUser.postValue(it)
-                profileMyPostsPagingAdapter.submitData(it)
+            postRepository.getUsersPosts()?.collect {
+                postsPagingAdapter.submitData(it)
             }
         }
     }
 
-    private fun GetUser() {
+    private fun getSavedPosts() {
+        externalScope.launch(ioDispatcher) {
+            postRepository.getSavedPosts()?.collect {
+                savedPostsPagingAdapter.submitData(it)
+            }
+        }
+    }
+
+    private fun getUser() {
 
         externalScope.launch(ioDispatcher) {
 
@@ -85,10 +93,10 @@ class ProfileViewModel(
                         if (profileImageUrl.value != state.data.profileImageUrl!!) {
                             _profileImageUrl.postValue(state.data.profileImageUrl!!)
                         }
-                        if (numbersOfSubscribers.value != state.data.numberOfSubscribers){
+                        if (numbersOfSubscribers.value != state.data.numberOfSubscribers) {
                             _numbersOfSubscribers.postValue(state.data.numberOfSubscribers!!)
                         }
-                        if (numbersOfSubscriptions.value != state.data.numberOfSubscriptions!!){
+                        if (numbersOfSubscriptions.value != state.data.numberOfSubscriptions!!) {
                             _numbersOfSubscriptions.postValue(state.data.numberOfSubscriptions!!)
                         }
                     }
@@ -102,15 +110,26 @@ class ProfileViewModel(
         externalScope.launch(ioDispatcher) {
             postRepository.listeningForChangesPosts().collect {
                 if (it) {
-                    GetPostsUser()
+                    getPostsUser()
+                }
+            }
+        }
+    }
+
+    private fun listeningForChangesSavedPosts() {
+        externalScope.launch(ioDispatcher) {
+            postRepository.listeningForChangesSavedPosts().collect {
+                if (it) {
+                    getSavedPosts()
                 }
             }
         }
     }
 
     fun refresh() {
-        GetPostsUser()
-        GetUser()
+        getPostsUser()
+        getSavedPosts()
+        getUser()
     }
 }
 

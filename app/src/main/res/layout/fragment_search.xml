@@ -102,14 +102,14 @@
                     <com.google.android.material.tabs.TabLayout
                         android:id="@+id/search_tab_layout"
                         android:layout_width="0dp"
+                        app:tabGravity="center"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="4dp"
                         android:layout_marginBottom="7dp"
                         android:background="@drawable/bg_profile_content"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/search_post"
-                        app:tabMode="scrollable" />
+                        app:layout_constraintTop_toBottomOf="@+id/search_post" />
 
                     <androidx.constraintlayout.widget.ConstraintLayout
                         android:id="@+id/constraint_layout_for_search"

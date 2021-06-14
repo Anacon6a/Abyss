@@ -2,10 +2,7 @@ package com.example.abyss.model.pagingsource.notification
 
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
-import com.example.abyss.model.data.NotificationData
-import com.example.abyss.model.data.PostData
-import com.example.abyss.model.data.StatisticsData
-import com.example.abyss.model.data.UserData
+import com.example.abyss.model.data.*
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.QuerySnapshot
@@ -64,27 +61,19 @@ class NotificationsPagingSource(
                     when (s.action) {
                         "like" -> {
                             var post: PostData? = null
-                            var user: UserData? = null
 
                             val postSnap =
                                 firestore.collection("users").document(s.uid!!)
                                     .collection("posts").document(s.postId!!).get()
                                     .await()
-                            post = if (postSnap == null) {
-                                null
-                            } else {
-                                firestore.collection("users").document(s.uid!!)
-                                    .collection("posts").document(s.postId!!).get()
-                                    .await()
-                                    .toObject<PostData>()
-                            }
-
-                            user =
-                                firestore.collection("users").document(s.uidWhoActed!!)
-                                    .get().await()
-                                    .toObject<UserData>()!!
+                            post = postSnap?.toObject<PostData>()
 
                             if (post != null) {
+                                var user =
+                                    firestore.collection("users").document(s.uidWhoActed!!)
+                                        .get().await()
+                                        .toObject<UserData>()!!
+
                                 val n = NotificationData(
                                     s.id!!,
                                     s.action,
@@ -120,11 +109,46 @@ class NotificationsPagingSource(
                             notificationData.add(n)
                         }
                         "comment" -> {
+                            var post: PostData? = null
 
+                            val postSnap =
+                                firestore.collection("users").document(s.uid!!)
+                                    .collection("posts").document(s.postId!!).get()
+                                    .await()
+                            post = postSnap?.toObject<PostData>()
+
+                            if (post != null) {
+                                val user =
+                                    firestore.collection("users").document(s.uidWhoActed!!)
+                                        .get().await()
+                                        .toObject<UserData>()!!
+                                val comment = firestore.collection("users").document(s.uid!!)
+                                    .collection("posts").document(s.postId!!).collection("comments")
+                                    .document(s.commentId!!)
+                                    .get().await().toObject<CommentData>()
+                                if (comment != null) {
+                                    val n = NotificationData(
+                                        s.id!!,
+                                        s.action,
+                                        s.date!!,
+                                        s.uid!!,
+                                        s.uidWhoActed!!,
+                                        user!!.userName!!,
+                                        user!!.profileImageUrl!!,
+                                        s.viewed!!,
+                                        post!!.id,
+                                        post!!.imageUrl,
+                                        post!!.text,
+                                        s.commentId,
+                                        comment.commentText
+                                    )
+                                    notificationData.add(n)
+                                }
+                            }
                         }
                     }
                 } catch (e: Exception) {
-
+                    Timber.e(e)
                 }
             }
         }.join()

@@ -72,10 +72,10 @@ class SearchFragment : Fragment(), KodeinAware {
         searchViewPagerAdapter.setOnCreateSearchViewHolder { bind, pos ->
             bindingRecycler = bind
             when (pos) {
-                1 -> viewModel.searchPostsPagingAdapter.let {
+                0 -> viewModel.searchPostsPagingAdapter.let {
                     it.setOnItemClickListener { post, imageView, postContainer ->
                         val action =
-                            NewsFeedFragmentDirections.actionNewsFeedFragmentToPostFragment(post)
+                            SearchFragmentDirections.actionSearchFragmentToPostFragment(post)
                         findNavController().navigate(
                             action, FragmentNavigator.Extras.Builder().addSharedElements(
                                 mapOf(
@@ -86,7 +86,7 @@ class SearchFragment : Fragment(), KodeinAware {
                         )
                     }
                 }
-                2 -> viewModel.searchUsersPagingAdapter.let {
+                1 -> viewModel.searchUsersPagingAdapter.let {
                     it.setOnItemClickListener { user ->
 
                     }

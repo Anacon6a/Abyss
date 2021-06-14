@@ -4,12 +4,8 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.paging.LoadState
-import com.example.abyss.adapters.comment.CommentPagingAdapter
 import com.example.abyss.model.data.PostData
 import com.example.abyss.model.data.UserData
-import com.example.abyss.model.data.UserTagData
-import com.example.abyss.model.pagingsource.comment.CommentsPagingSource
 import com.example.abyss.model.repository.auth.AuthRepository
 import com.example.abyss.model.repository.comment.CommentRepository
 import com.example.abyss.model.repository.like.LikeRepository
@@ -19,7 +15,6 @@ import com.example.abyss.model.repository.user.UserRepository
 import com.example.abyss.model.repository.views.ViewsRepository
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.collectLatest
 
 class PostViewModel(
     private val externalScope: CoroutineScope,
@@ -55,11 +50,19 @@ class PostViewModel(
 
     private val _tagsText = MutableLiveData<String>()
     val tagsText: LiveData<String>
-    get() = _tagsText
+        get() = _tagsText
 
     private val _numberOfViews = MutableLiveData<Int>()
     val numberOfViews: LiveData<Int>
         get() = _numberOfViews
+
+    private val _numberOfSaves = MutableLiveData<Int>()
+    val numberOfSaves: LiveData<Int>
+        get() = _numberOfSaves
+
+    private val _numberOfComments = MutableLiveData<Int?>()
+    val numberOfComments: LiveData<Int?>
+        get() = _numberOfComments
 
     private val _numberOfLikes = MutableLiveData<Int>()
     val numberOfLikes: LiveData<Int>
@@ -80,6 +83,10 @@ class PostViewModel(
     private val _stateLike = MutableLiveData<Boolean>()
     val stateLike: LiveData<Boolean>
         get() = _stateLike
+
+    private val _stateSavePost = MutableLiveData<Boolean?>()
+    val stateSavePost: LiveData<Boolean?>
+        get() = _stateSavePost
 
     private val _userData = MutableLiveData<UserData>()
     private val userData: LiveData<UserData>
@@ -108,8 +115,11 @@ class PostViewModel(
                 }
                 _postText.postValue(it.text)
                 _numberOfLikes.value = it.numberOfLikes!!
-                _numberOfViews.value =  it.numberOfViews!!
-                _tagsText.value = it.tags!!.joinToString(separator = ", ")
+                _numberOfViews.value = it.numberOfViews!!
+                it.tags?.let {t->
+                    _tagsText.value = t.joinToString(separator = ", ")
+                }
+                _numberOfComments.value = it.numberOfComments
             }
         }
     }
@@ -120,6 +130,7 @@ class PostViewModel(
             subscribeButtonVisibility()
             getStateLike()
             addAndGetViews()
+            getStateSave()
         }
     }
 
@@ -159,6 +170,18 @@ class PostViewModel(
         }
     }
 
+    private fun getStateSave() {
+        viewModelScope.launch(ioDispatcher) {
+            val s = postRepository.getStateSavePost(postData.value!!)
+            _stateSavePost.postValue(s)
+            if (s == null) {
+                val n =
+                    if (postData.value!!.numberOfSaves == null) 0 else postData.value!!.numberOfSaves!!
+                _numberOfSaves.postValue(n)
+            }
+        }
+    }
+
     fun ClickLike() {
         externalScope.launch(ioDispatcher) {
             stateLike.value?.let { state ->
@@ -169,7 +192,7 @@ class PostViewModel(
                 }
                 _stateLike.postValue(!stateLike.value!!)
 
-                likeRepository.AddLikeAndGetNumberOfLikesAndStatus(
+                likeRepository.addOrDeleteLike(
                     postData.value!!.id!!, postData.value!!.uid!!
                 )
             }
@@ -202,9 +225,20 @@ class PostViewModel(
                         _numberOfSubscribers.postValue(numberOfSubscribers.value!!.plus(1))
                     }
                     _stateSubscribe.postValue(!stateSubscribe.value!!)
-                    subscriptionRepository.AddSubscriptionAndGetNumberOfSubscribersAndStatus(
+                    subscriptionRepository.addOrDeleteSubscription(
                         postData.value!!.uid!!
                     )
+                }
+            }
+        }
+    }
+
+    fun savePost() {
+        externalScope.launch(ioDispatcher) {
+            postData.value?.let {
+                stateSavePost.value?.let {
+                    _stateSavePost.postValue(!stateSavePost.value!!)
+                    postRepository.saveOrDeletePost(postData.value!!)
                 }
             }
         }
@@ -214,11 +248,8 @@ class PostViewModel(
         viewModelScope.launch {
             getPost()
             getUserContentProvider()
+            getStateSave()
         }
-    }
-
-    fun savePost() {
-
     }
 
     fun addComment() {

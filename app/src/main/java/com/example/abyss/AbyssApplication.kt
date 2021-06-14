@@ -14,6 +14,7 @@ import com.example.abyss.adapters.home.search.SearchPostsPagingAdapter
 import com.example.abyss.adapters.home.search.SearchUsersPagingAdapter
 import com.example.abyss.adapters.home.search.SearchViewPagerAdapter
 import com.example.abyss.adapters.profile.ProfileMyPostsPagingAdapter
+import com.example.abyss.adapters.profile.ProfileViewPagerAdapter
 import com.example.abyss.model.repository.auth.AuthRepositoryFirebase
 import com.example.abyss.model.repository.auth.AuthRepository
 import com.example.abyss.model.repository.comment.CommentRepository
@@ -128,7 +129,7 @@ class AbyssApplication : Application(), KodeinAware {
 
 // ViewModel
         bindViewModel<ProfileViewModel>() with singleton {
-            ProfileViewModel(instance(), instance(), instance(), instance(), instance())
+            ProfileViewModel(instance(), instance(), instance(), instance(), instance(), instance())
         }
         bindViewModel<AddPostViewModel>() with provider {
             AddPostViewModel(instance(), instance(), instance(), instance(), instance())
@@ -187,6 +188,7 @@ class AbyssApplication : Application(), KodeinAware {
         bind() from provider { TagsPagingAdapter() }
         bind() from provider { NewsFeedAllTagsPagingAdapter() }
         bind() from provider { CommentPagingAdapter() }
+        bind() from provider { ProfileViewPagerAdapter() }
     }
 
     override fun onCreate() {

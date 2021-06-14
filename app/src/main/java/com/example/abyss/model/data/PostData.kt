@@ -15,10 +15,12 @@ data class PostData(
     val date: Date? = Date(System.currentTimeMillis()),
     var numberOfLikes: Int? = 0,
     var numberOfViews: Int? = 0,
+    var numberOfComments: Int? = 0,
+    var numberOfSaves: Int? = 0,
     var id: String? = null,
     var uid: String? = null,
     var imageFileName: String? = null,
     var tags: List<String>? = emptyList(),
-    val keywords: List<String>? = emptyList()
+    val keywords: List<String>? = emptyList(),
 ) : Parcelable
 

@@ -10,6 +10,7 @@ import com.example.abyss.R
 import com.example.abyss.databinding.FragmentStatisticsBinding
 import com.example.abyss.extensions.onClick
 import com.example.abyss.utils.HidingNavigationBar
+import com.example.abyss.utils.LineChartXAxisValueFormatter
 import com.github.mikephil.charting.animation.Easing
 import com.github.mikephil.charting.data.*
 import com.github.mikephil.charting.formatter.ValueFormatter
@@ -47,18 +48,22 @@ class StatisticsFragment : Fragment(), KodeinAware {
     }
 
 
-
-
     private fun ddd() {
         //Part1
         val entries = ArrayList<Entry>()
         val entries2 = ArrayList<Entry>()
+
+
 //Part2
-        entries.add(Entry(1f, 2f))
-        entries.add(Entry(2f, 2f))
-        entries.add(Entry(3f, 7f))
-        entries.add(Entry(4f, 3f))
-        entries.add(Entry(5f, 5f))
+        /**В икс засовывай timeStamp число даты
+         * (Про timeStamp читай в интернете, в кратце это 4-байтное целое число, равное количеству секунд, прошедших с полуночи 1 января 1970 года)
+         * стандартный джавовский класс даты в неё конвертится спокойно
+         * */
+        entries.add(Entry(1623233453f, 2f))
+        entries.add(Entry(1623319853f, 2f))
+        entries.add(Entry(1623406253f, 7f))
+        entries.add(Entry(1623492653f, 3f))
+        entries.add(Entry(1623579053f, 5f))
 
         entries2.add(Entry(2f, 20f))
         entries2.add(Entry(3f, 4f))
@@ -96,6 +101,12 @@ class StatisticsFragment : Fragment(), KodeinAware {
 
 //Part6
         binding.chart1.data = LineData(vl, v2)
+
+
+
+
+        binding.chart1.xAxis.valueFormatter = LineChartXAxisValueFormatter()
+
 
 //Part7
         binding.chart1.axisRight.isEnabled = false
@@ -136,11 +147,11 @@ class StatisticsFragment : Fragment(), KodeinAware {
 
         val date: ArrayList<String> = arrayListOf()
         val entry = ArrayList<Entry>()
-        for (i in test){
+        for (i in test) {
             val d = i.date.toString()
             date.add(d)
 //            val f = d.toInt()
-            entry.add(Entry(i.value.toFloat(),i.value.toFloat()))
+            entry.add(Entry(i.value.toFloat(), i.value.toFloat()))
         }
 
 
@@ -170,7 +181,6 @@ class StatisticsFragment : Fragment(), KodeinAware {
 //        val data = LineData(datasetFirst)
 //        binding.chart1.data = data
 //        binding.chart1.setVisibleXRangeMaximum(365f)
-
 
 
     }
@@ -353,7 +363,7 @@ class StatisticsFragment : Fragment(), KodeinAware {
 //        binding.graph1.description.text = "что-то"
 //        binding.graph1.setNoDataText("Нет данных!")
 
-        // График будет анимироваться 0.5 секунды
+    // График будет анимироваться 0.5 секунды
 //        binding.graph1.animateXY(600, 600, Easing.EaseInBounce)
 //    }
 
@@ -369,7 +379,6 @@ class StatisticsFragment : Fragment(), KodeinAware {
 //            return SimpleDateFormat("dd MMM", Locale.getDefault()).format(date)
 //        }
 //    }
-
 
 
 }

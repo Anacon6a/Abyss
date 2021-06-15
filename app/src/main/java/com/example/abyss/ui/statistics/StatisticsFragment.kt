@@ -9,7 +9,9 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.example.abyss.R
 import com.example.abyss.databinding.FragmentStatisticsBinding
+import com.example.abyss.extensions.Date
 import com.example.abyss.extensions.onClick
+import com.example.abyss.extensions.secondTimestamp
 import com.example.abyss.utils.HidingNavigationBar
 import com.example.abyss.utils.LineChartXAxisValueFormatter
 import com.github.dewinjm.monthyearpicker.MonthYearPickerDialogFragment
@@ -22,6 +24,7 @@ import com.github.mikephil.charting.interfaces.datasets.ILineDataSet
 import kodeinViewModel
 import org.kodein.di.KodeinAware
 import org.kodein.di.android.x.kodein
+import timber.log.Timber
 import java.text.DateFormat
 import java.text.DateFormatSymbols
 import java.text.SimpleDateFormat
@@ -70,10 +73,7 @@ class StatisticsFragment : Fragment(), KodeinAware {
             )
         dialogFragment.show(parentFragmentManager, null)
         dialogFragment.setOnDateSetListener { year, monthOfYear ->
-            viewModel.monthSelectedInt.value = monthOfYear
-            viewModel.yearSelectedInt.value = year
-            viewModel.monthSelectedString.value = DateFormatSymbols().months[monthOfYear]
-            viewModel.yearSelectedString.value = year.toString()
+            viewModel.setDate(monthOfYear, year)
         }
     }
 
@@ -143,17 +143,18 @@ class StatisticsFragment : Fragment(), KodeinAware {
          * стандартный джавовский класс даты в неё конвертится спокойно
          * */
 
-        val formatter: DateFormat = SimpleDateFormat("dd-MM-yyyy")
 
-        val strDate: String = "1-6-2021"
-        val date = formatter.parse(strDate) as Date
-        var g = date.time.toFloat()
-//        entries.add(Entry(1623233453f, 2f))
-//        entries.add(Entry(1623319853f, 2f))
-//        entries.add(Entry(1623406253f, 7f))
-//        entries.add(Entry(1623492653f, 3f))
-//        entries.add(Entry(1623579053f, 5f))
-        entries.add(Entry(g, 8f))
+        entries.add(Entry(1623233453f, 2f))
+        entries.add(Entry(1623319853f, 2f))
+        entries.add(Entry(1623406253f, 7f))
+        entries.add(Entry(1623492653f, 3f))
+        entries.add(Entry(1623579053f, 5f))
+        val f = Date(1623492653f).secondTimestamp
+        entries.add(Entry(f, 3f))
+        entries.add(Entry(Date().secondTimestamp, 5f))
+        Timber.d("Ванина дата: ${Date(1623492653f).secondTimestamp}")
+
+
 
         entries2.add(Entry(2f, 20f))
         entries2.add(Entry(3f, 4f))

@@ -116,7 +116,14 @@ class AbyssApplication : Application(), KodeinAware {
         bind<TagRepository>() with provider {
             TagRepositoryFirestore(instance(), instance(), instance(), instance(), instance())
         }
-        bind<CommentRepository>() with provider { CommentRepositoryFirestore(instance(), instance(), instance(), instance()) }
+        bind<CommentRepository>() with provider {
+            CommentRepositoryFirestore(
+                instance(),
+                instance(),
+                instance(),
+                instance()
+            )
+        }
 // ViewModelFactory
         bind() from provider { FirstViewModelFactory(instance(), instance()) }
         bind() from provider { LoginViewModelFactory(instance(), instance()) }
@@ -165,7 +172,15 @@ class AbyssApplication : Application(), KodeinAware {
             EditPostViewModel(instance(), instance(), instance(), instance(), instance())
         }
         bindViewModel<SearchViewModel>() with provider {
-            SearchViewModel(instance(), instance(), instance(), instance(), instance(), instance(), instance())
+            SearchViewModel(
+                instance(),
+                instance(),
+                instance(),
+                instance(),
+                instance(),
+                instance(),
+                instance()
+            )
         }
         bindViewModel<DialogForTagsViewModel>() with provider {
             DialogForTagsViewModel(instance(), instance(), instance())
@@ -180,10 +195,17 @@ class AbyssApplication : Application(), KodeinAware {
             ModalBottomSheetForCommentViewModel(instance(), instance(), instance())
         }
         bindViewModel<StatisticsViewModel>() with provider {
-            StatisticsViewModel(instance(), instance(), instance())
+            StatisticsViewModel(instance(), instance(), instance(), instance(), instance())
         }
         bindViewModel<AnotherUserProfileViewModel>() with provider {
-            AnotherUserProfileViewModel(instance(), instance(), instance(), instance(), instance(), instance())
+            AnotherUserProfileViewModel(
+                instance(),
+                instance(),
+                instance(),
+                instance(),
+                instance(),
+                instance()
+            )
         }
 // Adapter
         bind<ProfileMyPostsPagingAdapter>() with provider { ProfileMyPostsPagingAdapter() }

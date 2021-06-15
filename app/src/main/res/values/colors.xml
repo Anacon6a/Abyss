@@ -15,4 +15,9 @@
     <color name="ucrop_color_statusbar">@color/white</color>
     <color name="ucrop_color_widget_active">@color/white</color>
     <color name="colorTextPrimary">#333333</color>
+<!--    BarChart-->
+    <color name="color1">#1D1D26</color>
+    <color name="color2">#5C00C5</color>
+    <color name="color3">#010E81</color>
+    <color name="color4">#010725</color>
 </resources>

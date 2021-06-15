@@ -245,7 +245,11 @@
         android:id="@+id/statisticsFragment"
         android:name="com.example.abyss.ui.statistics.StatisticsFragment"
         android:label="fragment_statistics"
-        tools:layout="@layout/fragment_statistics" />
+        tools:layout="@layout/fragment_statistics" >
+        <action
+            android:id="@+id/action_statisticsFragment_to_postFragment"
+            app:destination="@id/postFragment" />
+    </fragment>
     <fragment
         android:id="@+id/anotherUserProfileFragment"
         android:name="com.example.abyss.ui.anotheruser.AnotherUserProfileFragment"

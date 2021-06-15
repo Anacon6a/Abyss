@@ -16,6 +16,7 @@ interface PostRepository {
     suspend fun getPostsTrends(): Flow<PagingData<PostData>>?
     suspend fun getPostByTag(tag: String): Flow<PagingData<PostData>>?
     suspend fun getFoundPosts(text: String, orderBySelection: Int): Flow<PagingData<PostData>>?
+    suspend fun getSortedPosts(month: Int, year: Int, typeSort: Int): Flow<PagingData<PostData>>
     suspend fun listeningForChangesPosts(): Flow<Boolean>
     suspend fun listeningForChangesPost(postId: String): Flow<PostData?>
     suspend fun editPost(post: PostData, imageUri: Uri?, width: Int?, height: Int?, text: String?, tags: ArrayList<String>): String?

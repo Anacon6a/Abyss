@@ -198,6 +198,31 @@ class PostRepositoryFirestore(
             PostsPagingSource(query)
         }.flow.cachedIn(externalScope)
 
+    override suspend fun getSortedPosts(
+        month: Int,
+        year: Int,
+        typeSort: Int
+    ): Flow<PagingData<PostData>> =
+        Pager(
+            PagingConfig(
+                initialLoadSize = 10,
+                pageSize = 10,
+                prefetchDistance = 3
+            )
+        ) {
+            val uid = firebaseAuth.uid.toString()
+
+            val query = firestore.collection("users").document(uid).collection("posts")
+            when (typeSort) {
+                0 -> query.orderBy("numberOfLikes")
+                1 -> query.orderBy("numberOfViews")
+                2 -> query.orderBy("numberOfLikes")
+                3 -> query.orderBy("numberOfComments")
+                4 -> query.orderBy("numberOfSaves")
+            }
+            PostsPagingSource(query)
+        }.flow.cachedIn(externalScope)
+
 
     @ExperimentalCoroutinesApi
     override suspend fun listeningForChangesPosts(): Flow<Boolean> = callbackFlow {

@@ -9,6 +9,20 @@
     <string name="registration">Регистрация</string>
     <string name="select_capture_image">Выберите изображение из галереи или сделайте снимок</string>
     <string name="file_provider_name" translatable="false">.fileProvider</string>
-    <!-- TODO: Remove or change this placeholder text -->
+
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    
+    <string-array name="period">
+        <item>День</item>
+        <item>Месяц</item>
+        <item>Год</item>
+    </string-array>
+
+    <string-array name="sortingType" >
+        <item>Самые популярные</item>
+        <item>По количеству просмотров</item>
+        <item>По количеству лайков</item>
+        <item>По количеству комментариев</item>
+        <item>По количеству сохранений</item>
+    </string-array>
 </resources>

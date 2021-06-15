@@ -4,22 +4,24 @@ import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
+import com.example.abyss.extensions.secondTimestamp
 import com.example.abyss.model.data.NotificationData
 import com.example.abyss.model.data.StatisticsData
 import com.example.abyss.model.pagingsource.notification.NotificationsPagingSource
+import com.github.mikephil.charting.data.Entry
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.catch
-import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.tasks.await
 import timber.log.Timber
 import java.sql.Timestamp
+import java.text.DateFormat
 import java.text.SimpleDateFormat
 import java.util.*
+import kotlin.collections.ArrayList
 
 class StatisticsRepositoryFirebase(
     private val firebaseAuth: FirebaseAuth,
@@ -73,153 +75,33 @@ class StatisticsRepositoryFirebase(
 
         }.flow.cachedIn(externalScope)
 
-    override suspend fun getAllActions(
+    override suspend fun getNumberActions(
         month: Int,
-        year: Int
-    ): Flow<MutableList<StatisticsData>> = flow {
-        val d1 = Date(year-1900, month, 1, 0, 0, 0)
-        val d2 = Date(year-1900, month.plus(1), 1, 0, 0)
-        val minDate = com.google.firebase.Timestamp(d1)
-        val maxDate = com.google.firebase.Timestamp(d2)
+        year: Int,
+        action: String
+    ): Flow<Int> = flow {
+//        val calendar: Calendar = GregorianCalendar(year, month, 1)
+//        val daysInMonth: Int = calendar.getActualMaximum(Calendar.DAY_OF_MONTH)
+        val formatter: DateFormat = SimpleDateFormat("dd-MM-yyyy")
+        val d1 = "1-${month + 1}-$year"
+        val d2 = "1-${month + 2}-$year"
+        val mD1 = formatter.parse(d1) as Date
+        val mD2 = formatter.parse(d2) as Date
+        val minDate = com.google.firebase.Timestamp(mD1)
+        val maxDate = com.google.firebase.Timestamp(mD2)
+
         val uid = firebaseAuth.uid!!
         val actionsSnap = firestore.collection("users").document(uid)
             .collection("statistics")
-            .whereGreaterThanOrEqualTo("date", minDate)
-            .whereLessThan("date", maxDate)
-            .orderBy("date")
-            .get()
-            .await().toObjects(StatisticsData::class.java)
-
-        emit(actionsSnap)
-    }.catch {
-        Timber.e(it)
-    }
-
-    override suspend fun getSubscriptionsActions(
-        month: Int,
-        year: Int
-    ): Flow<MutableList<StatisticsData>> = flow {
-        val d1 = Date(year-1900, month, 1, 0, 0, 0)
-        val d2 = Date(year-1900, month.plus(1), 1, 0, 0)
-        val minDate = com.google.firebase.Timestamp(d1)
-        val maxDate = com.google.firebase.Timestamp(d2)
-        val uid = firebaseAuth.uid!!
-        val actionsSnap = firestore.collection("users").document(uid)
-            .collection("statistics")
-            .whereEqualTo("action", "subscribe")
+            .whereEqualTo("action", action)
             .whereGreaterThanOrEqualTo("date", minDate)
             .whereLessThan("date", maxDate)
             .orderBy("date", Query.Direction.ASCENDING)
             .get()
             .await().toObjects(StatisticsData::class.java)
 
-        emit(actionsSnap)
-    }.catch {
-        Timber.e(it)
-    }
-
-    override suspend fun getUnsubscriptionsActions(
-        month: Int,
-        year: Int
-    ): Flow<MutableList<StatisticsData>> = flow {
-        val d1 = Date(year-1900, month, 1, 0, 0, 0)
-        val d2 = Date(year-1900, month.plus(1), 1, 0, 0)
-        val minDate = com.google.firebase.Timestamp(d1)
-        val maxDate = com.google.firebase.Timestamp(d2)
-        val uid = firebaseAuth.uid!!
-        val actionsSnap = firestore.collection("users").document(uid)
-            .collection("statistics")
-            .whereEqualTo("action", "unsubscribe")
-            .whereGreaterThanOrEqualTo("date", minDate)
-            .whereLessThan("date", maxDate)
-            .orderBy("date", Query.Direction.ASCENDING)
-            .get()
-            .await().toObjects(StatisticsData::class.java)
-
-        emit(actionsSnap)
-    }.catch {
-        Timber.e(it)
-    }
-
-    override suspend fun getViewsActions(month: Int, year: Int): Flow<MutableList<StatisticsData>> = flow {
-        val d1 = Date(year-1900, month, 1, 0, 0, 0)
-        val d2 = Date(year-1900, month.plus(1), 1, 0, 0)
-        val minDate = com.google.firebase.Timestamp(d1)
-        val maxDate = com.google.firebase.Timestamp(d2)
-        val uid = firebaseAuth.uid!!
-        val actionsSnap = firestore.collection("users").document(uid)
-            .collection("statistics")
-            .whereEqualTo("action", "view")
-            .whereGreaterThanOrEqualTo("date", minDate)
-            .whereLessThan("date", maxDate)
-            .orderBy("date", Query.Direction.ASCENDING)
-            .get()
-            .await().toObjects(StatisticsData::class.java)
-
-        emit(actionsSnap)
-    }.catch {
-        Timber.e(it)
-    }
-
-    override suspend fun getLikesActions(month: Int, year: Int): Flow<MutableList<StatisticsData>> = flow {
-        val d1 = Date(year-1900, month, 1, 0, 0, 0)
-        val d2 = Date(year-1900, month.plus(1), 1, 0, 0)
-        val minDate = com.google.firebase.Timestamp(d1)
-        val maxDate = com.google.firebase.Timestamp(d2)
-        val uid = firebaseAuth.uid!!
-        val actionsSnap = firestore.collection("users").document(uid)
-            .collection("statistics")
-            .whereEqualTo("action", "like")
-            .whereGreaterThanOrEqualTo("date", minDate)
-            .whereLessThan("date", maxDate)
-            .orderBy("date", Query.Direction.ASCENDING)
-            .get()
-            .await().toObjects(StatisticsData::class.java)
-
-        emit(actionsSnap)
-    }.catch {
-        Timber.e(it)
-    }
-
-    override suspend fun getCommentsActions(
-        month: Int,
-        year: Int
-    ): Flow<MutableList<StatisticsData>> = flow {
-        val d1 = Date(year-1900, month, 1, 0, 0, 0)
-        val d2 = Date(year-1900, month.plus(1), 1, 0, 0)
-        val minDate = com.google.firebase.Timestamp(d1)
-        val maxDate = com.google.firebase.Timestamp(d2)
-        val uid = firebaseAuth.uid!!
-        val actionsSnap = firestore.collection("users").document(uid)
-            .collection("statistics")
-            .whereEqualTo("action", "comment")
-            .whereGreaterThanOrEqualTo("date", minDate)
-            .whereLessThan("date", maxDate)
-            .orderBy("date", Query.Direction.ASCENDING)
-            .get()
-            .await().toObjects(StatisticsData::class.java)
-
-        emit(actionsSnap)
-    }.catch {
-        Timber.e(it)
-    }
-
-    override suspend fun getSavesActions(month: Int, year: Int): Flow<MutableList<StatisticsData>> = flow {
-        val d1 = Date(year-1900, month, 1, 0, 0, 0)
-        val d2 = Date(year-1900, month.plus(1), 1, 0, 0)
-        val minDate = com.google.firebase.Timestamp(d1)
-        val maxDate = com.google.firebase.Timestamp(d2)
-        val uid = firebaseAuth.uid!!
-        val actionsSnap = firestore.collection("users").document(uid)
-            .collection("statistics")
-            .whereEqualTo("action", "save")
-            .whereGreaterThanOrEqualTo("date", minDate)
-            .whereLessThan("date", maxDate)
-            .orderBy("date", Query.Direction.ASCENDING)
-            .get()
-            .await().toObjects(StatisticsData::class.java)
-
-        emit(actionsSnap)
+        val number = actionsSnap.size
+        emit(number)
     }.catch {
         Timber.e(it)
     }

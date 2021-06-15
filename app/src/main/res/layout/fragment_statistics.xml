@@ -53,14 +53,29 @@
                     app:layout_constraintTop_toTopOf="parent" />
             </androidx.constraintlayout.widget.ConstraintLayout>
 
-            <TextView
-                android:layout_width="wrap_content"
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="20dp"
                 android:layout_marginTop="10dp"
-                android:text="Выберите период:"
-                android:textColor="@color/black"
-                android:textSize="20sp" />
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="20dp"
+                    android:layout_marginTop="10dp"
+                    android:text="Выберите период:"
+                    android:textColor="@color/black"
+                    android:textSize="20sp" />
+
+                <!--                <Spinner-->
+                <!--                    android:id="@+id/spinner"-->
+                <!--                    android:layout_width="match_parent"-->
+                <!--                    android:layout_height="wrap_content"-->
+                <!--                    android:entries="@array/period"-->
+
+                <!--                    android:layout_gravity="bottom"/>-->
+            </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -73,25 +88,26 @@
                     android:id="@+id/select_month"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginEnd="2dp"
                     android:background="@drawable/bg_text_border"
                     android:padding="5dp"
                     android:text="@{StatisticsViewModel.monthSelectedString}"
-                    tools:text="Июнь"
-                    android:layout_marginEnd="2dp"
                     android:textColor="@color/black"
-                    android:textSize="22dp" />
+                    android:textSize="22dp"
+                    tools:text="Июнь" />
 
                 <TextView
                     android:id="@+id/select_year"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginEnd="6dp"
                     android:background="@drawable/bg_text_border"
                     android:padding="5dp"
                     android:text="@{StatisticsViewModel.yearSelectedString}"
-                    tools:text="2021"
-                    android:layout_marginEnd="6dp"
                     android:textColor="@color/black"
-                    android:textSize="22dp" />
+                    android:textSize="22dp"
+                    tools:text="2021" />
+
                 <androidx.appcompat.widget.AppCompatButton
                     android:id="@+id/button_select"
                     android:layout_width="wrap_content"
@@ -119,7 +135,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="20dp"
                 android:layout_marginTop="2dp"
-                android:text="Данный график показывает количество подписывающихся/тписывающихся пользователей."
+                android:layout_marginEnd="10dp"
+                android:text="Данная диаграмма показывает количество подписавшихся/отписавшихся пользователей."
                 android:textColor="@color/grey"
                 android:textSize="16sp" />
             <!--            <lecho.lib.hellocharts.view.LineChartView-->
@@ -127,16 +144,16 @@
             <!--                android:layout_width="match_parent"-->
             <!--                android:layout_height="match_parent" />-->
 
-            <com.github.mikephil.charting.charts.LineChart
+            <com.github.mikephil.charting.charts.PieChart
                 android:id="@+id/chart1"
                 android:layout_width="match_parent"
-                android:layout_height="200dp"
-                android:layout_above="@+id/seekBar1" />
+                android:layout_height="260dp"
+                android:padding="20dp" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="20dp"
+                android:layout_marginStart="30dp"
                 android:layout_marginTop="10dp"
                 android:text="Охват аудитории"
                 android:textColor="@color/black"
@@ -147,22 +164,24 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="20dp"
                 android:layout_marginTop="2dp"
-                android:text="На данном графике отображены все действия пользователей с публикациями."
+                android:layout_marginEnd="10dp"
+                android:text="На данной диаграмма отображены все действия пользователей с публикациями за выбранный период."
                 android:textColor="@color/grey"
                 android:textSize="16sp" />
 
-            <com.github.mikephil.charting.charts.LineChart
-                android:id="@+id/graph2"
+            <com.github.mikephil.charting.charts.BarChart
+                android:id="@+id/chart2"
                 android:layout_width="match_parent"
-                android:layout_height="200dp"
-                android:layout_above="@+id/seekBar1" />
+                android:layout_height="250dp"
+                android:layout_above="@+id/seekBar1"
+                android:paddingBottom="30dp"/>
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="20dp"
                 android:layout_marginTop="10dp"
-                android:text="кв"
+                android:text="Обзор публикаций "
                 android:textColor="@color/black"
                 android:textSize="20sp" />
 
@@ -171,9 +190,40 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="20dp"
                 android:layout_marginTop="2dp"
-                android:text="Нссс"
+                android:layout_marginEnd="10dp"
+                android:text="Здесь вы можете просмотреть свои публикации, в порядке возрастаний действий пользователей."
                 android:textColor="@color/grey"
-                android:textSize="18sp" />
+                android:textSize="16sp" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:gravity="center"
+                android:orientation="horizontal">
+
+                <Spinner
+                    android:id="@+id/type_sort_spinner"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="bottom"
+                    android:entries="@array/sortingType"
+                    android:paddingBottom="1dp"
+                    android:theme="@android:style/Theme.Holo.Light.DarkActionBar"/>
+
+            </LinearLayout>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/posts_recycler_view"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:clipToPadding="false"
+                android:paddingStart="12dp"
+                android:paddingTop="12dp"
+                android:paddingEnd="12dp"
+                tools:listitem="@layout/item_post_for_profile" />
+
 
         </GridLayout>
     </androidx.core.widget.NestedScrollView>

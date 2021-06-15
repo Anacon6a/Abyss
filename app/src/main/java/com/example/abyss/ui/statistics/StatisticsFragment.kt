@@ -8,7 +8,9 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.example.abyss.R
 import com.example.abyss.databinding.FragmentStatisticsBinding
+import com.example.abyss.extensions.Date
 import com.example.abyss.extensions.onClick
+import com.example.abyss.extensions.secondTimestamp
 import com.example.abyss.utils.HidingNavigationBar
 import com.example.abyss.utils.LineChartXAxisValueFormatter
 import com.github.mikephil.charting.animation.Easing
@@ -59,11 +61,13 @@ class StatisticsFragment : Fragment(), KodeinAware {
          * (Про timeStamp читай в интернете, в кратце это 4-байтное целое число, равное количеству секунд, прошедших с полуночи 1 января 1970 года)
          * стандартный джавовский класс даты в неё конвертится спокойно
          * */
+
+
         entries.add(Entry(1623233453f, 2f))
         entries.add(Entry(1623319853f, 2f))
         entries.add(Entry(1623406253f, 7f))
-        entries.add(Entry(1623492653f, 3f))
-        entries.add(Entry(1623579053f, 5f))
+        entries.add(Entry(Date(1623492653f).secondTimestamp, 3f))
+        entries.add(Entry(Date().secondTimestamp, 5f))
 
         entries2.add(Entry(2f, 20f))
         entries2.add(Entry(3f, 4f))

@@ -86,10 +86,35 @@ class PostFragment : Fragment(), KodeinAware {
                 refresh()
             }
             binding.buttonComments.onClick {
-                findNavController().navigate(PostFragmentDirections.actionPostFragmentToCommentsModalBottomSheetFragment(args.post, binding.textCommentInputText.text.toString()))
+                findNavController().navigate(
+                    PostFragmentDirections.actionPostFragmentToCommentsModalBottomSheetFragment(
+                        args.post,
+                        binding.textCommentInputText.text.toString()
+                    )
+                )
                 binding.textCommentInputText.setText("")
             }
+            binding.profileImage.onClick {
+                goToProfile()
+            }
+            binding.userProfileLinearLayout.onClick {
+                goToProfile()
+            }
+        }
+    }
 
+    private fun goToProfile() {
+        lifecycleScope.launch {
+            val b = viewModel.trueIfMyUid()
+            if (b) {
+                findNavController().navigate(PostFragmentDirections.actionPostFragmentToProfileFragment())
+            } else {
+                findNavController().navigate(
+                    PostFragmentDirections.actionPostFragmentToAnotherUserProfileFragment(
+                        viewModel.postData.value?.uid!!
+                    )
+                )
+            }
         }
     }
 

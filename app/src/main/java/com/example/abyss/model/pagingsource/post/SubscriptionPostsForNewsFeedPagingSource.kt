@@ -66,7 +66,7 @@ class SubscriptionPostsForNewsFeedPagingSource(
                         .document(sub.toObject<SubscriptionData>().uidSubscription!!)
                         .collection("posts").get().await()
                     postsSubscription?.let {
-                        val d2 = ArrayList<Deferred<Unit?>>()
+
                         for (post in it) {
                             val p = post.toObject<PostData>()
                             posts.add(p)

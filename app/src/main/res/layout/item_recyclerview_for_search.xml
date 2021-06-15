@@ -12,7 +12,7 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <com.example.abyss.NestedScrollableHost
+        <com.example.abyss.utils.NestedScrollableHost
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginTop="8dp">
@@ -25,7 +25,7 @@
                 android:paddingBottom="60dp"
                 android:clipToPadding="false"
                 tools:listitem="@layout/item_user_for_search"/>
-        </com.example.abyss.NestedScrollableHost>
+        </com.example.abyss.utils.NestedScrollableHost>
 
     </LinearLayout>
 </layout>

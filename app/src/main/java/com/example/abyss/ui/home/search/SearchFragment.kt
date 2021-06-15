@@ -88,7 +88,18 @@ class SearchFragment : Fragment(), KodeinAware {
                 }
                 1 -> viewModel.searchUsersPagingAdapter.let {
                     it.setOnItemClickListener { user ->
-
+                        lifecycleScope.launch {
+                            val b = viewModel.trueIfMyUid(user.uid!!)
+                            if (b) {
+                                findNavController().navigate(SearchFragmentDirections.actionSearchFragmentToProfileFragment())
+                            } else {
+                                findNavController().navigate(
+                                    SearchFragmentDirections.actionSearchFragmentToAnotherUserProfileFragment(
+                                        user.uid!!
+                                    )
+                                )
+                            }
+                        }
                     }
                 }
             }
@@ -177,12 +188,15 @@ class SearchFragment : Fragment(), KodeinAware {
 
     private fun searchFiltersDialog() {
         if (dialogSearchFiltersBinding.root.parent != null) {
-            (dialogSearchFiltersBinding.root.parent as? ViewGroup)?.removeView(dialogSearchFiltersBinding.root)
+            (dialogSearchFiltersBinding.root.parent as? ViewGroup)?.removeView(
+                dialogSearchFiltersBinding.root
+            )
         }
         val builder: AlertDialog.Builder = AlertDialog.Builder(activity)
         builder.setView(dialogSearchFiltersBinding.root)
         dialog = builder.create()
         dialog!!.show()
     }
+
 
 }

@@ -104,6 +104,12 @@
             android:id="@+id/action_postFragment_to_commentsModalBottomSheetFragment"
             app:destination="@id/commentsModalBottomSheetFragment"
             app:popUpToInclusive="false" />
+        <action
+            android:id="@+id/action_postFragment_to_profileFragment"
+            app:destination="@id/profileFragment" />
+        <action
+            android:id="@+id/action_postFragment_to_anotherUserProfileFragment"
+            app:destination="@id/anotherUserProfileFragment" />
     </fragment>
     <action
         android:id="@+id/action_global_addPostFragment"
@@ -174,6 +180,12 @@
         <action
             android:id="@+id/action_searchFragment_to_postFragment"
             app:destination="@id/postFragment" />
+        <action
+            android:id="@+id/action_searchFragment_to_profileFragment"
+            app:destination="@id/profileFragment" />
+        <action
+            android:id="@+id/action_searchFragment_to_anotherUserProfileFragment"
+            app:destination="@id/anotherUserProfileFragment" />
     </fragment>
     <dialog
         android:id="@+id/dialogForTagsFragment"
@@ -234,4 +246,13 @@
         android:name="com.example.abyss.ui.statistics.StatisticsFragment"
         android:label="fragment_statistics"
         tools:layout="@layout/fragment_statistics" />
+    <fragment
+        android:id="@+id/anotherUserProfileFragment"
+        android:name="com.example.abyss.ui.anotheruser.AnotherUserProfileFragment"
+        android:label="fragment_another_user_profile"
+        tools:layout="@layout/fragment_another_user_profile" >
+        <argument
+            android:name="uid"
+            app:argType="string" />
+    </fragment>
 </navigation>

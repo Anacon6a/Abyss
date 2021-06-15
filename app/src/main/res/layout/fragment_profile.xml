@@ -200,7 +200,7 @@
 <!--                    app:layout_constraintEnd_toEndOf="parent"-->
 <!--                    app:layout_constraintStart_toStartOf="parent"-->
 <!--                    app:layout_constraintTop_toBottomOf="@+id/news_feed_tab_layout">-->
-<!--                    <com.example.abyss.NestedScrollableHost-->
+<!--                    <com.example.abyss.utils.NestedScrollableHost-->
 <!--                        android:layout_width="match_parent"-->
 <!--                        android:layout_height="match_parent"-->
 <!--                        android:layout_marginStart="4dp"-->
@@ -214,7 +214,7 @@
 <!--                            android:layout_width="match_parent"-->
 <!--                            android:layout_height="match_parent"-->
 <!--                            android:orientation="horizontal" />-->
-<!--                    </com.example.abyss.NestedScrollableHost>-->
+<!--                    </com.example.abyss.utils.NestedScrollableHost>-->
 <!--                    <com.github.ybq.android.spinkit.SpinKitView-->
 <!--                        android:id="@+id/progress_bar_loading_all_posts"-->
 <!--                        style="@style/SpinKitView.MultiplePulse"-->
@@ -278,7 +278,7 @@
                         <!--                android:id="@+id/swipe_refresh_layout"-->
                         <!--                android:layout_width="match_parent"-->
                         <!--                android:layout_height="match_parent">-->
-                        <com.example.abyss.NestedScrollableHost
+                        <com.example.abyss.utils.NestedScrollableHost
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:layout_marginStart="4dp"
@@ -292,7 +292,7 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="match_parent"
                                 android:orientation="horizontal" />
-                        </com.example.abyss.NestedScrollableHost>
+                        </com.example.abyss.utils.NestedScrollableHost>
                         <!--            </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>-->
 
                         <com.github.ybq.android.spinkit.SpinKitView

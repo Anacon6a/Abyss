@@ -34,6 +34,7 @@ import com.example.abyss.model.repository.user.UserRepositoryFirestore
 import com.example.abyss.model.repository.views.ViewsRepository
 import com.example.abyss.model.repository.views.ViewsRepositoryFirestore
 import com.example.abyss.ui.MainViewModelFactory
+import com.example.abyss.ui.anotheruser.AnotherUserProfileViewModel
 import com.example.abyss.ui.first.FirstViewModelFactory
 import com.example.abyss.ui.auth.login.LoginViewModelFactory
 import com.example.abyss.ui.auth.registration.RegistrationViewModelFactory
@@ -50,6 +51,7 @@ import com.example.abyss.ui.posts.comments.ModalBottomSheetForCommentViewModel
 import com.example.abyss.ui.posts.comments.edit.DialogForEditCommentViewModel
 import com.example.abyss.ui.profile.ModalBottomSheetForProfileViewModel
 import com.example.abyss.ui.profile.ProfileViewModel
+import com.example.abyss.ui.statistics.StatisticsViewModel
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.firestore.FirebaseFirestore
@@ -163,7 +165,7 @@ class AbyssApplication : Application(), KodeinAware {
             EditPostViewModel(instance(), instance(), instance(), instance(), instance())
         }
         bindViewModel<SearchViewModel>() with provider {
-            SearchViewModel(instance(), instance(), instance(), instance(), instance(), instance())
+            SearchViewModel(instance(), instance(), instance(), instance(), instance(), instance(), instance())
         }
         bindViewModel<DialogForTagsViewModel>() with provider {
             DialogForTagsViewModel(instance(), instance(), instance())
@@ -176,6 +178,12 @@ class AbyssApplication : Application(), KodeinAware {
         }
         bindViewModel<ModalBottomSheetForCommentViewModel>() with provider {
             ModalBottomSheetForCommentViewModel(instance(), instance(), instance())
+        }
+        bindViewModel<StatisticsViewModel>() with provider {
+            StatisticsViewModel(instance(), instance(), instance())
+        }
+        bindViewModel<AnotherUserProfileViewModel>() with provider {
+            AnotherUserProfileViewModel(instance(), instance(), instance(), instance(), instance(), instance())
         }
 // Adapter
         bind<ProfileMyPostsPagingAdapter>() with provider { ProfileMyPostsPagingAdapter() }

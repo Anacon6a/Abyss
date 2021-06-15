@@ -116,7 +116,7 @@ class PostViewModel(
                 _postText.postValue(it.text)
                 _numberOfLikes.value = it.numberOfLikes!!
                 _numberOfViews.value = it.numberOfViews!!
-                it.tags?.let {t->
+                it.tags?.let { t ->
                     _tagsText.value = t.joinToString(separator = ", ")
                 }
                 _numberOfComments.value = it.numberOfComments
@@ -211,8 +211,8 @@ class PostViewModel(
         }
     }
 
-    fun goToUserProfile() {
-
+    suspend fun trueIfMyUid(): Boolean {
+        return authRepository.GetUid() == postData.value?.uid
     }
 
     fun subscribeToAccount() {

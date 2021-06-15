@@ -22,6 +22,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical">
+
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="56dp"
@@ -51,69 +52,128 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
             </androidx.constraintlayout.widget.ConstraintLayout>
+
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="20dp"
                 android:layout_marginTop="10dp"
-                android:text="подписки отписки"
-                android:textSize="20sp"
-                android:textColor="@color/black" />
+                android:text="Выберите период:"
+                android:textColor="@color/black"
+                android:textSize="20sp" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:gravity="center"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/select_month"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/bg_text_border"
+                    android:padding="5dp"
+                    android:text="@{StatisticsViewModel.monthSelectedString}"
+                    tools:text="Июнь"
+                    android:layout_marginEnd="2dp"
+                    android:textColor="@color/black"
+                    android:textSize="22dp" />
+
+                <TextView
+                    android:id="@+id/select_year"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/bg_text_border"
+                    android:padding="5dp"
+                    android:text="@{StatisticsViewModel.yearSelectedString}"
+                    tools:text="2021"
+                    android:layout_marginEnd="6dp"
+                    android:textColor="@color/black"
+                    android:textSize="22dp" />
+                <androidx.appcompat.widget.AppCompatButton
+                    android:id="@+id/button_select"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/bg_com_btn"
+                    android:paddingStart="20dp"
+                    android:paddingEnd="20dp"
+                    android:text="Выбрать"
+                    android:textAllCaps="false"
+                    android:textColor="@color/white" />
+            </LinearLayout>
+
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="10dp"
+                android:text="Анализ подписок"
+                android:textColor="@color/black"
+                android:textSize="20sp" />
+
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="20dp"
                 android:layout_marginTop="2dp"
-                android:text="На этом ... показано количество отписавшихся"
-                android:textSize="18sp"
-                android:textColor="@color/grey" />
-<!--            <lecho.lib.hellocharts.view.LineChartView-->
-<!--                android:id="@+id/chart"-->
-<!--                android:layout_width="match_parent"-->
-<!--                android:layout_height="match_parent" />-->
+                android:text="Данный график показывает количество подписывающихся/тписывающихся пользователей."
+                android:textColor="@color/grey"
+                android:textSize="16sp" />
+            <!--            <lecho.lib.hellocharts.view.LineChartView-->
+            <!--                android:id="@+id/chart"-->
+            <!--                android:layout_width="match_parent"-->
+            <!--                android:layout_height="match_parent" />-->
 
             <com.github.mikephil.charting.charts.LineChart
                 android:id="@+id/chart1"
                 android:layout_width="match_parent"
                 android:layout_height="200dp"
                 android:layout_above="@+id/seekBar1" />
+
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="20dp"
                 android:layout_marginTop="10dp"
                 android:text="Охват аудитории"
-                android:textSize="20sp"
-                android:textColor="@color/black" />
+                android:textColor="@color/black"
+                android:textSize="20sp" />
+
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="20dp"
                 android:layout_marginTop="2dp"
-                android:text="На этом графике показаны действия с вашими публикациями."
-                android:textSize="18sp"
-                android:textColor="@color/grey" />
+                android:text="На данном графике отображены все действия пользователей с публикациями."
+                android:textColor="@color/grey"
+                android:textSize="16sp" />
+
             <com.github.mikephil.charting.charts.LineChart
                 android:id="@+id/graph2"
                 android:layout_width="match_parent"
                 android:layout_height="200dp"
                 android:layout_above="@+id/seekBar1" />
+
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="20dp"
                 android:layout_marginTop="10dp"
                 android:text="кв"
-                android:textSize="20sp"
-                android:textColor="@color/black" />
+                android:textColor="@color/black"
+                android:textSize="20sp" />
+
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="20dp"
                 android:layout_marginTop="2dp"
                 android:text="Нссс"
-                android:textSize="18sp"
-                android:textColor="@color/grey" />
+                android:textColor="@color/grey"
+                android:textSize="18sp" />
 
         </GridLayout>
     </androidx.core.widget.NestedScrollView>

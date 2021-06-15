@@ -11,6 +11,7 @@ import androidx.paging.PagingData
 import com.example.abyss.R
 import com.example.abyss.adapters.home.search.SearchPostsPagingAdapter
 import com.example.abyss.adapters.home.search.SearchUsersPagingAdapter
+import com.example.abyss.model.repository.auth.AuthRepository
 import com.example.abyss.model.repository.post.PostRepository
 import com.example.abyss.model.repository.user.UserRepository
 import kotlinx.coroutines.CoroutineDispatcher
@@ -27,7 +28,8 @@ class SearchViewModel(
     private val externalScope: CoroutineScope,
     private val ioDispatcher: CoroutineDispatcher,
     val searchPostsPagingAdapter: SearchPostsPagingAdapter,
-    val searchUsersPagingAdapter: SearchUsersPagingAdapter
+    val searchUsersPagingAdapter: SearchUsersPagingAdapter,
+    private val authRepository: AuthRepository
 ) : ViewModel() {
 
     private val _progressBarLoading = MutableLiveData<Boolean>()
@@ -80,23 +82,23 @@ class SearchViewModel(
 
     private fun getUsers() {
         viewModelScope.launch {
-                userRepository.getFoundUsers(
-                    _searchText.value!!.toLowerCase(Locale.ROOT),
-                    orderBySelection.value!!,
-                ).collect {
-                    searchUsersPagingAdapter.submitData(it)
-                }
+            userRepository.getFoundUsers(
+                _searchText.value!!.toLowerCase(Locale.ROOT),
+                orderBySelection.value!!,
+            ).collect {
+                searchUsersPagingAdapter.submitData(it)
+            }
         }
     }
 
     private fun getPosts() {
         viewModelScope.launch {
-                postRepository.getFoundPosts(
-                    _searchText.value!!.toLowerCase(Locale.ROOT),
-                    orderBySelection.value!!,
-                )?.collect {
-                    searchPostsPagingAdapter.submitData(it)
-                }
+            postRepository.getFoundPosts(
+                _searchText.value!!.toLowerCase(Locale.ROOT),
+                orderBySelection.value!!,
+            )?.collect {
+                searchPostsPagingAdapter.submitData(it)
+            }
         }
     }
 
@@ -139,5 +141,9 @@ class SearchViewModel(
 //                    }
             }
         }
+    }
+
+    suspend fun trueIfMyUid(uid: String): Boolean {
+        return authRepository.GetUid() == uid
     }
 }

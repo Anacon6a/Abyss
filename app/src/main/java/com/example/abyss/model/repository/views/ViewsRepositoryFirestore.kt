@@ -2,6 +2,7 @@ package com.example.abyss.model.repository.views
 
 import com.example.abyss.model.data.LikeData
 import com.example.abyss.model.data.PostData
+import com.example.abyss.model.data.StatisticsData
 import com.example.abyss.model.data.ViewData
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
@@ -32,6 +33,10 @@ class ViewsRepositoryFirestore(
         val numberViewsRef =
             firestore.collection("users").document(uidProvider).collection("posts")
                 .document(postId)
+        val statisticsId = uid + postId
+        val statisticsRef =
+            firestore.collection("users").document(uidProvider).collection("statistics")
+                .document(statisticsId)
 
         firestore.runTransaction {
             numberViews = it.get(numberViewsRef).toObject<PostData>()?.numberOfViews
@@ -40,9 +45,19 @@ class ViewsRepositoryFirestore(
                 //если не просматривал
                 if (it.get(viewUserRef).data.isNullOrEmpty()) {
                     val view = ViewData(uid)
+                    val statistics = StatisticsData(
+                        statisticsRef.id,
+                        "view",
+                        view.date,
+                        uid,
+                        uidProvider,
+                        null,
+                        postId,
+                    )
                     it.set(viewUserRef, view)
                     numberViews = numberViews?.plus(1)
                     it.update(numberViewsRef, "numberOfViews", numberViews)
+                    it.set(statisticsRef, statistics)
                 }
             }
         }.await()

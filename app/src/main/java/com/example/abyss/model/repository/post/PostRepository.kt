@@ -10,6 +10,7 @@ interface PostRepository {
     suspend fun createPost(post: PostData, imageUri: Uri)
     suspend fun getUsersPosts(): Flow<PagingData<PostData>>
     suspend fun getSavedPosts(): Flow<PagingData<PostData>>
+    suspend fun getAnotherUsersPosts(uid:String): Flow<PagingData<PostData>>
     suspend fun getPostById(postId: String, uidProvider: String): Flow<PostData?>
     suspend fun getPostsSubscription(): Flow<PagingData<PostData>>?
     suspend fun getPostsTrends(): Flow<PagingData<PostData>>?

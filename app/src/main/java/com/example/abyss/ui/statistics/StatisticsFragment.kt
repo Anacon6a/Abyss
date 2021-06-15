@@ -1,5 +1,6 @@
 package com.example.abyss.ui.statistics
 
+import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -11,13 +12,18 @@ import com.example.abyss.databinding.FragmentStatisticsBinding
 import com.example.abyss.extensions.onClick
 import com.example.abyss.utils.HidingNavigationBar
 import com.example.abyss.utils.LineChartXAxisValueFormatter
+import com.github.dewinjm.monthyearpicker.MonthYearPickerDialogFragment
 import com.github.mikephil.charting.animation.Easing
-import com.github.mikephil.charting.data.*
-import com.github.mikephil.charting.formatter.ValueFormatter
+import com.github.mikephil.charting.components.XAxis
+import com.github.mikephil.charting.data.Entry
+import com.github.mikephil.charting.data.LineData
+import com.github.mikephil.charting.data.LineDataSet
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet
 import kodeinViewModel
 import org.kodein.di.KodeinAware
 import org.kodein.di.android.x.kodein
+import java.text.DateFormat
+import java.text.DateFormatSymbols
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -27,6 +33,7 @@ class StatisticsFragment : Fragment(), KodeinAware {
     override val kodein by kodein()
     private val viewModel: StatisticsViewModel by kodeinViewModel()
     private lateinit var binding: FragmentStatisticsBinding
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -40,11 +47,87 @@ class StatisticsFragment : Fragment(), KodeinAware {
 
         subscription()
         ddd()
-//        hh()
-//        rr()
-//        ss()
 
         return binding.root
+    }
+
+    private fun subscription() {
+        binding.backBtn.onClick {
+            findNavController().popBackStack()
+        }
+        binding.buttonSelect.onClick {
+            monthPicker()
+        }
+    }
+
+    private fun monthPicker() {
+        val customTitle = "Выбор месяца"
+        val dialogFragment = MonthYearPickerDialogFragment
+            .getInstance(
+                viewModel.monthSelectedInt.value!!,
+                viewModel.yearSelectedInt.value!!,
+                customTitle
+            )
+        dialogFragment.show(parentFragmentManager, null)
+        dialogFragment.setOnDateSetListener { year, monthOfYear ->
+            viewModel.monthSelectedInt.value = monthOfYear
+            viewModel.yearSelectedInt.value = year
+            viewModel.monthSelectedString.value = DateFormatSymbols().months[monthOfYear]
+            viewModel.yearSelectedString.value = year.toString()
+        }
+    }
+
+
+    private fun lkj() {
+        val xAxis = binding.chart1.xAxis
+        xAxis.position = XAxis.XAxisPosition.BOTTOM
+        xAxis.setDrawGridLines(false)
+
+        xAxis.valueFormatter = LineChartXAxisValueFormatter()
+
+
+        val entriesFirst: ArrayList<Entry> = ArrayList()
+        entriesFirst.add(Entry(1623233453f, 2f))
+        entriesFirst.add(Entry(1623319853f, 2f))
+        entriesFirst.add(Entry(1623406253f, 7f))
+        entriesFirst.add(Entry(1623492653f, 3f))
+        entriesFirst.add(Entry(1623579053f, 5f))
+        // На основании массива точек создадим первую линию с названием
+        val datasetFirst = LineDataSet(entriesFirst, "Подписавшиеся")
+        // График будет заполненным
+        datasetFirst.setDrawFilled(true)
+        // Цвет
+        datasetFirst.color = R.color.purple_500
+
+        // Массив координат точек второй линии
+        val entriesSecond: ArrayList<Entry> = ArrayList()
+        entriesSecond.add(Entry(0.5f, 0f))
+        entriesSecond.add(Entry(2.5f, 2f))
+        entriesSecond.add(Entry(3.5f, 1f))
+        entriesSecond.add(Entry(3.6f, 2f))
+        entriesSecond.add(Entry(4f, 0.5f))
+        entriesSecond.add(Entry(5.1f, -0.5f))
+        // На основании массива точек создаем вторую линию с названием
+        val datasetSecond = LineDataSet(entriesSecond, "Отписавшиеся")
+        // Цвет
+        datasetSecond.color = Color.BLACK
+        // График будет плавным
+        datasetSecond.mode = LineDataSet.Mode.CUBIC_BEZIER
+
+        // Линии графиков соберем в один массив
+        val dataSets: ArrayList<ILineDataSet> = ArrayList()
+        dataSets.add(datasetFirst)
+        dataSets.add(datasetSecond)
+        // Создадим переменную  данных для графика
+        val data = LineData(dataSets)
+        // Передадим данные для графика в сам график
+        binding.chart1.data = data
+
+        binding.chart1.description.text = "что-то"
+        binding.chart1.setNoDataText("Нет данных!")
+
+
+        binding.chart1.animateXY(600, 600, Easing.EaseInBounce)
     }
 
 
@@ -59,11 +142,18 @@ class StatisticsFragment : Fragment(), KodeinAware {
          * (Про timeStamp читай в интернете, в кратце это 4-байтное целое число, равное количеству секунд, прошедших с полуночи 1 января 1970 года)
          * стандартный джавовский класс даты в неё конвертится спокойно
          * */
-        entries.add(Entry(1623233453f, 2f))
-        entries.add(Entry(1623319853f, 2f))
-        entries.add(Entry(1623406253f, 7f))
-        entries.add(Entry(1623492653f, 3f))
-        entries.add(Entry(1623579053f, 5f))
+
+        val formatter: DateFormat = SimpleDateFormat("dd-MM-yyyy")
+
+        val strDate: String = "1-6-2021"
+        val date = formatter.parse(strDate) as Date
+        var g = date.time.toFloat()
+//        entries.add(Entry(1623233453f, 2f))
+//        entries.add(Entry(1623319853f, 2f))
+//        entries.add(Entry(1623406253f, 7f))
+//        entries.add(Entry(1623492653f, 3f))
+//        entries.add(Entry(1623579053f, 5f))
+        entries.add(Entry(g, 8f))
 
         entries2.add(Entry(2f, 20f))
         entries2.add(Entry(3f, 4f))
@@ -98,7 +188,7 @@ class StatisticsFragment : Fragment(), KodeinAware {
         dataSets.add(v2)
 //Part5
         binding.chart1.xAxis.labelRotationAngle = 0f
-
+        binding.chart1.xAxis.position = XAxis.XAxisPosition.BOTTOM
 //Part6
         binding.chart1.data = LineData(vl, v2)
 
@@ -121,112 +211,16 @@ class StatisticsFragment : Fragment(), KodeinAware {
         binding.chart1.setNoDataText("No forex yet!")
 
 //Part10
-        binding.chart1.animateX(1800, Easing.EaseInExpo)
+        binding.chart1.animateXY(600, 600, Easing.EaseInBounce)
 
 //Part11
 //        val markerView = CustomMarker(this@ShowForexActivity, R.layout.marker_view)
 //        binding.graph1.marker = markerView
     }
 
-    data class eeeee(
-        val value: Int = (0..50).random(),
-        val date: Date = Date(System.currentTimeMillis())
-    )
 
-    fun ss() {
-
-        binding.chart1.isDragEnabled = true
-        binding.chart1.setScaleEnabled(false)
-        binding.chart1.axisRight.isEnabled = false
-
-
-        val test: ArrayList<eeeee> = arrayListOf()
-        for (i in 0..50) {
-            test.add(eeeee(i))
-        }
-
-        val date: ArrayList<String> = arrayListOf()
-        val entry = ArrayList<Entry>()
-        for (i in test) {
-            val d = i.date.toString()
-            date.add(d)
-//            val f = d.toInt()
-            entry.add(Entry(i.value.toFloat(), i.value.toFloat()))
-        }
-
-
-//        val f =1
-//        val g = f.toFloat()
-//        val dddf = "dd f".toFloat()
-
-        val xaxis = binding.chart1.xAxis
-        xaxis.granularity = 1f
-
-        xaxis.valueFormatter = object : ValueFormatter() {
-            val pattern = "dd MMM yy"
-            private val mFormat = SimpleDateFormat(pattern)
-            private val inputFormat = SimpleDateFormat("yyyy-MM-dd")
-            override fun getFormattedValue(value: Float): String {
-//                val millis = TimeUnit.HOURS.toMillis(value.toLong())
-                return mFormat.format(inputFormat.parse(date[value.toInt()]))
-            }
-        }
-
-        xaxis.granularity = 1f
-//
-//        val datasetFirst = LineDataSet(entry, "Подписавшиеся")
-//        set1.color = Color.parseColor(color)
-//        datasetFirst.setDrawCircles(false)
-//        datasetFirst.setDrawValues(false)
-//        val data = LineData(datasetFirst)
-//        binding.chart1.data = data
-//        binding.chart1.setVisibleXRangeMaximum(365f)
-
-
-    }
-
-    private fun subscription() {
-        binding.backBtn.onClick {
-            findNavController().popBackStack()
-        }
-
-    }
-
-//
-//    fun rr() {
 //        binding.chart1.description.isEnabled = false
-//
-//        val xAxisFormatter: ValueFormatter = DayAxisValueFormatter(binding.chart1)
-//
-//        val xAxis = binding.chart1.xAxis
-//        xAxis.position = XAxisPosition.BOTTOM
-////    xAxis.typeface = tfLight
-//        xAxis.setDrawGridLines(false)
-//        xAxis.granularity = 1f // only intervals of 1 day
-//
-//        xAxis.labelCount = 7
-//        xAxis.valueFormatter = xAxisFormatter
-//
-//        val custom: ValueFormatter = MyAxisValueFormatter()
-//
-//        val leftAxis: YAxis = binding.chart1.axisLeft
-////    leftAxis.typeface = tfLight
-//        leftAxis.setLabelCount(8, false)
-//        leftAxis.valueFormatter = custom
-//        leftAxis.setPosition(YAxisLabelPosition.OUTSIDE_CHART)
-//        leftAxis.spaceTop = 15f
-//        leftAxis.axisMinimum = 0f // this replaces setStartAtZero(true)
-//
-//
-//        val rightAxis: YAxis = binding.chart1.axisRight
-//        rightAxis.setDrawGridLines(false)
-////    rightAxis.typeface = tfLight
-//        rightAxis.setLabelCount(8, false)
-//        rightAxis.valueFormatter = custom
-//        rightAxis.spaceTop = 15f
-//        rightAxis.axisMinimum = 0f // this replaces setStartAtZero(true)
-//
-//
+
 //        val l: Legend = binding.chart1.legend
 //        l.verticalAlignment = Legend.LegendVerticalAlignment.BOTTOM
 //        l.horizontalAlignment = Legend.LegendHorizontalAlignment.LEFT

@@ -10,6 +10,7 @@ interface UserRepository {
     suspend fun createUser(user: UserData)
     suspend fun addProfileImageInStorage(imageUri: Uri): Flow<String>
     suspend fun getUserByUid(): Flow<State<UserData?>>
+    suspend fun getAnotherUserByUid(uid:String): Flow<State<UserData?>>
     suspend fun getUserContentProviderByUid(uid: String): Flow<UserData?>
     suspend fun getFoundUsers(text: String, orderBySelection: Int): Flow<PagingData<UserData>>
     fun addUserKeywords(user: UserData)

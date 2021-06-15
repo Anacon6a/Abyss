@@ -110,6 +110,33 @@ class UserRepositoryFirestore(
         SharingStarted.WhileSubscribed(),
     )
 
+    override suspend fun getAnotherUserByUid(uid: String): Flow<State<UserData?>>  = callbackFlow {
+
+        val userRef = firestore.collection("users").document(uid)
+
+        val subscription = userRef.addSnapshotListener { snapshot, exception ->
+
+            exception?.let {
+                offer(State.failed(it.message.toString()))
+                cancel(it.message.toString())
+            }
+            if (snapshot!!.exists()) {
+                val user = snapshot.toObject<UserData>()
+                offer(State.success(user))
+            }
+        }
+
+        awaitClose {
+            Timber.i("awaitClose")
+            subscription.remove()
+        }
+    }.catch {
+        Timber.e("Ошибка: $it")
+    }.shareIn(
+        externalScope,
+        SharingStarted.WhileSubscribed(),
+    )
+
     @ExperimentalCoroutinesApi
     override suspend fun getUserContentProviderByUid(uid: String): Flow<UserData?> = flow {
 

@@ -7,6 +7,7 @@ import androidx.paging.PagingData
 import androidx.paging.cachedIn
 import com.example.abyss.model.data.PostData
 import com.example.abyss.model.data.SavedPostData
+import com.example.abyss.model.data.StatisticsData
 import com.example.abyss.model.pagingsource.post.SubscriptionPostsForNewsFeedPagingSource
 import com.example.abyss.model.pagingsource.post.PostsPagingSource
 import com.example.abyss.model.pagingsource.post.SavedPostsPagingSource
@@ -104,6 +105,19 @@ class PostRepositoryFirestore(
             val query = firestore.collection("users").document(uid).collection("savedPosts")
                 .orderBy("date", Query.Direction.DESCENDING)
             SavedPostsPagingSource(query, ioDispatcher, externalScope, firestore)
+        }.flow.cachedIn(externalScope)
+
+    override suspend fun getAnotherUsersPosts(uid: String): Flow<PagingData<PostData>> =
+        Pager(
+            PagingConfig(
+                initialLoadSize = 30,
+                pageSize = 30,
+                prefetchDistance = 10
+            )
+        ) {
+            val query = firestore.collection("users").document(uid).collection("posts")
+                .orderBy("date", Query.Direction.DESCENDING)
+            PostsPagingSource(query)
         }.flow.cachedIn(externalScope)
 
     override suspend fun getPostsSubscription(): Flow<PagingData<PostData>>? =
@@ -363,6 +377,19 @@ class PostRepositoryFirestore(
                 val numberSavesRef =
                     firestore.collection("users").document(post.uid!!).collection("posts")
                         .document(post.id!!)
+                val statisticsId = post.id + savedPostRef.id
+                val statisticsRef =
+                    firestore.collection("users").document(post.uid!!).collection("statistics")
+                        .document(statisticsId)
+                val statistics = StatisticsData(
+                    statisticsId,
+                    "save",
+                    savedPost.date,
+                    uid,
+                    post.uid,
+                    null,
+                    post.id,
+                )
                 firestore.runTransaction {
                     val numberSavesSnap = it.get(numberSavesRef)
                     val nS = numberSavesSnap.toObject<PostData>()?.numberOfComments
@@ -370,10 +397,12 @@ class PostRepositoryFirestore(
                         val numberSaves = nS?.plus(1) ?: 1
                         it.update(numberSavesRef, "numberOfSaves", numberSaves)
                         it.set(savedPostRef, savedPost)
+                        it.set(statisticsRef, statistics)
                     } else {
                         val numberSaves = nS?.minus(1) ?: 0
                         it.update(numberSavesRef, "numberOfSaves", numberSaves)
                         it.delete(savedPostRef)
+                        it.delete(statisticsRef)
                     }
                 }.await()
             } catch (e: Exception) {

@@ -1,4 +1,4 @@
-package com.example.abyss.ui.profile
+package com.example.abyss.ui.profile.profile
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData

@@ -14,4 +14,7 @@ interface UserRepository {
     suspend fun getUserContentProviderByUid(uid: String): Flow<UserData?>
     suspend fun getFoundUsers(text: String, orderBySelection: Int): Flow<PagingData<UserData>>
     fun addUserKeywords(user: UserData)
+    suspend fun updateUserName(name: String)
+    suspend fun updateUserEmail(email: String)
+    suspend fun updateProfileImage(imageUri: Uri)
 }

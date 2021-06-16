@@ -62,6 +62,32 @@ class UserRepositoryFirestore(
         }
     }
 
+    override suspend fun updateUserName(name: String) {
+        externalScope.launch(ioDispatcher) {
+            val uid = firebaseAuth.uid!!
+            firestore.collection("users").document(uid).update("userName", name).await()
+            val userDate = UserData(userName = name, uid = uid)
+            addUserKeywords(userDate)
+        }.join()
+    }
+
+    override suspend fun updateUserEmail(email: String) {
+        externalScope.launch(ioDispatcher) {
+            val uid = firebaseAuth.uid!!
+            firestore.collection("users").document(uid).update("email", email).await()
+        }.join()
+    }
+
+    override suspend fun updateProfileImage(imageUri: Uri) {
+        externalScope.launch(ioDispatcher) {
+            val uid = firebaseAuth.uid!!
+            val imageRef = firebaseStorage.getReference("profileImage").child(uid)
+            imageRef.putFile(imageUri).await()
+            val url = imageRef.downloadUrl.await()
+            firestore.collection("users").document(uid).update("profileImageUrl", url).await()
+        }.join()
+    }
+
 
     override suspend fun addProfileImageInStorage(imageUri: Uri): Flow<String> = flow {
 
@@ -110,7 +136,7 @@ class UserRepositoryFirestore(
         SharingStarted.WhileSubscribed(),
     )
 
-    override suspend fun getAnotherUserByUid(uid: String): Flow<State<UserData?>>  = callbackFlow {
+    override suspend fun getAnotherUserByUid(uid: String): Flow<State<UserData?>> = callbackFlow {
 
         val userRef = firestore.collection("users").document(uid)
 
@@ -163,7 +189,7 @@ class UserRepositoryFirestore(
             )
         ) {
             var query: Query = firestore.collection("users")
-            if (text.isNotEmpty()){
+            if (text.isNotEmpty()) {
                 query = query.whereArrayContains("keywords", text)
             }
 

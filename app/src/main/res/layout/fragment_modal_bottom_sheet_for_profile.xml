@@ -2,12 +2,12 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".ui.profile.ModalBottomSheetForProfileFragment">
+    tools:context=".ui.profile.profile.ModalBottomSheetForProfileFragment">
 
     <data>
         <variable
             name="ModalBottomSheetForProfileViewModel"
-            type="com.example.abyss.ui.profile.ModalBottomSheetForProfileViewModel" />
+            type="com.example.abyss.ui.profile.profile.ModalBottomSheetForProfileViewModel" />
     </data>
 
     <LinearLayout

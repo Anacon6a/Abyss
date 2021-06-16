@@ -106,7 +106,7 @@ class EditPostViewModel(
 
     fun editPost() {
         externalScope.launch(ioDispatcher) {
-            val url = postRepository.editPost(
+            val url = postRepository.updatePost(
                 postData.value!!,
                 postImageUrl.value,
                 widthImage.get(),

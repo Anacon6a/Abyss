@@ -1,4 +1,4 @@
-package com.example.abyss.ui.anotheruser
+package com.example.abyss.ui.profile.anotheruser
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -10,17 +10,10 @@ import androidx.navigation.fragment.FragmentNavigator
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.GridLayoutManager
-import com.example.abyss.R
-import com.example.abyss.adapters.profile.ProfileViewPagerAdapter
 import com.example.abyss.databinding.FragmentAnotherUserProfileBinding
-import com.example.abyss.databinding.FragmentProfileBinding
-import com.example.abyss.databinding.PostProfileRecyclerDataBinding
-import com.example.abyss.extensions.ignorePullToRefresh
 import com.example.abyss.extensions.onClick
-import com.example.abyss.ui.profile.ProfileFragmentDirections
-import com.example.abyss.ui.profile.ProfileViewModel
+import com.example.abyss.ui.profile.profile.ProfileFragmentDirections
 import com.example.abyss.utils.HidingNavigationBar
-import com.google.android.material.tabs.TabLayoutMediator
 import kodeinViewModel
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.launch

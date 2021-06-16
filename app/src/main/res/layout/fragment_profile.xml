@@ -2,13 +2,13 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context=".ui.profile.ProfileFragment">
+    tools:context=".ui.profile.profile.ProfileFragment">
 
     <data>
 
         <variable
             name="ProfileViewModel"
-            type="com.example.abyss.ui.profile.ProfileViewModel" />
+            type="com.example.abyss.ui.profile.profile.ProfileViewModel" />
     </data>
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout

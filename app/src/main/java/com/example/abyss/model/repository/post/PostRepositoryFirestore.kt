@@ -277,7 +277,7 @@ class PostRepositoryFirestore(
         SharingStarted.WhileSubscribed(),
     )
 
-    override suspend fun editPost(
+    override suspend fun updatePost(
         post: PostData,
         imageUri: Uri?,
         width: Int?,

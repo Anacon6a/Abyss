@@ -1,4 +1,4 @@
-package com.example.abyss.ui.profile
+package com.example.abyss.ui.profile.profile
 
 import androidx.lifecycle.*
 import androidx.paging.LoadState

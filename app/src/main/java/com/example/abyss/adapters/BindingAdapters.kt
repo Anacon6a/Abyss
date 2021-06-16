@@ -1,24 +1,20 @@
 package com.example.abyss.adapters
 
 import android.annotation.SuppressLint
-import android.app.AlertDialog
-import android.content.DialogInterface
 import android.graphics.drawable.Drawable
+import android.net.Uri
 import android.view.View
 import android.widget.*
 import androidx.appcompat.widget.AppCompatButton
 import androidx.appcompat.widget.AppCompatImageButton
 import androidx.core.content.ContextCompat
 import androidx.databinding.BindingAdapter
-import androidx.databinding.InverseBindingAdapter
-import androidx.databinding.InverseBindingListener
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.DataSource
 import com.bumptech.glide.load.engine.GlideException
 import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.target.Target
 import com.example.abyss.R
-import com.google.android.material.textfield.TextInputEditText
 import ru.rhanza.constraintexpandablelayout.ExpandableLayout
 import ru.rhanza.constraintexpandablelayout.State
 import java.text.SimpleDateFormat
@@ -29,6 +25,18 @@ fun hideIfEmpty(textView: TextView, text: String?) {
     if (text != null) {
         if (text.isEmpty()) {
             textView.visibility = View.INVISIBLE
+        } else {
+            textView.visibility = View.VISIBLE
+            textView.text = text
+        }
+    }
+}
+
+@BindingAdapter("hideIfEmpty2")
+fun hideIfEmpty2(textView: TextView, text: String?) {
+    if (text != null) {
+        if (text.isEmpty()) {
+            textView.visibility = View.GONE
         } else {
             textView.visibility = View.VISIBLE
             textView.text = text
@@ -117,6 +125,13 @@ fun loadImage(imageView: ImageView, url: String?) {
         Glide.with(imageView).load(url).into(imageView)
     } else {
         imageView.setImageResource(R.drawable.ic_user_image_profile)
+    }
+}
+
+@BindingAdapter("loadImageUri")
+fun loadImageUri(imageView: ImageView, uri: Uri?) {
+    if (uri != null) {
+        Glide.with(imageView).load(uri).into(imageView)
     }
 }
 
@@ -344,6 +359,13 @@ fun addedIsTrue(button: Button, boolean: Boolean?) {
 fun notEnabledIfEmpty(button: AppCompatImageButton, text: String?) {
     button.isEnabled = !text.isNullOrEmpty()
 }
+
+@BindingAdapter("notEnabledIfEmpty")
+fun notEnabledIfEmpty(button: AppCompatButton, text: String?) {
+    button.isEnabled = !text.isNullOrEmpty()
+}
+
+
 
 
 

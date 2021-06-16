@@ -1,18 +1,13 @@
 package com.example.abyss.ui.posts.post
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
-import com.example.abyss.R
 import com.example.abyss.databinding.FragmentModalBottomSheetForPostBinding
-import com.example.abyss.databinding.FragmentModalBottomSheetForProfileBinding
 import com.example.abyss.extensions.onClick
-import com.example.abyss.ui.profile.ModalBottomSheetForProfileFragmentDirections
-import com.example.abyss.ui.profile.ModalBottomSheetForProfileViewModel
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import kodeinViewModel
 import org.kodein.di.KodeinAware

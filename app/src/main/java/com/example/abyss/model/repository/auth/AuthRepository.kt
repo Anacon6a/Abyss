@@ -9,4 +9,6 @@ interface AuthRepository {
     suspend fun currentUser(): FirebaseUser?
     suspend fun GetUid(): String?
     suspend fun logout()
+    suspend fun updateEmail(email: String): String
+    suspend fun updatePassword(oldPassword: String, newPassword: String): String
 }

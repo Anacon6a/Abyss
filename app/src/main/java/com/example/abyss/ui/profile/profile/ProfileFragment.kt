@@ -1,4 +1,4 @@
-package com.example.abyss.ui.profile
+package com.example.abyss.ui.profile.profile
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -9,16 +9,12 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.FragmentNavigator
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.RecyclerView
-import androidx.recyclerview.widget.StaggeredGridLayoutManager
-import com.example.abyss.adapters.home.search.SearchViewPagerAdapter
 import com.example.abyss.adapters.profile.ProfileViewPagerAdapter
 import com.example.abyss.databinding.FragmentProfileBinding
 import com.example.abyss.databinding.PostProfileRecyclerDataBinding
-import com.example.abyss.databinding.SearchRecyclerDataBinding
 import com.example.abyss.extensions.ignorePullToRefresh
 import com.example.abyss.extensions.onClick
-import com.example.abyss.ui.home.newsfeed.NewsFeedFragmentDirections
+import com.example.abyss.ui.profile.profile.ProfileFragmentDirections
 import com.example.abyss.utils.HidingNavigationBar
 import com.google.android.material.tabs.TabLayoutMediator
 import kodeinViewModel

@@ -1,16 +1,13 @@
-package com.example.abyss.ui.profile
+package com.example.abyss.ui.profile.profile
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.navigation.fragment.findNavController
-import com.example.abyss.R
 import com.example.abyss.databinding.FragmentModalBottomSheetForProfileBinding
-import com.example.abyss.databinding.FragmentProfileBinding
 import com.example.abyss.extensions.onClick
-import com.example.abyss.utils.HidingNavigationBar
+import com.example.abyss.ui.profile.profile.ModalBottomSheetForProfileFragmentDirections
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import kodeinViewModel
 import org.kodein.di.KodeinAware
@@ -41,7 +38,7 @@ class ModalBottomSheetForProfileFragment : BottomSheetDialogFragment(), KodeinAw
             findNavController().navigate(ModalBottomSheetForProfileFragmentDirections.actionModalBottomSheetFragmentToStatisticsFragment())
         }
         binding.editProfileBtn.onClick {
-
+            findNavController().navigate(ModalBottomSheetForProfileFragmentDirections.actionModalBottomSheetFragmentToEditProfileFragment())
         }
         binding.logoutBtn.onClick {
             viewModel.logout()

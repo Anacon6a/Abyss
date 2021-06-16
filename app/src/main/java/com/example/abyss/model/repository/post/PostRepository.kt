@@ -19,7 +19,7 @@ interface PostRepository {
     suspend fun getSortedPosts(month: Int, year: Int, typeSort: Int): Flow<PagingData<PostData>>
     suspend fun listeningForChangesPosts(): Flow<Boolean>
     suspend fun listeningForChangesPost(postId: String): Flow<PostData?>
-    suspend fun editPost(post: PostData, imageUri: Uri?, width: Int?, height: Int?, text: String?, tags: ArrayList<String>): String?
+    suspend fun updatePost(post: PostData, imageUri: Uri?, width: Int?, height: Int?, text: String?, tags: ArrayList<String>): String?
     suspend fun deletePost(post: PostData)
     suspend fun getStateSavePost(post: PostData): Boolean?
     suspend fun saveOrDeletePost(post: PostData)

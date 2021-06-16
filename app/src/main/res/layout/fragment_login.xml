@@ -19,34 +19,49 @@
         android:paddingRight="@dimen/fragment_horizontal_margin"
         android:paddingBottom="@dimen/fragment_vertical_margin">
 
-
+        <TextView
+            android:id="@+id/title_text_login"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toStartOf="@+id/login_edit"
+            app:layout_constraintTop_toBottomOf="@+id/login_textView"
+            android:layout_marginTop="40dp"
+            android:text="@string/email"
+            android:textColor="@color/grey"
+            android:textSize="18dp"/>
         <EditText
             android:id="@+id/login_edit"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="38dp"
             android:layout_marginBottom="27dp"
             android:enabled="@{LoginViewModel.viewEnabled}"
-            android:hint="@string/email"
+            android:hint="Введите Email"
             android:imeOptions="actionNext"
             android:importantForAutofill="no"
             android:inputType="textEmailAddress"
             android:selectAllOnFocus="true"
             android:text="@={LoginViewModel.email}"
-            app:layout_constraintBottom_toTopOf="@+id/password_edit"
             app:layout_constraintEnd_toEndOf="@+id/password_edit"
             app:layout_constraintStart_toStartOf="@+id/password_edit"
-            app:layout_constraintTop_toBottomOf="@+id/login_textView" />
-
+            app:layout_constraintTop_toBottomOf="@+id/title_text_login" />
+        <TextView
+            android:id="@+id/title_text_password"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toStartOf="@+id/login_edit"
+            app:layout_constraintTop_toBottomOf="@+id/login_edit"
+            android:layout_marginTop="20dp"
+            android:text="@string/password"
+            android:textColor="@color/grey"
+            android:textSize="18dp"/>
         <EditText
             android:id="@+id/password_edit"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="22dp"
-            android:layout_marginTop="27dp"
             android:layout_marginEnd="22dp"
             android:enabled="@{LoginViewModel.viewEnabled}"
-            android:hint="@string/password"
+            android:hint="Введите пароль"
             android:imeOptions="actionDone"
             android:importantForAutofill="no"
             android:inputType="textPassword"
@@ -54,7 +69,7 @@
             android:text="@={LoginViewModel.password}"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/login_edit" />
+            app:layout_constraintTop_toBottomOf="@+id/title_text_password" />
 
         <TextView
             android:id="@+id/go_to_registration"

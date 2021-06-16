@@ -34,7 +34,7 @@ import com.example.abyss.model.repository.user.UserRepositoryFirestore
 import com.example.abyss.model.repository.views.ViewsRepository
 import com.example.abyss.model.repository.views.ViewsRepositoryFirestore
 import com.example.abyss.ui.MainViewModelFactory
-import com.example.abyss.ui.anotheruser.AnotherUserProfileViewModel
+import com.example.abyss.ui.profile.anotheruser.AnotherUserProfileViewModel
 import com.example.abyss.ui.first.FirstViewModelFactory
 import com.example.abyss.ui.auth.login.LoginViewModelFactory
 import com.example.abyss.ui.auth.registration.RegistrationViewModelFactory
@@ -49,8 +49,9 @@ import com.example.abyss.ui.posts.post.PostViewModel
 import com.example.abyss.ui.posts.comments.CommentsViewModel
 import com.example.abyss.ui.posts.comments.ModalBottomSheetForCommentViewModel
 import com.example.abyss.ui.posts.comments.edit.DialogForEditCommentViewModel
-import com.example.abyss.ui.profile.ModalBottomSheetForProfileViewModel
-import com.example.abyss.ui.profile.ProfileViewModel
+import com.example.abyss.ui.profile.editprofile.EditProfileViewModel
+import com.example.abyss.ui.profile.profile.ModalBottomSheetForProfileViewModel
+import com.example.abyss.ui.profile.profile.ProfileViewModel
 import com.example.abyss.ui.statistics.StatisticsViewModel
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.FirebaseDatabase
@@ -206,6 +207,9 @@ class AbyssApplication : Application(), KodeinAware {
                 instance(),
                 instance()
             )
+        }
+        bindViewModel<EditProfileViewModel>() with provider {
+            EditProfileViewModel(instance(), instance())
         }
 // Adapter
         bind<ProfileMyPostsPagingAdapter>() with provider { ProfileMyPostsPagingAdapter() }

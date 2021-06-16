@@ -57,16 +57,24 @@
             app:layout_constraintBottom_toBottomOf="@+id/shapeable_image_view"
             app:layout_constraintStart_toStartOf="@+id/shapeable_image_view"
             app:layout_constraintTop_toTopOf="@+id/shapeable_image_view" />
-
+        <TextView
+            android:id="@+id/title_text_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toStartOf="@+id/username"
+            app:layout_constraintTop_toBottomOf="@+id/shapeable_image_view"
+            android:layout_marginTop="30dp"
+            android:text="@string/username"
+            android:textColor="@color/grey"
+            android:textSize="18dp"/>
         <EditText
             android:id="@+id/username"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="22dp"
-            android:layout_marginTop="27dp"
             android:layout_marginEnd="22dp"
             android:enabled="@{RegistrationViewModel.viewEnabled}"
-            android:hint="@string/username"
+            android:hint="Введите имя пользователя"
             android:maxLength="30"
             android:imeOptions="actionNext"
             android:importantForAutofill="no"
@@ -75,17 +83,25 @@
             android:text="@={RegistrationViewModel.username}"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/shapeable_image_view" />
-
+            app:layout_constraintTop_toBottomOf="@+id/title_text_name" />
+        <TextView
+            android:id="@+id/title_text_email"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toStartOf="@+id/username"
+            app:layout_constraintTop_toBottomOf="@+id/username"
+            android:layout_marginTop="20dp"
+            android:text="@string/password"
+            android:textColor="@color/grey"
+            android:textSize="18dp"/>
         <EditText
             android:id="@+id/password_edit"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="22dp"
-            android:layout_marginTop="27dp"
             android:layout_marginEnd="22dp"
             android:enabled="@{RegistrationViewModel.viewEnabled}"
-            android:hint="@string/password"
+            android:hint="Введите пароль"
             android:imeOptions="actionDone"
             android:importantForAutofill="no"
             android:inputType="textPassword"
@@ -93,17 +109,25 @@
             android:text="@={RegistrationViewModel.password}"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/email_edit" />
-
+            app:layout_constraintTop_toBottomOf="@+id/title_text_password" />
+        <TextView
+            android:id="@+id/title_text_password"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toStartOf="@+id/username"
+            app:layout_constraintTop_toBottomOf="@+id/email_edit"
+            android:layout_marginTop="20dp"
+            android:text="@string/email"
+            android:textColor="@color/grey"
+            android:textSize="18dp"/>
         <EditText
             android:id="@+id/email_edit"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="22dp"
-            android:layout_marginTop="27dp"
             android:layout_marginEnd="22dp"
             android:enabled="@{RegistrationViewModel.viewEnabled}"
-            android:hint="@string/email"
+            android:hint="Введите Email"
             android:imeOptions="actionNext"
             android:importantForAutofill="no"
             android:inputType="textEmailAddress"
@@ -111,7 +135,7 @@
             android:text="@={RegistrationViewModel.email}"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/username" />
+            app:layout_constraintTop_toBottomOf="@+id/title_text_email" />
 
         <TextView
             android:id="@+id/registration_error"

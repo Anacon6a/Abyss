@@ -67,7 +67,7 @@
     </fragment>
     <fragment
         android:id="@+id/profileFragment"
-        android:name="com.example.abyss.ui.profile.ProfileFragment"
+        android:name="com.example.abyss.ui.profile.profile.ProfileFragment"
         android:label="fragment_profile"
         tools:layout="@layout/fragment_profile" >
         <action
@@ -126,7 +126,7 @@
     </fragment>
     <dialog
         android:id="@+id/modalBottomSheetFragment"
-        android:name="com.example.abyss.ui.profile.ModalBottomSheetForProfileFragment"
+        android:name="com.example.abyss.ui.profile.profile.ModalBottomSheetForProfileFragment"
         android:label="fragment_modal_bottom_sheet"
         tools:layout="@layout/fragment_modal_bottom_sheet_for_profile" >
         <action
@@ -136,6 +136,9 @@
         <action
             android:id="@+id/action_modalBottomSheetFragment_to_statisticsFragment"
             app:destination="@id/statisticsFragment" />
+        <action
+            android:id="@+id/action_modalBottomSheetFragment_to_editProfileFragment"
+            app:destination="@id/editProfileFragment" />
     </dialog>
     <dialog
         android:id="@+id/editPostModalBottomSheetFragment"
@@ -252,11 +255,16 @@
     </fragment>
     <fragment
         android:id="@+id/anotherUserProfileFragment"
-        android:name="com.example.abyss.ui.anotheruser.AnotherUserProfileFragment"
+        android:name="com.example.abyss.ui.profile.anotheruser.AnotherUserProfileFragment"
         android:label="fragment_another_user_profile"
         tools:layout="@layout/fragment_another_user_profile" >
         <argument
             android:name="uid"
             app:argType="string" />
     </fragment>
+    <fragment
+        android:id="@+id/editProfileFragment"
+        android:name="com.example.abyss.ui.profile.editprofile.EditProfileFragment"
+        android:label="fragment_edit_profile"
+        tools:layout="@layout/fragment_edit_profile" />
 </navigation>

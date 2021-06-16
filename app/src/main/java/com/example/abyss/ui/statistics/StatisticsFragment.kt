@@ -5,10 +5,8 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Adapter
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
-import android.widget.SpinnerAdapter
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.FragmentNavigator
@@ -18,7 +16,6 @@ import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.example.abyss.R
 import com.example.abyss.databinding.FragmentStatisticsBinding
 import com.example.abyss.extensions.onClick
-import com.example.abyss.ui.profile.ProfileFragmentDirections
 import com.example.abyss.utils.HidingNavigationBar
 import com.example.abyss.utils.ChartValueFormatter
 import com.github.dewinjm.monthyearpicker.MonthYearPickerDialogFragment
@@ -99,7 +96,7 @@ class StatisticsFragment : Fragment(), KodeinAware {
                         position: Int,
                         id: Long
                     ) {
-                        viewModel.seTypeSort(position)
+                        viewModel.setTypeSort(position)
                     }
 
                 }
@@ -111,7 +108,7 @@ class StatisticsFragment : Fragment(), KodeinAware {
                         position: Int,
                         id: Long
                     ) {
-                        viewModel.seTypeSort(position)
+                        viewModel.setTypeSort(position)
                     }
 
                     override fun onNothingSelected(parent: AdapterView<*>?) {

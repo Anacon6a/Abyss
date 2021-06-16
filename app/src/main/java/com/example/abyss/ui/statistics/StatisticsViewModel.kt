@@ -53,7 +53,6 @@ class StatisticsViewModel(
     init {
         val calendar: Calendar = Calendar.getInstance()
         setDate(calendar[Calendar.MONTH], calendar[Calendar.YEAR])
-        seTypeSort(0)
     }
 
     fun setDate(month: Int, year: Int) {
@@ -136,7 +135,7 @@ class StatisticsViewModel(
         }.join()
     }
 
-    fun seTypeSort(type: Int) {
+    fun setTypeSort(type: Int) {
         viewModelScope.launch {
             typeSortSelectInt.postValue(type)
             getPosts(type)

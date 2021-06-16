@@ -212,15 +212,15 @@ class PostRepositoryFirestore(
         ) {
             val uid = firebaseAuth.uid.toString()
 
-            val query = firestore.collection("users").document(uid).collection("posts")
-            when (typeSort) {
-                0 -> query.orderBy("numberOfLikes")
-                1 -> query.orderBy("numberOfViews")
-                2 -> query.orderBy("numberOfLikes")
-                3 -> query.orderBy("numberOfComments")
-                4 -> query.orderBy("numberOfSaves")
+            var query: Query? = null
+                when (typeSort) {
+                0 -> query = firestore.collection("users").document(uid).collection("posts").orderBy("numberOfLikes", Query.Direction.DESCENDING)
+                1 -> query = firestore.collection("users").document(uid).collection("posts").orderBy("numberOfViews", Query.Direction.DESCENDING)
+                2 -> query = firestore.collection("users").document(uid).collection("posts").orderBy("numberOfLikes", Query.Direction.DESCENDING)
+                3 -> query = firestore.collection("users").document(uid).collection("posts").orderBy("numberOfComments", Query.Direction.DESCENDING)
+                4 -> query = firestore.collection("users").document(uid).collection("posts").orderBy("numberOfSaves", Query.Direction.DESCENDING)
             }
-            PostsPagingSource(query)
+            PostsPagingSource(query!!)
         }.flow.cachedIn(externalScope)
 
 

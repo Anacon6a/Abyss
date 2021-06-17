@@ -91,7 +91,7 @@
             app:layout_constraintStart_toStartOf="@+id/username"
             app:layout_constraintTop_toBottomOf="@+id/username"
             android:layout_marginTop="20dp"
-            android:text="@string/password"
+            android:text="@string/email"
             android:textColor="@color/grey"
             android:textSize="18dp"/>
         <EditText
@@ -117,7 +117,7 @@
             app:layout_constraintStart_toStartOf="@+id/username"
             app:layout_constraintTop_toBottomOf="@+id/email_edit"
             android:layout_marginTop="20dp"
-            android:text="@string/email"
+            android:text="@string/password"
             android:textColor="@color/grey"
             android:textSize="18dp"/>
         <EditText

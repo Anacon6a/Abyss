@@ -50,7 +50,7 @@ class AnotherUserProfileFragment : Fragment(), KodeinAware {
     private fun subscription() {
             viewModel.postsPagingAdapter.setOnItemClickListener { post, imageView, postContainer ->
                     val action =
-                        ProfileFragmentDirections.actionProfileFragmentToPostFragment(post)
+                        AnotherUserProfileFragmentDirections.actionAnotherUserProfileFragmentToPostFragment(post)
                     findNavController().navigate(
                         action, FragmentNavigator.Extras.Builder().addSharedElements(
                             mapOf(

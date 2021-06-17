@@ -64,27 +64,39 @@ class UserRepositoryFirestore(
 
     override suspend fun updateUserName(name: String) {
         externalScope.launch(ioDispatcher) {
-            val uid = firebaseAuth.uid!!
-            firestore.collection("users").document(uid).update("userName", name).await()
-            val userDate = UserData(userName = name, uid = uid)
-            addUserKeywords(userDate)
+            try {
+                val uid = firebaseAuth.uid!!
+                firestore.collection("users").document(uid).update("userName", name).await()
+                val userDate = UserData(userName = name, uid = uid)
+                addUserKeywords(userDate)
+            } catch (e: Exception) {
+                Timber.e("Ошибка: ${e.message}")
+            }
         }.join()
     }
 
     override suspend fun updateUserEmail(email: String) {
         externalScope.launch(ioDispatcher) {
-            val uid = firebaseAuth.uid!!
-            firestore.collection("users").document(uid).update("email", email).await()
+            try {
+                val uid = firebaseAuth.uid!!
+                firestore.collection("users").document(uid).update("email", email).await()
+            } catch (e: Exception) {
+                Timber.e("Ошибка: ${e.message}")
+            }
         }.join()
     }
 
     override suspend fun updateProfileImage(imageUri: Uri) {
         externalScope.launch(ioDispatcher) {
-            val uid = firebaseAuth.uid!!
-            val imageRef = firebaseStorage.getReference("profileImage").child(uid)
-            imageRef.putFile(imageUri).await()
-            val url = imageRef.downloadUrl.await()
-            firestore.collection("users").document(uid).update("profileImageUrl", url).await()
+            try {
+                val uid = firebaseAuth.uid!!
+                val imageRef = firebaseStorage.getReference("profileImage").child(uid)
+                imageRef.putFile(imageUri).await()
+                val url = imageRef.downloadUrl.await()
+                firestore.collection("users").document(uid).update("profileImageUrl", url.toString()).await()
+            } catch (e: Exception) {
+                Timber.e("Ошибка: ${e.message}")
+            }
         }.join()
     }
 

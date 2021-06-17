@@ -20,16 +20,11 @@
                 android:id="@+id/profile_posts_recycler_view"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginTop="45dp"
                 android:clipToPadding="false"
                 android:paddingStart="12dp"
                 android:paddingTop="12dp"
                 android:paddingEnd="12dp"
                 android:paddingBottom="60dp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
                 tools:listitem="@layout/item_post_for_profile" />
         </com.example.abyss.utils.NestedScrollableHost>
     </LinearLayout>

@@ -53,7 +53,7 @@ class CommentsPagingSource(
             for (comm in comments) {
                 try {
                     val user =
-                        firestore.collection("users").document(comm.contentMakerUid!!).get().await()
+                        firestore.collection("users").document(comm.uid!!).get().await()
                             .toObject(UserData::class.java)!!
                     val uC = UserCommentData(
                         comm.commentText!!,
